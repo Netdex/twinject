@@ -19,6 +19,19 @@ twinhook is a DLL, injected during runtime into a Touhou game. It uses MS Detour
 2. When `LoadLibraryA` hook is called and `d3d9.dll` is loaded, hook `Direct3DCreate9` with Detours based on procedure address
 3. When `Direct3DCreate9` hook is called, return a dummy `IDirect3D9` that allows manipulation of device
 
+#### Procedure for Bullet Location Reading
+1. Hook function at 0x00431240, which is called whenever a bullet is processed
+2. Every frame, store every bullet processed that frame into a list
+3. Every new frame, wipe the list
+
+#### Procedure for Powerup Reading
+Repeat same process as abovee but hook function at 0x00440500
+
+#### Procedure for Enemy Location Reading
+... todo
+
+#### [Bullet Update Routine](https://github.com/Netdex/twinject/blob/master/docs/bullet.md)
+
 ### twinject
 twinject loads twinhook into th08.exe with Detours.
 
