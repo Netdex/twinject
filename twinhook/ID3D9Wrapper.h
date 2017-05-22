@@ -4,7 +4,7 @@ class Direct3D9Wrapper : public IDirect3D9
 public:
 
 	Direct3D9Wrapper(LPDIRECT3D9 pDirect3D,
-		HRESULT(*fnBeginSceneHook)(IDirect3DDevice9*), HRESULT(*fnEndSceneHook)(IDirect3DDevice9*));
+		void(*fnBeginSceneHook)(IDirect3DDevice9*), void(*fnEndSceneHook)(IDirect3DDevice9*));
 	virtual ~Direct3D9Wrapper();
 
 	/*** IUnknown methods ***/
@@ -29,6 +29,6 @@ public:
 	STDMETHOD(CreateDevice)(THIS_ UINT Adapter, D3DDEVTYPE DeviceType, HWND hFocusWindow, DWORD BehaviorFlags, D3DPRESENT_PARAMETERS* pPresentationParameters, IDirect3DDevice9** ppReturnedDeviceInterface);
 
 	IDirect3D9* Direct3D9;
-	HRESULT(*BeginSceneHook)(IDirect3DDevice9*);
-	HRESULT(*EndSceneHook)(IDirect3DDevice9*);
+	void(*BeginSceneHook)(IDirect3DDevice9*);
+	void(*EndSceneHook)(IDirect3DDevice9*);
 };

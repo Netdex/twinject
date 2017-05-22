@@ -3,7 +3,7 @@
 #include "CDraw.h"
 
 Direct3DDevice9Wrapper::Direct3DDevice9Wrapper(IDirect3DDevice9 *pDirect3DDevice9, IDirect3D9 *pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters,
-	HRESULT(*fnBeginSceneHook)(IDirect3DDevice9*), HRESULT(*fnEndSceneHook)(IDirect3DDevice9*))
+	void(*fnBeginSceneHook)(IDirect3DDevice9*), void(*fnEndSceneHook)(IDirect3DDevice9*))
 {
 	Direct3DDevice9 = pDirect3DDevice9;
 	Direct3D9 = pDirect3D9;

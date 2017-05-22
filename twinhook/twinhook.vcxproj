@@ -154,6 +154,7 @@
     <ClCompile Include="CDraw.cpp" />
     <ClCompile Include="ID3D9Wrapper.cpp" />
     <ClCompile Include="ID3D9Wrapper_Device.cpp" />
+    <ClCompile Include="logfs.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -164,6 +165,7 @@
     <ClInclude Include="CDraw.h" />
     <ClInclude Include="ID3D9Wrapper.h" />
     <ClInclude Include="ID3D9Wrapper_Device.h" />
+    <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 #include "ID3D9Wrapper_Device.h"
 
 Direct3D9Wrapper::Direct3D9Wrapper(LPDIRECT3D9 pDirect3D,
-	HRESULT(*fnBeginSceneHook)(IDirect3DDevice9*), HRESULT(*fnEndSceneHook)(IDirect3DDevice9*))
+	void(*fnBeginSceneHook)(IDirect3DDevice9*), void(*fnEndSceneHook)(IDirect3DDevice9*))
 {
 	Direct3D9 = pDirect3D;
 	this->BeginSceneHook = fnBeginSceneHook;
