@@ -4,7 +4,7 @@
 IDirect3DTexture9* Primitive = NULL;
 bool Init = false;
 
-HRESULT GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32)
+HRESULT CDraw_GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32)
 {
 	if (FAILED(pD3Ddev->CreateTexture(8, 8, 1, 0, D3DFMT_A4R4G4B4, D3DPOOL_MANAGED, ppD3Dtex, NULL)))
 		return E_FAIL;
@@ -22,7 +22,7 @@ HRESULT GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex,
 	return S_OK;
 }
 
-void DrawRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
+void CDraw_DrawRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
 {
 	D3DTLVERTEX qV[4] = {
 		{ (float)x , (float)(y + h), 0.0f, 1.0f, Color },
@@ -38,7 +38,7 @@ void DrawRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D
 	m_pD3Ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, qV, sizeof(D3DTLVERTEX));
 }
 
-void CBeginScene(LPDIRECT3DDEVICE9 m_pD3Ddev)
+void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
 {
 	if (!Init)
 	{
@@ -47,9 +47,4 @@ void CBeginScene(LPDIRECT3DDEVICE9 m_pD3Ddev)
 		);
 		Init = true;
 	}
-}
-
-void CEndScene(LPDIRECT3DDEVICE9 m_pD3Ddev)
-{
-	DrawRect(m_pD3Ddev, 10, 10, 100, 100, D3DCOLOR_ARGB(255, 255, 2, 200));
 }

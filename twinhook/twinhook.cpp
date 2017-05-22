@@ -22,11 +22,11 @@ bool DetourFunction(PVOID *ppPointer, PVOID pDetour)
 
 void BeginScene_Hook(IDirect3DDevice9 *d3dDev)
 {
-	CBeginScene(d3dDev);
+	CDraw_InitSolidTexture(d3dDev);
 }
 void EndScene_Hook(IDirect3DDevice9 *d3dDev)
 {
-	CEndScene(d3dDev);
+	CDraw_DrawRect(d3dDev, 10, 10, 100, 100, D3DCOLOR_ARGB(255, 255, 2, 200));
 }
 
 IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers);
