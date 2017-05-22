@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "ID3D9Wrapper_Device.h"
+#include "CDraw.h"
 
-Direct3DDevice9Wrapper::Direct3DDevice9Wrapper(IDirect3DDevice9 *pDirect3DDevice9, IDirect3D9 *pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters)
+Direct3DDevice9Wrapper::Direct3DDevice9Wrapper(IDirect3DDevice9 *pDirect3DDevice9, IDirect3D9 *pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters,
+	HRESULT(*fnBeginSceneHook)(IDirect3DDevice9*), HRESULT(*fnEndSceneHook)(IDirect3DDevice9*))
 {
 	Direct3DDevice9 = pDirect3DDevice9;
 	Direct3D9 = pDirect3D9;
+	this->BeginSceneHook = fnBeginSceneHook;
+	this->EndSceneHook = fnEndSceneHook;
 }
 
 Direct3DDevice9Wrapper::~Direct3DDevice9Wrapper() {  }
@@ -182,10 +186,14 @@ HRESULT Direct3DDevice9Wrapper::GetDepthStencilSurface(IDirect3DSurface9** ppZSt
 }
 HRESULT Direct3DDevice9Wrapper::BeginScene()
 {
+	if(BeginSceneHook)
+		BeginSceneHook(Direct3DDevice9);
 	return Direct3DDevice9->BeginScene();
 }
 HRESULT Direct3DDevice9Wrapper::EndScene()
 {
+	if(EndSceneHook)
+		EndSceneHook(Direct3DDevice9);
 	return Direct3DDevice9->EndScene();
 }
 HRESULT Direct3DDevice9Wrapper::Clear(DWORD Count, const D3DRECT* pRects, DWORD Flags, D3DCOLOR Color, float Z, DWORD Stencil)

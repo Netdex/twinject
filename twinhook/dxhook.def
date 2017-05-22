@@ -1,3 +1,0 @@
-LIBRARY	"dxhook"
-EXPORTS
-	Direct3DCreate9 = Mine_Direct3DCreate9

@@ -8,81 +8,71 @@ std::ofstream logfs;
 
 HANDLE HookHandle = NULL;
 
-IDirect3D9*  (WINAPI *Real_Direct3DCreate9)(UINT SDKVersion) = Direct3DCreate9;
 
-IDirect3D9* WINAPI Mine_Direct3DCreate9(UINT SDKVersion)
-{
-	logfs << "called alternate direct3d create" << std::endl;
-	IDirect3D9* Direct3D = Real_Direct3DCreate9(SDKVersion);
-	IDirect3D9* Mine_Direct3D = new Direct3D9Wrapper(Direct3D);
-	return Mine_Direct3D;
-}
+HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName);
+typedef HMODULE(WINAPI *LoadLibrary_t)(LPCSTR);
+LoadLibrary_t LoadLibraryA_Original;
 
+IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers);
+typedef IDirect3D9* (WINAPI *Direct3DCreate9_t)(UINT SDKVersion);
+Direct3DCreate9_t Direct3DCreate9_Original;
+PBYTE pDirect3DCreate9;
 
-void HookAPI()
+bool DetourFunction(PVOID *ppPointer, PVOID pDetour)
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	if (DetourAttach(&(PVOID&)Real_Direct3DCreate9, Mine_Direct3DCreate9))
-	{
-		logfs << "failed to attach" << std::endl;
-	}
-	else
-	{
-		logfs << "successfully attached" << std::endl;
-	}
-	if (DetourTransactionCommit() == NO_ERROR)
-	{
-		logfs << "set function detour" << std::endl;
-	}
-	else
-	{
-		logfs << "failed to set function detour" << std::endl;
-	}
+	if (DetourAttach(ppPointer, pDetour))
+		return false;
+	if (DetourTransactionCommit() != NO_ERROR)
+		return false;
+	return true;
 }
 
-
-
-typedef HMODULE(WINAPI *LoadLibrary_t)(LPCSTR);
-LoadLibrary_t orig_LoadLibrary; // holds address of original non-detoured function
-
-								// Our hooked LoadLibrary
-
-HMODULE WINAPI LoadLibrary_Hook(LPCSTR lpFileName)
+IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 {
-	HMODULE hM = orig_LoadLibrary(lpFileName); // keep functionality
-	logfs << lpFileName << std::endl;
+	logfs << "Feeding fake IDirect3D9" << std::endl;
+	IDirect3D9 *legit = Direct3DCreate9_Original(sdkVers);
+	Direct3D9Wrapper *wrapper = new Direct3D9Wrapper(legit, NULL, NULL);
+	return wrapper;
+}
+
+void HookDirect3DCreate9()
+{
+	if (DetourFunction(&(PVOID&)Direct3DCreate9_Original, Direct3DCreate9_Hook))
+		logfs << "Hooked Direct3DCreate9" << std::endl;
+	else
+		logfs << "Failed to hook Direct3DCreate9" << std::endl;
+}
+
+HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
+{
+	HMODULE hM = LoadLibraryA_Original(lpFileName);
+	if (strcmp(lpFileName, "d3d9.dll") == 0)
+	{
+		logfs << "Loaded d3d9.dll" << std::endl;
+		pDirect3DCreate9 = (PBYTE)GetProcAddress(hM, "Direct3DCreate9");
+		logfs << "Found Direct3DCreate9 at addr " << (int)pDirect3DCreate9 << std::endl;
+		Direct3DCreate9_Original = (Direct3DCreate9_t)(pDirect3DCreate9);
+		HookDirect3DCreate9();
+	}
 	return hM;
 }
 
-void HookLoad()
+void HookLoadLibraryA()
 {
-	orig_LoadLibrary = LoadLibraryA;
+	LoadLibraryA_Original = LoadLibraryA;
 
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-	if (DetourAttach(&(PVOID&)orig_LoadLibrary, LoadLibrary_Hook))
-	{
-		logfs << "failed to attach" << std::endl;
-	}
+	if (DetourFunction(&(PVOID&)LoadLibraryA_Original, LoadLibraryA_Hook))
+		logfs << "Hooked LoadLibraryA" << std::endl;
 	else
-	{
-		logfs << "successfully attached" << std::endl;
-	}
-	if (DetourTransactionCommit() == NO_ERROR)
-	{
-		logfs << "set function detour" << std::endl;
-	}
-	else
-	{
-		logfs << "failed to set function detour" << std::endl;
-	}
+		logfs << "Failed to hook LoadLibraryA" << std::endl;
 }
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 {
 	logfs.open("twinhook.log");
-	logfs << "dll executed" << std::endl;
+	logfs << "DllMain injected" << std::endl;
 
 	HANDLE hProcess = GetCurrentProcess();
 
@@ -91,11 +81,8 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 	case DLL_PROCESS_ATTACH:
 		DisableThreadLibraryCalls(hModule);
 		HookHandle = hModule;
-		HookAPI();
-
-		///HookLoad();
+		HookLoadLibraryA();
 		break;
-
 	case DLL_PROCESS_DETACH:
 		break;
 	}

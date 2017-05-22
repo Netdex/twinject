@@ -98,7 +98,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>detours.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Programming\C++\_libraries\detours\lib.X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>dxhook.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,7 +130,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>detours.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Programming\C++\_libraries\detours\lib.X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>dxhook.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,9 +151,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CDraw.cpp" />
     <ClCompile Include="ID3D9Wrapper.cpp" />
     <ClCompile Include="ID3D9Wrapper_Device.cpp" />
-    <ClCompile Include="manual_hook.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -161,12 +161,13 @@
     <ClCompile Include="twinhook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CDraw.h" />
     <ClInclude Include="ID3D9Wrapper.h" />
     <ClInclude Include="ID3D9Wrapper_Device.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dxhook.def" />
+    <None Include="twinhook.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -37,33 +37,9 @@ BOOL InjectLibrary(HANDLE hProcess, char *fnDll)
 
 int main(const int argc, const char *argv[])
 {
-	char *exename = "D:\\Games\\Touhou Project\\11.0 ~ Subterranean Animism\\th11.exe";
+	char *exename = "D:\\Programming\\Multi\\th08\\th08.exe";
 	char *dllname = "D:\\Programming\\Multi\\twinject\\Debug\\twinhook.dll";
-	char *currentdir = "D:\\Games\\Touhou Project\\11.0 ~ Subterranean Animism";
-
-	//STARTUPINFOA siStartupInfo;
-	//PROCESS_INFORMATION piProcessInfo;
-	//memset(&siStartupInfo, 0, sizeof(siStartupInfo));
-	//memset(&piProcessInfo, 0, sizeof(piProcessInfo));
-	//siStartupInfo.cb = sizeof(siStartupInfo);
-
-	//if (!CreateProcessA(NULL,
-	//	exename, NULL, NULL, false,
-	//	CREATE_SUSPENDED, NULL, currentdir,
-	//	&siStartupInfo, &piProcessInfo)) {
-	//	MessageBoxA(NULL, exename, "Error", MB_OK);
-	//}
-
-	//// get the process id for injection
-	//DWORD pId = piProcessInfo.dwProcessId;
-	//HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, false, pId);
-
-	//// Inject the dll
-	//if (!InjectLibrary(hProc, dllname)) {
-	//	MessageBoxA(NULL, "Injection failed", "Error", MB_OK);
-	//}
-
-	//ResumeThread(piProcessInfo.hThread);
+	char *currentdir = "D:\\Programming\\Multi\\th08";
 
 	STARTUPINFO si = { sizeof(STARTUPINFO) };
 	PROCESS_INFORMATION pi = { 0 };

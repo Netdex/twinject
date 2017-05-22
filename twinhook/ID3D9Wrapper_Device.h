@@ -1,9 +1,11 @@
 #pragma once
 
+
 class Direct3DDevice9Wrapper : public IDirect3DDevice9
 {
 public:
-	Direct3DDevice9Wrapper(IDirect3DDevice9* pDirect3DDevice9, IDirect3D9* pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters);
+	Direct3DDevice9Wrapper(IDirect3DDevice9* pDirect3DDevice9, IDirect3D9* pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters,
+		HRESULT(*fnBeginSceneHook)(IDirect3DDevice9*), HRESULT(*fnEndSceneHook)(IDirect3DDevice9*));
 	virtual ~Direct3DDevice9Wrapper();
 
 	/*** IUnknown methods ***/
@@ -133,4 +135,7 @@ public:
 	IDirect3D9* Direct3D9;
 
 	UINT m_Stride;
+
+	HRESULT(*BeginSceneHook)(IDirect3DDevice9*);
+	HRESULT(*EndSceneHook)(IDirect3DDevice9*);
 };
