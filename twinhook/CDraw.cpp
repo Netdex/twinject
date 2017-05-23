@@ -2,7 +2,10 @@
 #include "CDraw.h"
 
 IDirect3DTexture9* Primitive = NULL;
-bool Init = false;
+LPD3DXFONT dxfont;
+
+bool InitPrimitive = false;
+bool InitFont = false;
 
 HRESULT CDraw_GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32)
 {
@@ -38,13 +41,43 @@ void CDraw_DrawRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, floa
 	m_pD3Ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, qV, sizeof(D3DTLVERTEX));
 }
 
+void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face)
+{
+	if (!InitFont) {
+		D3DXCreateFont(m_pD3Ddev,    // the D3D Device
+			sz,    // font height
+			0,    // default font width
+			FW_NORMAL,    // font weight
+			1,    // not using MipLevels
+			false,    // italic font
+			DEFAULT_CHARSET,    // default character set
+			OUT_DEFAULT_PRECIS,    // default OutputPrecision,
+			DEFAULT_QUALITY,    // default Quality
+			DEFAULT_PITCH | FF_DONTCARE,    // default pitch and family
+			face,    // use Facename Arial
+			&dxfont);    // the font object
+		InitFont = true;
+	}
+}
+void CDraw_Text(char *str, D3DCOLOR color, int x, int y, int w, int h)
+{
+	static RECT textbox;
+	SetRect(&textbox, x, y, w, h);
+	if(dxfont)
+	dxfont->DrawTextA(NULL,
+		str,
+		-1,
+		&textbox,
+		DT_LEFT | DT_TOP,
+		color);
+}
 void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
 {
-	if (!Init)
+	if (!InitPrimitive)
 	{
-		GenerateTexture(m_pD3Ddev, &Primitive,
+		CDraw_GenerateTexture(m_pD3Ddev, &Primitive,
 			D3DCOLOR_ARGB(255, 255, 255, 255)
 		);
-		Init = true;
+		InitPrimitive = true;
 	}
 }
