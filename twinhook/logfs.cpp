@@ -1,14 +1,12 @@
 #include "stdafx.h"
 #include "logfs.h"
 
-std::ofstream logfs_s;
-
-void logfs_init(char *file)
+void logfs(const char* fmt, ...)
 {
-	logfs_s.open(file);
-}
-
-std::ofstream& logfs()
-{
-	return logfs_s;
+	char buf[256];
+	va_list args;
+	va_start(args, fmt);
+	vsprintf_s(buf,256, fmt, args);
+	OutputDebugStringA(buf);
+	va_end(args);
 }

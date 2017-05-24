@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject", "twinject\twinject.vcxproj", "{99BD0A6E-E384-451B-A5E6-D24234D9F4E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A47B2FB1-6209-46DC-AA46-17F03164F7D8} = {A47B2FB1-6209-46DC-AA46-17F03164F7D8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinhook", "twinhook\twinhook.vcxproj", "{A47B2FB1-6209-46DC-AA46-17F03164F7D8}"
 EndProject

@@ -1,11 +1,13 @@
 #include "stdafx.h"
-#include "CDraw.h"
+#include "cdraw.h"
 
 IDirect3DTexture9* Primitive = NULL;
 LPD3DXFONT dxfont;
+LPD3DXLINE dxLine;
 
 bool InitPrimitive = false;
 bool InitFont = false;
+bool InitLine = false;
 
 HRESULT CDraw_GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32)
 {
@@ -25,7 +27,34 @@ HRESULT CDraw_GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD
 	return S_OK;
 }
 
-void CDraw_DrawRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
+void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
+{
+	if (!InitPrimitive)
+	{
+		CDraw_GenerateTexture(m_pD3Ddev, &Primitive,
+			D3DCOLOR_ARGB(255, 255, 255, 255)
+		);
+		InitPrimitive = true;
+	}
+}
+void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face)
+{
+	if (!InitFont) {
+		D3DXCreateFont(m_pD3Ddev, sz, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET, 
+			OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face, &dxfont);
+		InitFont = true;
+	}
+}
+void CDraw_InitLine(IDirect3DDevice9 *m_pD3Ddev)
+{
+	if (!InitLine)
+	{
+		D3DXCreateLine(m_pD3Ddev, &dxLine);
+		InitLine = true;
+	}
+}
+
+void CDraw_Rect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
 {
 	D3DTLVERTEX qV[4] = {
 		{ (float)x , (float)(y + h), 0.0f, 1.0f, Color },
@@ -40,44 +69,24 @@ void CDraw_DrawRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, floa
 	m_pD3Ddev->SetTexture(0, Primitive);
 	m_pD3Ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, qV, sizeof(D3DTLVERTEX));
 }
-
-void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face)
-{
-	if (!InitFont) {
-		D3DXCreateFont(m_pD3Ddev,    // the D3D Device
-			sz,    // font height
-			0,    // default font width
-			FW_NORMAL,    // font weight
-			1,    // not using MipLevels
-			false,    // italic font
-			DEFAULT_CHARSET,    // default character set
-			OUT_DEFAULT_PRECIS,    // default OutputPrecision,
-			DEFAULT_QUALITY,    // default Quality
-			DEFAULT_PITCH | FF_DONTCARE,    // default pitch and family
-			face,    // use Facename Arial
-			&dxfont);    // the font object
-		InitFont = true;
-	}
-}
 void CDraw_Text(char *str, D3DCOLOR color, int x, int y, int w, int h)
 {
 	static RECT textbox;
 	SetRect(&textbox, x, y, w, h);
-	if(dxfont)
-	dxfont->DrawTextA(NULL,
-		str,
-		-1,
-		&textbox,
-		DT_LEFT | DT_TOP,
-		color);
+	if (dxfont)
+		dxfont->DrawTextA(NULL,
+			str,
+			-1,
+			&textbox,
+			DT_LEFT | DT_TOP,
+			color);
 }
-void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
+void CDraw_Line(float x1, float y1, float x2, float y2, D3DCOLOR color)
 {
-	if (!InitPrimitive)
-	{
-		CDraw_GenerateTexture(m_pD3Ddev, &Primitive,
-			D3DCOLOR_ARGB(255, 255, 255, 255)
-		);
-		InitPrimitive = true;
-	}
+	D3DXVECTOR2 vert[2];
+	vert[0].x = x1;
+	vert[0].y = y1;
+	vert[1].x = x2;
+	vert[1].y = y2;
+	dxLine->Draw(vert, 2, color);
 }

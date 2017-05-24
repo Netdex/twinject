@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;D:\Programming\Multi\twinject\twinhook\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;D:\Programming\Multi\twinject\twinhook\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -96,7 +96,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Programming\C++\_libraries\detours\lib.X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
     </Link>
@@ -128,7 +128,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Programming\C++\_libraries\detours\lib.X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
     </Link>
@@ -151,9 +151,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CDraw.cpp" />
-    <ClCompile Include="ID3D9Wrapper.cpp" />
-    <ClCompile Include="ID3D9Wrapper_Device.cpp" />
+    <ClCompile Include="BulletProcessHook.cpp" />
+    <ClCompile Include="cdraw.cpp" />
+    <ClCompile Include="detour.cpp" />
+    <ClCompile Include="Direct3DCreate9Hook.cpp" />
+    <ClCompile Include="DirectInput8CreateHook.cpp" />
+    <ClCompile Include="ID3D9_Wrapper.cpp" />
+    <ClCompile Include="ID3D9Device_Wrapper.cpp" />
+    <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
+    <ClCompile Include="IDI8A_Wrapper.cpp" />
+    <ClCompile Include="LoadLibraryAHook.cpp" />
     <ClCompile Include="logfs.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -162,9 +169,16 @@
     <ClCompile Include="twinhook.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CDraw.h" />
-    <ClInclude Include="ID3D9Wrapper.h" />
-    <ClInclude Include="ID3D9Wrapper_Device.h" />
+    <ClInclude Include="BulletProcessHook.h" />
+    <ClInclude Include="cdraw.h" />
+    <ClInclude Include="detour.h" />
+    <ClInclude Include="Direct3DCreate9Hook.h" />
+    <ClInclude Include="DirectInput8CreateHook.h" />
+    <ClInclude Include="ID3D9_Wrapper.h" />
+    <ClInclude Include="ID3D9Device_Wrapper.h" />
+    <ClInclude Include="IDI8ADevice_Wrapper.h" />
+    <ClInclude Include="IDI8A_Wrapper.h" />
+    <ClInclude Include="LoadLibraryAHook.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

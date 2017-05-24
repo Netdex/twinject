@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{1ecae554-7b8d-4808-9edd-1f83c77ca513}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{befb00fb-4972-49ab-9986-b5f40d25d999}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hook">
+      <UniqueIdentifier>{95f861b0-0cd8-43df-97ed-be4b3eaeea6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\hook">
+      <UniqueIdentifier>{e714dc2f-26fc-4aa3-a8c1-ea1ea718046a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx">
+      <UniqueIdentifier>{26d2e39e-0f64-4eb6-9e01-63fff0409b51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\directx">
+      <UniqueIdentifier>{f6f0dd86-8217-4562-bf80-15a4b9753f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -21,34 +39,76 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ID3D9Wrapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ID3D9Wrapper_Device.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CDraw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="logfs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletProcessHook.cpp">
+      <Filter>Source Files\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="detour.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="cdraw.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="Direct3DCreate9Hook.cpp">
+      <Filter>Source Files\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadLibraryAHook.cpp">
+      <Filter>Source Files\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="ID3D9Device_Wrapper.cpp">
+      <Filter>Source Files\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="ID3D9_Wrapper.cpp">
+      <Filter>Source Files\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="IDI8A_Wrapper.cpp">
+      <Filter>Source Files\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="IDI8ADevice_Wrapper.cpp">
+      <Filter>Source Files\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectInput8CreateHook.cpp">
+      <Filter>Source Files\hook</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ID3D9Wrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ID3D9Wrapper_Device.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CDraw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="logfs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="detour.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletProcessHook.h">
+      <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="cdraw.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Direct3DCreate9Hook.h">
+      <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadLibraryAHook.h">
+      <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="ID3D9_Wrapper.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="ID3D9Device_Wrapper.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="IDI8A_Wrapper.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="IDI8ADevice_Wrapper.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectInput8CreateHook.h">
+      <Filter>Header Files\hook</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
