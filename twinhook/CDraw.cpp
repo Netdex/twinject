@@ -40,7 +40,7 @@ void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
 void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face)
 {
 	if (!InitFont) {
-		D3DXCreateFont(m_pD3Ddev, sz, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET, 
+		D3DXCreateFont(m_pD3Ddev, sz, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET,
 			OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face, &dxfont);
 		InitFont = true;
 	}
@@ -54,7 +54,7 @@ void CDraw_InitLine(IDirect3DDevice9 *m_pD3Ddev)
 	}
 }
 
-void CDraw_Rect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
+void CDraw_FillRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
 {
 	D3DTLVERTEX qV[4] = {
 		{ (float)x , (float)(y + h), 0.0f, 1.0f, Color },
@@ -69,6 +69,16 @@ void CDraw_Rect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h,
 	m_pD3Ddev->SetTexture(0, Primitive);
 	m_pD3Ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, qV, sizeof(D3DTLVERTEX));
 }
+
+void CDraw_Rect(float x, float y, float w, float h, D3DCOLOR c)
+{
+	CDraw_Line(x, y, x + w, y, c);
+	CDraw_Line(x, y + h, x + w, y + h, c);
+	CDraw_Line(x, y, x, y + h, c);
+	CDraw_Line(x + w, y, x + w, y + h, c);
+}
+
+
 void CDraw_Text(char *str, D3DCOLOR color, int x, int y, int w, int h)
 {
 	static RECT textbox;
@@ -89,4 +99,21 @@ void CDraw_Line(float x1, float y1, float x2, float y2, D3DCOLOR color)
 	vert[1].x = x2;
 	vert[1].y = y2;
 	dxLine->Draw(vert, 2, color);
+}
+void CDraw_Circle(float x, float y, float radius, int sides, DWORD color)
+{
+	sides = min(127, sides);
+	D3DXVECTOR2 line[128];
+	float step = M_PI * 2.0 / sides;
+	for (int s = 0; s <= sides; s++)
+	{
+		float a = step * s;
+		float x1 = radius * cos(a) + x;
+		float y1 = radius * sin(a) + y;
+		line[s].x = x1;
+		line[s].y = y1;
+	}
+	dxLine->Begin();
+	dxLine->Draw(line, sides + 1, color);
+	dxLine->End();
 }

@@ -5,12 +5,13 @@
 #include "DirectInput8CreateHook.h"
 
 HANDLE HookHandle = NULL;
+HANDLE ProcessHandle = NULL;
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 {
 	logfs("DllMain injected");	
 
-	HANDLE hProcess = GetCurrentProcess();
+	ProcessHandle = GetCurrentProcess();
 
 	switch (reasonForCall)
 	{
@@ -19,7 +20,6 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 		logfs("DllMain: Debugger attached");
 		HookHandle = hModule;
 		Hook_Kernel32_LoadLibraryA();
-		// Hook_D3D9_Direct3DCreate9();
 		Hook_TH08_sub_410A70();
 		Hook_TH08_sub_447A37();
 		break;

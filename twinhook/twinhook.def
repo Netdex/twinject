@@ -1,5 +1,3 @@
 LIBRARY	"twinhook"
 EXPORTS
-	LoadLibraryA = LoadLibraryA_Hook
-	Direct3DCreate9 = Direct3DCreate9_Hook
-	sub_431240_Hook
+	DllMain

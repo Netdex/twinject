@@ -31,6 +31,18 @@
     <Filter Include="Source Files\directx">
       <UniqueIdentifier>{f6f0dd86-8217-4562-bf80-15a4b9753f8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\control">
+      <UniqueIdentifier>{dbcc21e5-5a89-458f-b4e8-3886c208a225}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\control">
+      <UniqueIdentifier>{02d8b0a8-4929-4a83-a37b-9e490684e386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\patch">
+      <UniqueIdentifier>{073eb184-6ac2-4669-80ab-304cf51d01a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\patch">
+      <UniqueIdentifier>{231cd6fb-3128-4bd0-a7ff-338eebe694c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -72,6 +84,24 @@
     <ClCompile Include="DirectInput8CreateHook.cpp">
       <Filter>Source Files\hook</Filter>
     </ClCompile>
+    <ClCompile Include="DI8Control.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D9Control.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="TH08Control.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="BotControl.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoBombPatch.cpp">
+      <Filter>Source Files\patch</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -109,6 +139,24 @@
     </ClInclude>
     <ClInclude Include="DirectInput8CreateHook.h">
       <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="DI8Control.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D9Control.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="TH08Control.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="BotControl.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoBombPatch.h">
+      <Filter>Header Files\patch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

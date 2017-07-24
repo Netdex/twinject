@@ -1,9 +1,11 @@
 #include"stdafx.h"
 #include"IDI8ADevice_Wrapper.h"
+#include "IDI8A_Wrapper.h"
 
-DirectInputDevice8Wrapper::DirectInputDevice8Wrapper(LPDIRECTINPUTDEVICE8A lpDirectInputDevice)
+DirectInputDevice8Wrapper::DirectInputDevice8Wrapper(LPDIRECTINPUTDEVICE8A lpDirectInputDevice, DirectInput8Wrapper *pDirectInput8)
 {
 	DirectInputDevice8 = lpDirectInputDevice;
+	DirectInput8 = pDirectInput8;
 }
 
 DirectInputDevice8Wrapper::~DirectInputDevice8Wrapper() {}
@@ -60,6 +62,8 @@ HRESULT DirectInputDevice8Wrapper::Unacquire()
 
 HRESULT DirectInputDevice8Wrapper::GetDeviceState(DWORD cbData, LPVOID lpvData)
 {
+	if (DirectInput8->Hook.GetDeviceState_Hook)
+		return DirectInput8->Hook.GetDeviceState_Hook(this, cbData, lpvData);
 	return DirectInputDevice8->GetDeviceState(cbData, lpvData);
 }
 

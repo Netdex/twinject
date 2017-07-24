@@ -2,9 +2,10 @@
 #include "IDI8A_Wrapper.h"
 #include "IDI8ADevice_Wrapper.h"
 
-DirectInput8Wrapper::DirectInput8Wrapper(LPDIRECTINPUT8A pDirectInput)
+DirectInput8Wrapper::DirectInput8Wrapper(LPDIRECTINPUT8A pDirectInput, DirectInput8Hook stHook)
 {
 	DirectInput8 = pDirectInput;
+	Hook = stHook;
 }
 
 DirectInput8Wrapper::~DirectInput8Wrapper() {}
@@ -28,8 +29,9 @@ HRESULT DirectInput8Wrapper::CreateDevice(const GUID& rguid, LPDIRECTINPUTDEVICE
 {
 	LPDIRECTINPUTDEVICE8A pDirectInputDevice8A;
 	HRESULT hRes = DirectInput8->CreateDevice(rguid, &pDirectInputDevice8A, pUnkOuter);
-	DirectInputDevice8 = pDirectInputDevice8A;
-	*lplpDirectInputDevice = new DirectInputDevice8Wrapper(pDirectInputDevice8A);
+	DirectInputDevice8Wrapper *wrapper = new DirectInputDevice8Wrapper(pDirectInputDevice8A, this);
+	*lplpDirectInputDevice = wrapper;
+	DirectInputDevice8 = wrapper;
 	return hRes;
 }
 

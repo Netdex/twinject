@@ -2,13 +2,10 @@
 #include "ID3D9Device_Wrapper.h"
 #include "cdraw.h"
 
-Direct3DDevice9Wrapper::Direct3DDevice9Wrapper(IDirect3DDevice9 *pDirect3DDevice9, IDirect3D9 *pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters,
-	void(*fnBeginSceneHook)(IDirect3DDevice9*), void(*fnEndSceneHook)(IDirect3DDevice9*))
+Direct3DDevice9Wrapper::Direct3DDevice9Wrapper(IDirect3DDevice9 *pDirect3DDevice9, Direct3D9Wrapper *pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters)
 {
 	Direct3DDevice9 = pDirect3DDevice9;
 	Direct3D9 = pDirect3D9;
-	this->BeginSceneHook = fnBeginSceneHook;
-	this->EndSceneHook = fnEndSceneHook;
 }
 
 Direct3DDevice9Wrapper::~Direct3DDevice9Wrapper() {  }
@@ -186,14 +183,14 @@ HRESULT Direct3DDevice9Wrapper::GetDepthStencilSurface(IDirect3DSurface9** ppZSt
 }
 HRESULT Direct3DDevice9Wrapper::BeginScene()
 {
-	if(BeginSceneHook)
-		BeginSceneHook(Direct3DDevice9);
+	if(Direct3D9->Hook.BeginSceneHook)
+		Direct3D9->Hook.BeginSceneHook(Direct3DDevice9);
 	return Direct3DDevice9->BeginScene();
 }
 HRESULT Direct3DDevice9Wrapper::EndScene()
 {
-	if(EndSceneHook)
-		EndSceneHook(Direct3DDevice9);
+	if(Direct3D9->Hook.EndSceneHook)
+		Direct3D9->Hook.EndSceneHook(Direct3DDevice9);
 	return Direct3DDevice9->EndScene();
 }
 HRESULT Direct3DDevice9Wrapper::Clear(DWORD Count, const D3DRECT* pRects, DWORD Flags, D3DCOLOR Color, float Z, DWORD Stencil)

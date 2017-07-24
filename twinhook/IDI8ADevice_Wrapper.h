@@ -1,9 +1,12 @@
 #pragma once
 
+
+class DirectInput8Wrapper;
+
 class DirectInputDevice8Wrapper : public IDirectInputDevice8A
 {
 public:
-	DirectInputDevice8Wrapper(LPDIRECTINPUTDEVICE8A lpDirectInputDevice);
+	DirectInputDevice8Wrapper(LPDIRECTINPUTDEVICE8A lpDirectInputDevice, DirectInput8Wrapper *pDirectInput8);
 	virtual ~DirectInputDevice8Wrapper();
 
 	/*** IUnknown methods ***/
@@ -42,5 +45,6 @@ public:
 	STDMETHOD(SetActionMap)(THIS_ LPDIACTIONFORMATA, LPCSTR, DWORD);
 	STDMETHOD(GetImageInfo)(THIS_ LPDIDEVICEIMAGEINFOHEADERA);
 
+	DirectInput8Wrapper *DirectInput8;
 	LPDIRECTINPUTDEVICE8A DirectInputDevice8;
 };

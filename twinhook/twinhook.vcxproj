@@ -151,9 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BotControl.cpp" />
     <ClCompile Include="BulletProcessHook.cpp" />
     <ClCompile Include="cdraw.cpp" />
+    <ClCompile Include="color.cpp" />
+    <ClCompile Include="D3D9Control.cpp" />
     <ClCompile Include="detour.cpp" />
+    <ClCompile Include="DI8Control.cpp" />
     <ClCompile Include="Direct3DCreate9Hook.cpp" />
     <ClCompile Include="DirectInput8CreateHook.cpp" />
     <ClCompile Include="ID3D9_Wrapper.cpp" />
@@ -166,12 +170,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TH08Control.cpp" />
+    <ClCompile Include="AutoBombPatch.cpp" />
     <ClCompile Include="twinhook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BotControl.h" />
     <ClInclude Include="BulletProcessHook.h" />
     <ClInclude Include="cdraw.h" />
+    <ClInclude Include="color.h" />
+    <ClInclude Include="D3D9Control.h" />
     <ClInclude Include="detour.h" />
+    <ClInclude Include="DI8Control.h" />
     <ClInclude Include="Direct3DCreate9Hook.h" />
     <ClInclude Include="DirectInput8CreateHook.h" />
     <ClInclude Include="ID3D9_Wrapper.h" />
@@ -181,6 +191,8 @@
     <ClInclude Include="LoadLibraryAHook.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TH08Control.h" />
+    <ClInclude Include="AutoBombPatch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="twinhook.def" />

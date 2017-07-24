@@ -1,7 +1,17 @@
 #pragma once
+
+class DirectInputDevice8Wrapper;
+
+typedef HRESULT(*GetDeviceState_t)(DirectInputDevice8Wrapper *lpDirectInput, DWORD cbData, LPVOID lpvData);
+
+struct DirectInput8Hook
+{
+	GetDeviceState_t GetDeviceState_Hook;
+};
+
 class DirectInput8Wrapper : public IDirectInput8A {
 public:
-	DirectInput8Wrapper(LPDIRECTINPUT8A pDirectInput);
+	DirectInput8Wrapper(LPDIRECTINPUT8A pDirectInput, DirectInput8Hook stHook);
 	virtual ~DirectInput8Wrapper();
 
 	/*** IUnknown methods ***/
@@ -20,5 +30,7 @@ public:
 	STDMETHOD(ConfigureDevices)(THIS_ LPDICONFIGUREDEVICESCALLBACK, LPDICONFIGUREDEVICESPARAMSA, DWORD, LPVOID);
 
 	LPDIRECTINPUT8A DirectInput8;
-	LPDIRECTINPUTDEVICE8A DirectInputDevice8;
+	DirectInputDevice8Wrapper *DirectInputDevice8;
+	DirectInput8Hook Hook;
 };
+
