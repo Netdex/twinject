@@ -8,7 +8,7 @@ _twinject_ (**t**ouhou **w**indows **inject**or) is a bot for *Touhou Eiyashou ~
 
 This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available.
 
-So far, I plan to only implement for *Imperishable Night* with the dxd9 patch, because I like IN, and I cannot find SDKs for dxd8.
+So far, I plan to only implement for *Imperishable Night* with the d3d9 patch, because I like IN, and I cannot find SDKs for dxd8.
 
 
 
@@ -18,9 +18,9 @@ Consists of two parts, **twinhook** and **twinject**.
 ### twinhook
 twinhook is a DLL, injected during runtime into a Touhou game. It uses MS Detours to trampoline functions.
 
-`TODO: Technical Description`
+[Technical Description](http://github.com/netdex/twinject/docs/twinhook_technical.md)
 
 ### twinject
 twinject loads twinhook into th08.exe with Detours.
 
-`TODO: Technical Description`
+[Technical Description](http://github.com/netdex/twinject/docs/twinject_technical.md)

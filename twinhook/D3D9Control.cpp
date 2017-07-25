@@ -8,6 +8,7 @@
 
 extern DirectInput8Wrapper *DirectInput8;
 extern std::vector<entity> TH08_Bullets;
+
 void D3D9_Init_Hook(IDirect3DDevice9 *d3dDev)
 {
 	CDraw_InitSolidTexture(d3dDev);
