@@ -173,6 +173,7 @@
     <ClCompile Include="TH08Control.cpp" />
     <ClCompile Include="AutoBombPatch.cpp" />
     <ClCompile Include="twinhook.cpp" />
+    <ClCompile Include="vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BotControl.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TH08Control.h" />
     <ClInclude Include="AutoBombPatch.h" />
+    <ClInclude Include="vec2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="twinhook.def" />

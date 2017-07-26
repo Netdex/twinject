@@ -12,7 +12,7 @@ LoadLibrary_t LoadLibraryA_Original;
 HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
 {
 	HMODULE hM = LoadLibraryA_Original(lpFileName);
-	logfs("LoadLibrary: %s" , lpFileName);
+	// logfs("LoadLibrary: %s" , lpFileName);
 	if (!HookedD3D && strcmp(lpFileName, "d3d9.dll") == 0)
 	{
 		pDirect3DCreate9 = (PBYTE)GetProcAddress(hM, "Direct3DCreate9");

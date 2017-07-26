@@ -102,6 +102,9 @@
     <ClCompile Include="AutoBombPatch.cpp">
       <Filter>Source Files\patch</Filter>
     </ClCompile>
+    <ClCompile Include="vec2.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="AutoBombPatch.h">
       <Filter>Header Files\patch</Filter>
+    </ClInclude>
+    <ClInclude Include="vec2.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
