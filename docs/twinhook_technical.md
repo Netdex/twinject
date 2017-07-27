@@ -102,6 +102,7 @@ void TH08_VectorUpdate_Hook(int retaddr, int a1, int a2, int a3)
 One extra note, at `*((DWORD*)a2 + 875))` is an identifier for the state of the current bullet. There are several different states, which are used for manipulating the bullet patterns (ex. curving in a certain direction, stopping temporarily, accelerating). I won't summarize them all here, but this information may be useful to a bot.
 
 TODO: find a way to read the bullet sizes because that's pretty important
+rev. eng. of death processing function
 
 #### Powerup Locations
 This is actually demonstrated above, it's the exact same process as the bullets but with a return address of `0x0044095B` instead.
@@ -149,7 +150,12 @@ This technique requires finetuning of several parameters for maximum effectivene
 
 The net force vector is then used to determine which arrow keys to send to the game. Of course, Z is held down all the time, and SHIFT is useless for a precise bot (except some of the shot types are better in focus mode).
 
+TODO: describe velocity dodging technique
+
 #### Deathbombing
 Deathbombing can be implemented with the local optimization technique as well. If the effective electrostatic force acting on the player has a large magnitude, then the player is probably stuck, since if it can, it will try to move to a state that has the least force acting on it.
 
 Perfect deathbombing can be implemented by patching IN and simply wiring out the deathbomb test, so that every death automatically deathbombs. However, I think this kidn of goes against the spirit of this project, so I'll try to use the alternative solution.
+
+#### Focus Control
+`TODO`
