@@ -15,12 +15,12 @@ void TH08_VectorUpdate_Hook(int retaddr, int a1, int a2, int a3)
 		b.v.x = *(float*)(a3 + 0);
 		b.v.y = *(float*)(a3 + 4);
 		// find log2 of bullet action binary flag
-		if(!_BitScanReverse(&b.bh, *((DWORD*)a2 + 875)))
-			b.bh = 0;
+		if(!_BitScanReverse(&b.me, *((DWORD*)a2 + 875)))
+			b.me = 0;
 		
-		char* v6 = (char*)a2;
-		char* v23 = &v6[24 * *((DWORD*)v6 + 883) + 3536];
-
+		float bx = *(float*)(a2 + 3380);
+		float by = *((float*)(a2 + 3380) + 1);
+		b.sz = vec2(bx, by);
 		TH08_Bullets.push_back(b);
 	}
 	else if(retaddr == 0x0044095B)
@@ -31,7 +31,7 @@ void TH08_VectorUpdate_Hook(int retaddr, int a1, int a2, int a3)
 		b.v.x = *(float*)(a3 + 0);
 		b.v.y = *(float*)(a3 + 4);
 		// get powerup temporal factor
-		b.pt = *(BYTE*)(a1 - 676 + 727);
+		b.me = *(BYTE*)(a1 - 676 + 727);
 		TH08_Powerups.push_back(b);
 	}
 }

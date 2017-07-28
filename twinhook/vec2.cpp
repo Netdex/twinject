@@ -9,9 +9,6 @@ vec2::vec2(float x, float y) : x(x), y(y)
 {
 }
 
-vec2::vec2(vec2& o) : x(o.x), y(o.y)
-{
-}
 
 vec2::vec2(const vec2& other)
 	: x(other.x),

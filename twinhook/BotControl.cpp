@@ -8,6 +8,13 @@
 #include "AutoBombPatch.h"
 #include "vec2.h"
 
+/*
+ * TODO
+ * - BUG: Bullets that come directly will not be dodged
+ * - Bullet sizes contribute to action range
+ * - Handle focusing better
+ * - Lasers
+ */
 extern HANDLE ProcessHandle;
 
 extern DirectInput8Wrapper *DirectInput8;
@@ -17,8 +24,6 @@ extern std::vector<entity> TH08_Powerups;
 
 BOOL bBotEnabled = FALSE;
 bool bRenderDetailed = false;
-
-float actionRange = BOT_DEFAULT_ACTION_RANGE;
 
 void Bot_OnEnable()
 {
@@ -68,8 +73,9 @@ void CalculateNetVector(vec2 c, vec2 &attract, vec2 &repel)
 		* normal d(x, y)
 		*/
 
-		float lr = actionRange;
-		float sr = BOT_SIDESTEP_RANGE;
+		float sr = BOT_RADIUS + (*i).sz.x / 2 * 1.414;
+		float lr = sr + BOT_SAFETY_DELTA;
+		
 		vec2 a = (*i).p;										// bullet position
 		vec2 b = a + (*i).v * BULLET_PROJECTION_FACTOR;			// bullet projected future position
 		vec2 ac = c - a;										// vector from player to bullet
@@ -83,22 +89,25 @@ void CalculateNetVector(vec2 c, vec2 &attract, vec2 &repel)
 			shrinkRange = true;
 			repel -= ac.unit() / ac.lensq();
 		}
-		else if (cd.zero())
+		else if((a - d).len() + (b - d).len() - (a - b).len() < ZERO_EPSILON)	// TODO replace with bounding box check
 		{
-			// move the player in the direction of the bullet normal
-			repel += (*i).v.normal().unit() * ac.lensq();
-		}
-		else if (cd.lensq() < sr * sr && (a - d).len() + (b - d).len() - (a - b).len() < ZERO_EPSILON)
-		{
-			// move the player away from the normal by a factor relative to the bullet distance
-			repel += cd.unit() / ac.lensq();
+			if (cd.zero())
+			{
+				// move the player in the direction of the bullet normal
+				repel += (*i).v.normal().unit() * ac.lensq();
+			}
+			else if (cd.lensq() < sr * sr)
+			{
+				// move the player away from the normal by a factor relative to the bullet distance
+				repel += cd.unit() / ac.lensq();
+			}
 		}
 	}
 
 	for (auto i = TH08_Powerups.begin(); i != TH08_Powerups.end(); ++i)
 	{
 		// make sure this powerup isn't one of those score particles
-		if ((*i).pt == 0) {
+		if ((*i).me == 0) {
 			vec2 m((*i).p.x - c.x, (*i).p.y - c.y);
 			if (abs(m.x) < 300 && abs(m.y) < 70) {
 				attract -= m.unit() * .1f / m.lensq();
@@ -106,14 +115,6 @@ void CalculateNetVector(vec2 c, vec2 &attract, vec2 &repel)
 		}
 	}
 
-	if (shrinkRange)
-	{
-		actionRange = (actionRange * 15 + BOT_MIN_ACTION_RANGE) / 16;
-	}
-	else
-	{
-		actionRange = (actionRange * 20 + BOT_DEFAULT_ACTION_RANGE) / 21;
-	}
 	// calculate wall repulsion
 	float dxr = abs(pow(GAME_WIDTH - c.x, 2));
 	float dxl = abs(pow(c.x, 2));
@@ -137,12 +138,13 @@ void Bot_RenderOverlay(IDirect3DDevice9 *d3dDev)
 		// bullet markers
 		for (auto i = TH08_Bullets.begin(); i != TH08_Bullets.end(); ++i)
 		{
-			CDraw_FillRect(d3dDev, (*i).p.x - 2 + GAME_X_OFFSET, (*i).p.y - 2 + GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 255, 2, 200));
+			CDraw_Rect((*i).p.x - (*i).sz.x / 2 + GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
 			CDraw_Line((*i).p.x + GAME_X_OFFSET, (*i).p.y + GAME_Y_OFFSET,
 				(*i).p.x + (*i).v.x * BULLET_PROJECTION_FACTOR + GAME_X_OFFSET, (*i).p.y + (*i).v.y * BULLET_PROJECTION_FACTOR + GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-			if ((*i).bh)
+			
+			if ((*i).me)
 			{
-				CDraw_Rect((*i).p.x - 7 + GAME_X_OFFSET, (*i).p.y - 7 + GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).bh), 1, 1)));
+				CDraw_Rect((*i).p.x - 7 + GAME_X_OFFSET, (*i).p.y - 7 + GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
 			}
 			/*if((*i).vt)
 			{
@@ -153,7 +155,7 @@ void Bot_RenderOverlay(IDirect3DDevice9 *d3dDev)
 		// powerup markers
 		for (auto i = TH08_Powerups.begin(); i != TH08_Powerups.end(); ++i)
 		{
-			if ((*i).pt == 0) {
+			if ((*i).me == 0) {
 				CDraw_FillRect(d3dDev, (*i).p.x - 2 + GAME_X_OFFSET, (*i).p.y - 2 + GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 2, 255, 200));
 				CDraw_Line((*i).p.x + GAME_X_OFFSET, (*i).p.y + GAME_Y_OFFSET,
 					(*i).p.x + (*i).v.x * 5 + GAME_X_OFFSET, (*i).p.y + (*i).v.y * 5 + GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
@@ -163,8 +165,8 @@ void Bot_RenderOverlay(IDirect3DDevice9 *d3dDev)
 	// player area
 	vec2 plyr = TH08_GetPlayerLocation();
 	CDraw_FillRect(d3dDev, plyr.x - 2 + GAME_X_OFFSET, plyr.y - 2 + GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
-	CDraw_Circle(plyr.x + GAME_X_OFFSET, plyr.y + GAME_Y_OFFSET, actionRange, 20, D3DCOLOR_ARGB(255, 255, 0, 0));
-	CDraw_Circle(plyr.x + GAME_X_OFFSET, plyr.y + GAME_Y_OFFSET, BOT_SIDESTEP_RANGE, 20, D3DCOLOR_ARGB(255, 255, 255, 0));
+	/*CDraw_Circle(plyr.x + GAME_X_OFFSET, plyr.y + GAME_Y_OFFSET, actionRange, 20, D3DCOLOR_ARGB(255, 255, 0, 0));
+	CDraw_Circle(plyr.x + GAME_X_OFFSET, plyr.y + GAME_Y_OFFSET, BOT_SIDESTEP_RANGE, 20, D3DCOLOR_ARGB(255, 255, 255, 0));*/
 }
 
 void Bot_ProcessControl(BYTE *diKeys)
@@ -231,13 +233,13 @@ void Bot_Tick()
 	}
 	if (abs(repel.x) > FOCUS_FORCE_THRESHOLD || abs(repel.y) > FOCUS_FORCE_THRESHOLD)
 	{
-		if (abs(attract.x) > GATHER_THRESHOLD || abs(attract.y) > GATHER_THRESHOLD) {
+		//if (abs(attract.x) > GATHER_THRESHOLD || abs(attract.y) > GATHER_THRESHOLD) {
 			DI8C_SetKeyState(DIK_LSHIFT, 0);
-		}
-		else
-		{
-			DI8C_SetKeyState(DIK_LSHIFT, 0x80);
-		}
+		//}
+		//else
+		//{
+		//	DI8C_SetKeyState(DIK_LSHIFT, 0x80);
+		//}
 	}
 	else
 	{

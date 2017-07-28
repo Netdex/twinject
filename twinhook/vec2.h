@@ -8,7 +8,6 @@ public:
 
 	vec2();
 	vec2(float x, float y);
-	vec2(vec2 &o);
 
 	vec2(const vec2& other);
 	vec2(vec2&& other) noexcept;

@@ -5,9 +5,8 @@ struct entity
 {
 	vec2 p;
 	vec2 v;
-	DWORD bh;			// bullet behavior
-	BYTE pt;			// powerup type
-	int vt;				// temporary value
+	vec2 sz;			// bullet size
+	DWORD me;			// metadata
 };
 
 void TH08Control_FrameInit();

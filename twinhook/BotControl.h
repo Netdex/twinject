@@ -2,10 +2,9 @@
 
 
 const float BOT_ACTION_THRESHOLD = 0.000009f;
-const int BOT_MIN_ACTION_RANGE = 7;
-const int BOT_DEFAULT_ACTION_RANGE = 20;
-const int BOT_SIDESTEP_RANGE = 12;
-const float BULLET_PROJECTION_FACTOR = 10;
+const float BOT_RADIUS = 5;
+const float BOT_SAFETY_DELTA = 3;
+const float BULLET_PROJECTION_FACTOR = 13;
 const float FOCUS_FORCE_THRESHOLD = 0.005f;
 const float GATHER_THRESHOLD = 0.00005f;
 
