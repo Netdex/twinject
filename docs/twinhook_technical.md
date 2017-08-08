@@ -101,8 +101,7 @@ void TH08_VectorUpdate_Hook(int retaddr, int a1, int a2, int a3)
 
 One extra note, at `*((DWORD*)a2 + 875))` is an identifier for the state of the current bullet. There are several different states, which are used for manipulating the bullet patterns (ex. curving in a certain direction, stopping temporarily, accelerating). I won't summarize them all here, but this information may be useful to a bot.
 
-TODO: find a way to read the bullet sizes because that's pretty important
-rev. eng. of death processing function
+Bullets and the player are not actually circles, but are boxes. The collision detection does an axis-aligned bounding box check, which is fast but not as accurate to the graphics. Later games use hitcircles instead, since computational efficiency is not as important now. Bullets are defined by their position (the center of the box), and their size (width, height). These are available as two sequential floats at `*(float*)(a2 + 3380)`.
 
 #### Powerup Locations
 This is actually demonstrated above, it's the exact same process as the bullets but with a return address of `0x0044095B` instead.
@@ -134,23 +133,31 @@ I'll probably just spend a moment in Cheat Engine for this
 Now that we have all this information and a way to manipulate the game, we can program a bot.
 
 #### General Idea
-So far the technique I am using is a local optimization based on Coulomb's law, treating the bullets, player, enemies, and powerups as charged particles. We cannot change the bullet, enemy, or powerup positions (actually we can, but that's cheating), so we only simulate the electrostatic interactions involving the player. The player has the same charge as bullets and enemies, but has an opposite charge from powerups. Therefore, the player is repelled from bullets and enemies, but attracted to powerups. 
 
 Several other factors are taken into account to create the final algorithm:
+- we don't want the player to run into bullets or enemies
 - we don't want the player to run into the walls, so make the walls repulsive
 - we want the player closer to the bottom middle of the screen, but don't confine them there because some spellcards need you to move a lot
 - we don't want the player to prioritize anything (getting powerups, avoiding walls) over dodging bullets
 - we don't want the player to chase powerups up to the top of the screen
-- we don't want to take bullets that are really far away into account
-    - While I'm on this topic, I would like to mention the solution I used which works relatively well. The gist of it is that the player has a curtain around them, and only bullets inside the curtain are accounted for by the dodging algorithm. However, this curtain changes size depending on several factors (bullet density, bullet count, enemy count etc., and the exact weighting of these factors needs to be fine tuned) allowing the bot to be adaptable between macro/micro-dodging.
+- we want the player to prioritize dodging closer bullets
 - we don't want the player to get stuck in a rut, chased into a corner by a wall of bullets
+- we want the player to anticipate fast bullets
 - ... and several other considerations.
+
+##### Micrododging
+So far the technique I am using is a local optimization based on Coulomb's law, treating the bullets, player, enemies, and powerups as charged particles. We cannot change the bullet, enemy, or powerup positions (actually we can, but that's cheating), so we only simulate the electrostatic interactions involving the player. The player has the same charge as bullets and enemies, but has an opposite charge from powerups. Therefore, the player is repelled from bullets and enemies, but attracted to powerups. Bullet size and player hitbox size is taken into account to make the player graze as close as possible.
 
 This technique requires finetuning of several parameters for maximum effectiveness, I plan to either use a genetic algorithm or simulated annealing approach to optimize these parameters.
 
+The problem here is that extremely fast bullets may not be reacted to quickly enough to dodge.
+
+##### Macrododging
+An additional technique I added to solve the fast bullet problem involves preemtively predicting bullet motion and sidestepping bullets in advance.
+
+
 The net force vector is then used to determine which arrow keys to send to the game. Of course, Z is held down all the time, and SHIFT is useless for a precise bot (except some of the shot types are better in focus mode).
 
-TODO: describe velocity dodging technique
 
 #### Deathbombing
 Deathbombing can be implemented with the local optimization technique as well. If the effective electrostatic force acting on the player has a large magnitude, then the player is probably stuck, since if it can, it will try to move to a state that has the least force acting on it.
