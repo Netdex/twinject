@@ -1,13 +1,98 @@
 #include "stdafx.h"
 #include "cdraw.h"
 
-IDirect3DTexture9* Primitive = NULL;
-LPD3DXFONT dxfont;
-LPD3DXLINE dxLine;
+IDirect3DDevice9 *CDrawDefaultD3DDevice = NULL;
+IDirect3DTexture9* CDrawDefaultPrimitive = NULL;
+LPD3DXFONT CDrawDefaultDxFont;
+LPD3DXLINE CDrawDefaultDxLine;
 
-bool InitPrimitive = false;
-bool InitFont = false;
-bool InitLine = false;
+bool CDrawFlagInit = false;
+
+void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev);
+void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face);
+void CDraw_InitLine(IDirect3DDevice9 *m_pD3Ddev);
+
+void CDraw_Init(IDirect3DDevice9 *d3dDev)
+{
+	if (CDrawFlagInit) return;
+	CDrawFlagInit = true;
+
+	CDrawDefaultD3DDevice = d3dDev;
+	CDraw_InitSolidTexture(d3dDev);
+	CDraw_InitFont(d3dDev, 14, L"Consolas");
+	CDraw_InitLine(d3dDev);
+}
+
+void CDraw_FillRect(float x, float y, float w, float h, D3DCOLOR Color)
+{
+	if (!CDrawFlagInit) return;
+
+	D3DTLVERTEX qV[4] = {
+		{ (float)x , (float)(y + h), 0.0f, 1.0f, Color },
+		{ (float)x , (float)y , 0.0f, 1.0f, Color },
+		{ (float)(x + w), (float)(y + h), 0.0f, 1.0f, Color },
+		{ (float)(x + w), (float)y , 0.0f, 1.0f, Color }
+	};
+	const DWORD D3DFVF_TL = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
+	CDrawDefaultD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	CDrawDefaultD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	CDrawDefaultD3DDevice->SetFVF(D3DFVF_TL);
+	CDrawDefaultD3DDevice->SetTexture(0, CDrawDefaultPrimitive);
+	CDrawDefaultD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, qV, sizeof(D3DTLVERTEX));
+}
+
+void CDraw_Rect(float x, float y, float w, float h, D3DCOLOR c)
+{
+	if (!CDrawFlagInit) return;
+
+	CDraw_Line(x, y, x + w, y, c);
+	CDraw_Line(x, y + h, x + w, y + h, c);
+	CDraw_Line(x, y, x, y + h, c);
+	CDraw_Line(x + w, y, x + w, y + h, c);
+}
+
+
+void CDraw_Text(char *str, D3DCOLOR color, int x, int y, int w, int h)
+{
+	if (!CDrawFlagInit) return;
+
+	static RECT textbox;
+	SetRect(&textbox, x, y, w, h);
+	if (CDrawDefaultDxFont)
+		CDrawDefaultDxFont->DrawTextA(NULL, str, -1, &textbox, DT_LEFT | DT_TOP, color);
+}
+
+void CDraw_Line(float x1, float y1, float x2, float y2, D3DCOLOR color)
+{
+	if (!CDrawFlagInit) return;
+
+	D3DXVECTOR2 vert[2];
+	vert[0].x = x1;
+	vert[0].y = y1;
+	vert[1].x = x2;
+	vert[1].y = y2;
+	CDrawDefaultDxLine->Draw(vert, 2, color);
+}
+
+void CDraw_Circle(float x, float y, float radius, int sides, DWORD color)
+{
+	if (!CDrawFlagInit) return;
+
+	sides = min(127, sides);
+	D3DXVECTOR2 line[128];
+	float step = M_PI * 2.0 / sides;
+	for (int s = 0; s <= sides; s++)
+	{
+		float a = step * s;
+		float x1 = radius * cos(a) + x;
+		float y1 = radius * sin(a) + y;
+		line[s].x = x1;
+		line[s].y = y1;
+	}
+	CDrawDefaultDxLine->Begin();
+	CDrawDefaultDxLine->Draw(line, sides + 1, color);
+	CDrawDefaultDxLine->End();
+}
 
 HRESULT CDraw_GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32)
 {
@@ -29,91 +114,15 @@ HRESULT CDraw_GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD
 
 void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
 {
-	if (!InitPrimitive)
-	{
-		CDraw_GenerateTexture(m_pD3Ddev, &Primitive,
-			D3DCOLOR_ARGB(255, 255, 255, 255)
-		);
-		InitPrimitive = true;
-	}
+	CDraw_GenerateTexture(m_pD3Ddev, &CDrawDefaultPrimitive, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
+
 void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face)
 {
-	if (!InitFont) {
-		D3DXCreateFont(m_pD3Ddev, sz, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET,
-			OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face, &dxfont);
-		InitFont = true;
-	}
+	D3DXCreateFont(m_pD3Ddev, sz, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face, &CDrawDefaultDxFont);
 }
 void CDraw_InitLine(IDirect3DDevice9 *m_pD3Ddev)
 {
-	if (!InitLine)
-	{
-		D3DXCreateLine(m_pD3Ddev, &dxLine);
-		InitLine = true;
-	}
-}
-
-void CDraw_FillRect(IDirect3DDevice9* m_pD3Ddev, float x, float y, float w, float h, D3DCOLOR Color)
-{
-	D3DTLVERTEX qV[4] = {
-		{ (float)x , (float)(y + h), 0.0f, 1.0f, Color },
-		{ (float)x , (float)y , 0.0f, 1.0f, Color },
-		{ (float)(x + w), (float)(y + h), 0.0f, 1.0f, Color },
-		{ (float)(x + w), (float)y , 0.0f, 1.0f, Color }
-	};
-	const DWORD D3DFVF_TL = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
-	m_pD3Ddev->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-	m_pD3Ddev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	m_pD3Ddev->SetFVF(D3DFVF_TL);
-	m_pD3Ddev->SetTexture(0, Primitive);
-	m_pD3Ddev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, qV, sizeof(D3DTLVERTEX));
-}
-
-void CDraw_Rect(float x, float y, float w, float h, D3DCOLOR c)
-{
-	CDraw_Line(x, y, x + w, y, c);
-	CDraw_Line(x, y + h, x + w, y + h, c);
-	CDraw_Line(x, y, x, y + h, c);
-	CDraw_Line(x + w, y, x + w, y + h, c);
-}
-
-
-void CDraw_Text(char *str, D3DCOLOR color, int x, int y, int w, int h)
-{
-	static RECT textbox;
-	SetRect(&textbox, x, y, w, h);
-	if (dxfont)
-		dxfont->DrawTextA(NULL,
-			str,
-			-1,
-			&textbox,
-			DT_LEFT | DT_TOP,
-			color);
-}
-void CDraw_Line(float x1, float y1, float x2, float y2, D3DCOLOR color)
-{
-	D3DXVECTOR2 vert[2];
-	vert[0].x = x1;
-	vert[0].y = y1;
-	vert[1].x = x2;
-	vert[1].y = y2;
-	dxLine->Draw(vert, 2, color);
-}
-void CDraw_Circle(float x, float y, float radius, int sides, DWORD color)
-{
-	sides = min(127, sides);
-	D3DXVECTOR2 line[128];
-	float step = M_PI * 2.0 / sides;
-	for (int s = 0; s <= sides; s++)
-	{
-		float a = step * s;
-		float x1 = radius * cos(a) + x;
-		float y1 = radius * sin(a) + y;
-		line[s].x = x1;
-		line[s].y = y1;
-	}
-	dxLine->Begin();
-	dxLine->Draw(line, sides + 1, color);
-	dxLine->End();
+	D3DXCreateLine(m_pD3Ddev, &CDrawDefaultDxLine);
 }

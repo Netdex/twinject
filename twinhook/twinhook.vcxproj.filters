@@ -43,6 +43,12 @@
     <Filter Include="Source Files\patch">
       <UniqueIdentifier>{231cd6fb-3128-4bd0-a7ff-338eebe694c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gfx">
+      <UniqueIdentifier>{6bce54b5-b9e9-4dea-8586-295a9dddcb12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gfx">
+      <UniqueIdentifier>{4e16eb2d-224a-4c92-9fef-36d6015431b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -105,6 +111,12 @@
     <ClCompile Include="vec2.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="BotOverlayRenderer.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="InputOverlayRenderer.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -163,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="vec2.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="BotOverlayRenderer.h">
+      <Filter>Header Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="InputOverlayRenderer.h">
+      <Filter>Header Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

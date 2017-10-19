@@ -32,6 +32,31 @@ public:
 	
 	static float dot(vec2 &a, vec2 &b);
 	static vec2 proj(vec2 &a, vec2 &b);
+
+	/**
+	 * \brief Determine the minimum component-wise vector
+	 * \param a First vector
+	 * \param b Second vector
+	 * \return The minimum component-wise vector
+	 */
+	static vec2 minv(vec2 &a, vec2 &b);
+
+	/**
+	* \brief Determine the maximum component-wise vector
+	* \param a First vector
+	* \param b Second vector
+	* \return the minimum component-wise vector
+	*/
+	static vec2 maxv(vec2 &a, vec2 &b);
+
+	/**
+	 * \brief Determine if p is inside an AABB defined by a and b
+	 * \param p Point to test
+	 * \param a Arbitrary corner of AABB
+	 * \param b Arbitrary corner of AABB
+	 * \return If p is inside an AABB defined by a and b
+	 */
+	static bool in_aabb(vec2 &p, vec2 &a, vec2 &b);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);

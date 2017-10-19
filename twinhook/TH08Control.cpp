@@ -45,7 +45,6 @@ void TH08Control_FrameCleanup()
 {
 	TH08_Bullets.clear();
 	TH08_Powerups.clear();
-	
 }
 
 PBYTE PlayerPosAddr = (PBYTE)0x017D6110;

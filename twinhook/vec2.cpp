@@ -154,3 +154,19 @@ vec2 vec2::proj(vec2& a, vec2& b)
 	return b * (dot(a, b) / b.lensq());
 }
 
+vec2 vec2::minv(vec2& a, vec2& b)
+{
+	return vec2(min(a.x, b.x), min(a.y, b.y));
+}
+
+vec2 vec2::maxv(vec2& a, vec2& b)
+{
+	return vec2(max(a.x, b.x), max(a.y, b.y));
+}
+
+bool vec2::in_aabb(vec2 &p, vec2 &a, vec2 &b)
+{
+	vec2 topleft = minv(a, b);
+	vec2 botright = maxv(a, b);
+	return p.x >= topleft.x && p.x <= botright.x && p.y >= topleft.y && p.y <= botright.y;
+}

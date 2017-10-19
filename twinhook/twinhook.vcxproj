@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BotControl.cpp" />
+    <ClCompile Include="BotOverlayRenderer.cpp" />
     <ClCompile Include="BulletProcessHook.cpp" />
     <ClCompile Include="cdraw.cpp" />
     <ClCompile Include="color.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="ID3D9Device_Wrapper.cpp" />
     <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
     <ClCompile Include="IDI8A_Wrapper.cpp" />
+    <ClCompile Include="InputOverlayRenderer.cpp" />
     <ClCompile Include="LoadLibraryAHook.cpp" />
     <ClCompile Include="logfs.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -177,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BotControl.h" />
+    <ClInclude Include="BotOverlayRenderer.h" />
     <ClInclude Include="BulletProcessHook.h" />
     <ClInclude Include="cdraw.h" />
     <ClInclude Include="color.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="ID3D9Device_Wrapper.h" />
     <ClInclude Include="IDI8ADevice_Wrapper.h" />
     <ClInclude Include="IDI8A_Wrapper.h" />
+    <ClInclude Include="InputOverlayRenderer.h" />
     <ClInclude Include="LoadLibraryAHook.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />

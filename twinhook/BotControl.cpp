@@ -1,10 +1,7 @@
 #include "stdafx.h"
 #include "BotControl.h"
 #include "TH08Control.h"
-#include "IDI8A_Wrapper.h"
 #include "DI8Control.h"
-#include "cdraw.h"
-#include "color.h"
 #include "AutoBombPatch.h"
 #include "vec2.h"
 
@@ -17,12 +14,10 @@
  */
 extern HANDLE ProcessHandle;
 
-extern DirectInput8Wrapper *DirectInput8;
-
 extern std::vector<entity> TH08_Bullets;
 extern std::vector<entity> TH08_Powerups;
 
-BOOL bBotEnabled = FALSE;
+bool bBotEnabled = FALSE;
 bool bRenderDetailed = false;
 
 void Bot_OnEnable()
@@ -48,7 +43,7 @@ void Bot_SetEnable(BOOL enable)
 	}
 }
 
-BOOL Bot_IsEnabled()
+bool Bot_IsEnabled()
 {
 	return bBotEnabled;
 }
@@ -58,21 +53,20 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 	for (auto i = TH08_Bullets.begin(); i != TH08_Bullets.end(); ++i)
 	{
 		/*
-		*
-		*check if bullet crosses target boundary
-		*
-		* Action Radius:
-		* center c(x, y)
-		* radius r
-		*
-		* Bullet Path:
-		* location a(x, y)
-		* target b(x, y)
-		*
-		* normal d(x, y)
-		*/
+		 * check if bullet crosses target boundary
+		 *
+		 * Action Radius:
+		 * center c(x, y)
+		 * radius r
+		 *
+		 * Bullet Path:
+		 * location a(x, y)
+		 * target b(x, y)
+		 *
+		 * normal d(x, y)
+		 */
 
-		float ur = BOT_RADIUS + (*i).sz.x / 2 * 1.414;
+		float ur = BOT_RADIUS + (*i).sz.x / 2 * 1.41421356237f;
 		float sr = ur + BOT_MACROSAFETY_DELTA;
 		float lr = ur + BOT_MICROSAFETY_DELTA;
 
@@ -88,7 +82,7 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 		{
 			threat -= BOT_BULLET_PRIORITY * ac.unit() / ac.lensq();
 		}
-		else if ((a - d).len() + (b - d).len() - (a - b).len() < ZERO_EPSILON)	// TODO replace with bounding box check
+		else if (vec2::in_aabb(d, a, b))
 		{
 			if (cd.zero())
 			{
@@ -122,45 +116,6 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 	guide += vec2(.2f / dxr + -.2f / dxl, -.6f / dyt + .1f / dyb);
 }
 
-void Bot_RenderOverlay(IDirect3DDevice9 *d3dDev)
-{
-	// simple credits and stats
-	char buf[256];
-	CDraw_FillRect(d3dDev, 445, 250, 640, 480, D3DCOLOR_ARGB(200, 0, 0, 0));
-	CDraw_Text("TWINJECT [netdex]", D3DCOLOR_ARGB(255, 0, 255, 255), 450, 255, 640, 480);
-	sprintf_s(buf, 256, "BULLET_COUNT: %d", TH08_Bullets.size());
-	CDraw_Text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), 450, 285, 640, 480);
-	sprintf_s(buf, 256, "BOT_STATE: %s", Bot_IsEnabled() ? "ENABLED" : "DISABLED");
-	CDraw_Text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), 450, 300, 640, 480);
-
-	if (bRenderDetailed) {
-		// bullet markers
-		for (auto i = TH08_Bullets.begin(); i != TH08_Bullets.end(); ++i)
-		{
-			CDraw_Rect((*i).p.x - (*i).sz.x / 2 + GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
-			CDraw_Line((*i).p.x + GAME_X_OFFSET, (*i).p.y + GAME_Y_OFFSET,
-				(*i).p.x + (*i).v.x * BULLET_PROJECTION_FACTOR + GAME_X_OFFSET, (*i).p.y + (*i).v.y * BULLET_PROJECTION_FACTOR + GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-
-			if ((*i).me)
-			{
-				CDraw_Rect((*i).p.x - 7 + GAME_X_OFFSET, (*i).p.y - 7 + GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
-			}
-		}
-		// powerup markers
-		for (auto i = TH08_Powerups.begin(); i != TH08_Powerups.end(); ++i)
-		{
-			if ((*i).me == 0) {
-				CDraw_FillRect(d3dDev, (*i).p.x - 2 + GAME_X_OFFSET, (*i).p.y - 2 + GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 2, 255, 200));
-				CDraw_Line((*i).p.x + GAME_X_OFFSET, (*i).p.y + GAME_Y_OFFSET,
-					(*i).p.x + (*i).v.x * 5 + GAME_X_OFFSET, (*i).p.y + (*i).v.y * 5 + GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-			}
-		}
-	}
-	// player area
-	vec2 plyr = TH08_GetPlayerLocation();
-	CDraw_FillRect(d3dDev, plyr.x - 2 + GAME_X_OFFSET, plyr.y - 2 + GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
-}
-
 void Bot_ProcessControl(BYTE *diKeys)
 {
 	if (diKeys[DIK_G] & 0x80)
@@ -182,13 +137,18 @@ void Bot_Tick()
 		DI8C_ResetKeyState(DIK_DOWN);
 		DI8C_ResetKeyState(DIK_Z);
 		DI8C_ResetKeyState(DIK_LSHIFT);
+		DI8C_ResetKeyState(DIK_LCONTROL);
 		return;
 	}
+	
+	DI8C_SetKeyState(DIK_Z, 0x80);			// fire continuously
+	DI8C_SetKeyState(DIK_LCONTROL, 0x80);	// skip dialogue continuously
+
 	vec2 plyr = TH08_GetPlayerLocation();
 	vec2 guide, threat;
 	CalculateNetVector(plyr, guide, threat);
 	vec2 net = guide + threat;
-	DI8C_SetKeyState(DIK_Z, 0x80);
+	
 	if (abs(net.x) > BOT_ACTION_THRESHOLD)
 	{
 		if (net.x > 0) {
