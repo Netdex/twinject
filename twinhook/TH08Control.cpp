@@ -48,9 +48,16 @@ void TH08Control_FrameCleanup()
 }
 
 PBYTE PlayerPosAddr = (PBYTE)0x017D6110;
+PBYTE BossPosAddr = (PBYTE)0x004CE7EC;
 
 vec2 TH08_GetPlayerLocation()
 {
 	return vec2(*(float*)PlayerPosAddr - GAME_X_OFFSET, *(float*)(PlayerPosAddr + 4) - GAME_Y_OFFSET);
 }
 
+vec2 TH08_GetBossPosition()
+{
+	vec2 a(*(float*)BossPosAddr - GAME_X_OFFSET, *(float*)(BossPosAddr + 4) - GAME_Y_OFFSET);
+	if (a.x < 0 || a.y < 0) return vec2(NAN, NAN);
+	return a;
+}

@@ -5,35 +5,45 @@
 #include "AutoBombPatch.h"
 #include "vec2.h"
 
+const double M_PI = acos(-1);
+const double M_E = exp(1);
+
 /*
  * TODO
- * - BUG: Bullets that come directly will not be dodged
- * - Bullet sizes contribute to action range
+ *
+ * X - BUG: Bullets that come directly will not be dodged (fixed?)
+ * X - Bullet sizes contribute to action range (fixed?)
+ *
  * - Handle focusing better
  * - Lasers
+ * - Reimplement shrinking radius system
+ * - Implement simulated annealing tuning of parameters
+ * - Decrease focus dodge force (ie. focus more often)
+ * - Implement player velocity determination/calibration
+ * - Enemy detection and targeting (partially implemented through boss detection)
  */
-extern HANDLE ProcessHandle;
+extern HANDLE TH08_ProcessHandle;
 
 extern std::vector<entity> TH08_Bullets;
 extern std::vector<entity> TH08_Powerups;
 
-bool bBotEnabled = FALSE;
-bool bRenderDetailed = false;
+bool BotControl_FlagBotEnabled = FALSE;
+bool BotControl_FlagRenderDetailed = false;
 
 void Bot_OnEnable()
 {
-	AutoBomb_Patch(ProcessHandle);
+	AutoBomb_Patch(TH08_ProcessHandle);
 }
 
 void Bot_OnDisable()
 {
-	AutoBomb_Unpatch(ProcessHandle);
+	AutoBomb_Unpatch(TH08_ProcessHandle);
 }
 
 void Bot_SetEnable(BOOL enable)
 {
-	bBotEnabled = enable;
-	if (bBotEnabled)
+	BotControl_FlagBotEnabled = enable;
+	if (BotControl_FlagBotEnabled)
 	{
 		Bot_OnEnable();
 	}
@@ -45,10 +55,23 @@ void Bot_SetEnable(BOOL enable)
 
 bool Bot_IsEnabled()
 {
-	return bBotEnabled;
+	return BotControl_FlagBotEnabled;
 }
 
-void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
+// determine whether this actually helps
+float Bot_ProjectionTransform(float x)
+{
+	return (float)(x * (1 / (0.1*powf(x, 2) + 1) + 1) * BOT_BULLET_PROJECTION_FACTOR);
+}
+
+/**
+ * \brief Calculate the net weighted vector of forces
+ * \param c Player center
+ * \param bs Location of main boss
+ * \param guide Reference to return guiding vector
+ * \param threat Reference to return threat avoidance bector
+ */
+void CalculateNetVector(vec2 c, vec2 bs, vec2 &guide, vec2 &threat)
 {
 	for (auto i = TH08_Bullets.begin(); i != TH08_Bullets.end(); ++i)
 	{
@@ -66,12 +89,12 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 		 * normal d(x, y)
 		 */
 
-		float ur = BOT_RADIUS + (*i).sz.x / 2 * 1.41421356237f;
+		float ur = BOT_MIN_RADIUS + (*i).sz.x / 2 * 1.41421356237f;
 		float sr = ur + BOT_MACROSAFETY_DELTA;
 		float lr = ur + BOT_MICROSAFETY_DELTA;
 
 		vec2 a = (*i).p;										// bullet position
-		vec2 b = a + (*i).v * BULLET_PROJECTION_FACTOR;			// bullet projected future position
+		vec2 b = a + (*i).v.transform(Bot_ProjectionTransform);			// bullet projected future position
 		vec2 ac = c - a;										// vector from player to bullet
 		vec2 ab = b - a;										// vector from bullet to future position
 		vec2 ad = vec2::proj(ac, ab);							// vector from bullet to normal
@@ -92,7 +115,7 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 			else if (cd.lensq() < sr * sr)
 			{
 				// move the player away from the normal by a factor relative to the bullet distance
-				threat += BOT_BULLET_PRIORITY * cd.unit() / ac.lensq();
+				threat += BOT_BULLET_PRIORITY * cd.unit() / ac.lensq(); // TODO factor in distance cd as well
 			}
 		}
 	}
@@ -102,8 +125,8 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 		// make sure this powerup isn't one of those score particles
 		if ((*i).me == 0) {
 			vec2 m((*i).p.x - c.x, (*i).p.y - c.y);
-			if (abs(m.x) < 300 && abs(m.y) < 70) {
-				guide -= m.unit() * .1f / m.lensq();
+			if (abs(m.x) < BOT_POWERUP_MAXY && abs(m.y) < BOT_POWERUP_MINY) {
+				guide -= BOT_POWERUP_PRIORITY * m.unit() / m.lensq();
 			}
 		}
 	}
@@ -114,23 +137,29 @@ void CalculateNetVector(vec2 c, vec2 &guide, vec2 &threat)
 	float dyt = abs(pow(c.y, 2));
 	float dyb = abs(pow(GAME_HEIGHT - c.y, 2));
 	guide += vec2(.2f / dxr + -.2f / dxl, -.6f / dyt + .1f / dyb);
+
+	// calculate boss attraction
+	/*if (!b.nan()) {
+		float dxbs = -(signbit(b.x - c.x) ? -1 : 1) * abs(pow(b.x - c.x, 2));
+		guide += vec2(dxbs / BOT_BOSS_TARGET_PRIORITY, 0);
+	}*/
 }
 
 void Bot_ProcessControl(BYTE *diKeys)
 {
-	if (diKeys[DIK_G] & 0x80)
+	if (diKeys[DIK_G])
 		Bot_SetEnable(true);
-	if (diKeys[DIK_B] & 0x80)
+	if (diKeys[DIK_B])
 		Bot_SetEnable(false);
-	if (diKeys[DIK_H] & 0x80)
-		bRenderDetailed = true;
-	if (diKeys[DIK_N] & 0x80)
-		bRenderDetailed = false;
+	if (diKeys[DIK_H])
+		BotControl_FlagRenderDetailed = true;
+	if (diKeys[DIK_N])
+		BotControl_FlagRenderDetailed = false;
 }
 
 void Bot_Tick()
 {
-	if (!bBotEnabled) {
+	if (!BotControl_FlagBotEnabled) {
 		DI8C_ResetKeyState(DIK_LEFT);
 		DI8C_ResetKeyState(DIK_RIGHT);
 		DI8C_ResetKeyState(DIK_UP);
@@ -140,15 +169,16 @@ void Bot_Tick()
 		DI8C_ResetKeyState(DIK_LCONTROL);
 		return;
 	}
-	
+
 	DI8C_SetKeyState(DIK_Z, 0x80);			// fire continuously
 	DI8C_SetKeyState(DIK_LCONTROL, 0x80);	// skip dialogue continuously
 
 	vec2 plyr = TH08_GetPlayerLocation();
+	vec2 boss = TH08_GetBossPosition();
 	vec2 guide, threat;
-	CalculateNetVector(plyr, guide, threat);
+	CalculateNetVector(plyr, boss, guide, threat);
 	vec2 net = guide + threat;
-	
+
 	if (abs(net.x) > BOT_ACTION_THRESHOLD)
 	{
 		if (net.x > 0) {

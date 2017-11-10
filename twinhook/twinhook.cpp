@@ -5,13 +5,13 @@
 #include "DirectInput8CreateHook.h"
 
 HANDLE HookHandle = NULL;
-HANDLE ProcessHandle = NULL;
+HANDLE TH08_ProcessHandle = NULL;
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 {
 	logfs("DllMain injected");	
 
-	ProcessHandle = GetCurrentProcess();
+	TH08_ProcessHandle = GetCurrentProcess();
 
 	switch (reasonForCall)
 	{

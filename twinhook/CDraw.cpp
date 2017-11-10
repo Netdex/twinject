@@ -80,7 +80,7 @@ void CDraw_Circle(float x, float y, float radius, int sides, DWORD color)
 
 	sides = min(127, sides);
 	D3DXVECTOR2 line[128];
-	float step = M_PI * 2.0 / sides;
+	float step = (float)M_PI * 2.0f / sides;
 	for (int s = 0; s <= sides; s++)
 	{
 		float a = step * s;

@@ -2,6 +2,8 @@
 #define DIRECTINPUT_VERSION 0x0900
 #define _WIN32_WINNT 0x0500
 
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 #define GAME_WIDTH 384
 #define GAME_HEIGHT 448
 #define GAME_X_OFFSET 32
@@ -12,7 +14,9 @@
 #include <detours.h>
 #include <fstream>
 #include <cstdio>
+
 #include <vector>
+#include <tuple>
 
 #include <d3d9.h>
 #include <d3dx9.h>

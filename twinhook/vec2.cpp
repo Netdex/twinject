@@ -144,6 +144,16 @@ bool vec2::zero() const
 	return abs(x) < ZERO_EPSILON && abs(y) < ZERO_EPSILON;
 }
 
+bool vec2::nan() const
+{
+	return isnan(x) || isnan(y);
+}
+
+vec2 vec2::transform(float(* t)(float)) const
+{
+	return vec2(t(x), t(y));
+}
+
 float vec2::dot(vec2& a, vec2& b)
 {
 	return a.x * b.x + a.y * b.y;

@@ -29,7 +29,9 @@ public:
 	float lensq() const;
 	float len() const;
 	bool zero() const;
-	
+	bool nan() const;
+	vec2 transform(float(*t)(float)) const;
+
 	static float dot(vec2 &a, vec2 &b);
 	static vec2 proj(vec2 &a, vec2 &b);
 
