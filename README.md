@@ -3,6 +3,7 @@
 
 `This has nothing to do with the auto-injector.`
 
+![alt text?](https://i.imgur.com/uimgJ4L.png)
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is a bot for *Touhou Eiyashou ~ Imperishable Night*. Instead of using computer vision techniques to extract data from the game, a debugger is attached and the relevant game data is directly extracted.
 
@@ -38,7 +39,23 @@ N - Hide debug graphics
 
 To close the bot, close the console window and the game will close after.
 Closing the game first may not close the console window properly.
+
+Make sure DirectInput is not disabled.
 ```
+
+## Troubleshooting
+### Hotkeys do not work
+Make sure DirectInput is not disabled.
+![alt text?](https://i.imgur.com/r2unX8N.png)
+
+### Graphical overlay does not appear
+Make sure the dx8->dx9 patch is applied with `dxd8.dll` and `enbconvertor.ini`.
+
+### Game does not open
+Make sure you have DirectX 9 installed, preferrably the one from 2010.
+
+### Extreme frame drop
+Disable the debug visualization if it is enabled.
 
 ## Functionality
 Consists of two parts, **twinhook** and **twinject**.
@@ -52,3 +69,4 @@ twinhook is a DLL, injected during runtime into a Touhou game. It uses MS Detour
 twinject loads twinhook into th08.exe with Detours.
 
 [Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinject_technical.md)
+
