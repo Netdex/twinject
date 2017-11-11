@@ -12,6 +12,25 @@ So far, I plan to only implement for *Imperishable Night* with the d3d9 patch, b
 
 [Video Demonstration](https://www.youtube.com/watch?v=xiQNC4w72L4)
 
+## Building
+Download and build in Visual Studio 2017, compile with Release target.
+
+## Usage
+```
+-- INSTALLATION --
+Extract all files to your Touhou 08 ~ Imperishable Night directory.
+
+-- RUNNING --
+Run twinject.exe, which will chainload th08.exe.
+Make sure your game executable and the one defined in twinject.ini match.
+
+-- CONTROLS --
+G - Enable bot
+B - Disable bot
+H - Display debug graphics
+N - Hide debug graphics 
+```
+
 ## Functionality
 Consists of two parts, **twinhook** and **twinject**.
 
