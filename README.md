@@ -13,11 +13,17 @@ So far, I plan to only implement for *Imperishable Night* with the d3d9 patch, b
 [Video Demonstration](https://www.youtube.com/watch?v=xiQNC4w72L4)
 
 ## Building
+```
 Download and build in Visual Studio 2017, compile with Release target.
+
+Put twinhook.dll and twinject.exe into Touhou 08 ~ Imperishable Night directory.
+Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
+and place into game directory.
+```
 
 ## Usage
 ```
--- INSTALLATION --
+-- INSTALLATION (from release) --
 Extract all files to your Touhou 08 ~ Imperishable Night directory.
 
 -- RUNNING --
@@ -29,6 +35,9 @@ G - Enable bot
 B - Disable bot
 H - Display debug graphics
 N - Hide debug graphics 
+
+To close the bot, close the console window and the game will close after.
+Closing the game first may not close the console window properly.
 ```
 
 ## Functionality
