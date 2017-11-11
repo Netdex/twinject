@@ -27,7 +27,7 @@ extern HANDLE TH08_ProcessHandle;
 extern std::vector<entity> TH08_Bullets;
 extern std::vector<entity> TH08_Powerups;
 
-bool BotControl_FlagBotEnabled = FALSE;
+bool BotControl_FlagBotEnabled = false;
 bool BotControl_FlagRenderDetailed = false;
 
 void Bot_OnEnable()
@@ -61,7 +61,8 @@ bool Bot_IsEnabled()
 // determine whether this actually helps
 float Bot_ProjectionTransform(float x)
 {
-	return (float)(x * (1 / (0.1*powf(x, 2) + 1) + 1) * BOT_BULLET_PROJECTION_FACTOR);
+	//return (float)(x * (1 / (0.1*powf(x, 2) + 1) + 1) * BOT_BULLET_PROJECTION_FACTOR);
+	return x * BOT_BULLET_PROJECTION_FACTOR;
 }
 
 /**
