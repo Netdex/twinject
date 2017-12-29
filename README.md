@@ -5,7 +5,9 @@
 
 ![alt text?](https://i.imgur.com/uimgJ4L.png)
 ## What is this?
-_twinject_ (**t**ouhou **w**indows **inject**or) is a bot for *Touhou Eiyashou ~ Imperishable Night*. Instead of using computer vision techniques to extract data from the game, a debugger is attached and the relevant game data is directly extracted.
+_twinject_ (**t**ouhou **w**indows **inject**or) is a bot for the bullet hell game *Touhou Eiyashou ~ Imperishable Night*. Instead of using computer vision techniques to extract data from the game, a debugger is attached and the relevant game data is directly extracted.
+
+For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies.
 
 This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available.
 
