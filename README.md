@@ -11,8 +11,7 @@ Why did I do this? I thought it would be a neat challenge to apply my knowledge 
 
 So far, I plan to only implement for *Imperishable Night* with the d3d9 patch because it is well designed, and I cannot find compatible SDKs for dxd8.
 
-### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)
-#### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)
+### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Functionality
 Consists of two parts, **twinhook** and **twinject**.
@@ -71,4 +70,5 @@ Make sure you have DirectX 9 installed, preferrably the one from 2010.
 ### Extreme frame drop
 Disable the debug visualization if it is enabled.
 
-
+#### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)
+#### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)
