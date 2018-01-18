@@ -11,7 +11,8 @@ Why did I do this? I thought it would be a neat challenge to apply my knowledge 
 
 So far, I plan to only implement for *Imperishable Night* with the d3d9 patch because it is well designed, and I cannot find compatible SDKs for dxd8.
 
-[Video Demonstration](https://www.youtube.com/watch?v=xiQNC4w72L4)
+### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)
+#### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)
 
 ## Functionality
 Consists of two parts, **twinhook** and **twinject**.
