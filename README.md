@@ -28,7 +28,7 @@ twinject loads twinhook into th08.exe with Detours.
 
 ## Building
 ```
-Download and build in Visual Studio 2017, compile with Release target.
+Download and build in Visual Studio 2017, compile with Release (x86) target.
 
 Put twinhook.dll and twinject.exe into Touhou 08 ~ Imperishable Night directory.
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
