@@ -14,6 +14,7 @@
 #include <detours.h>
 #include <fstream>
 #include <cstdio>
+#include <cassert>
 
 #include <vector>
 #include <tuple>

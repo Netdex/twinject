@@ -11,7 +11,11 @@ private:
 
 public:
 	th_player() {}
-	virtual void hook() = 0;
-	virtual void tick() = 0;
-	virtual void draw() = 0;
+
+	virtual void init() {}
+	virtual void hook() {}
+	virtual void before_tick() {}
+	virtual void tick() {}
+	virtual void handle_input(BYTE keys[256]) {}
+	virtual void draw(IDirect3DDevice9 *d3dDev) {}
 };

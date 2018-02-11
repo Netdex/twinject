@@ -22,7 +22,7 @@ int main(const int argc, const char *argv[])
 {
 #ifdef DEBUG
 	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";
-	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
+	char *dllpath = "D:\\Programming\\Multi\\twinject\\Debug\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th08";
 #else
 	configuration config;

@@ -1,25 +1,26 @@
 #include "stdafx.h"
-#include "D3D9Control.h"
+#include "th08_d3d_controller.h"
 #include "cdraw.h"
+#include "TH08Control.h"
+#include "BotControl.h"
+#include "BotOverlayRenderer.h"
 #include "IDI8A_Wrapper.h"
 #include "IDI8ADevice_Wrapper.h"
-#include "BotControl.h"
-#include "TH08Control.h"
-#include "BotOverlayRenderer.h"
 
 extern DirectInput8Wrapper *DirectInput8;
 
-void D3D9_Init_Hook(IDirect3DDevice9 *d3dDev)
+void th08_d3d_controller::init(IDirect3DDevice9* d3dDev)
 {
 	CDraw_Init(d3dDev);
 }
 
-void D3D9_BeginScene_Hook(IDirect3DDevice9 *d3dDev)
+void th08_d3d_controller::begin(IDirect3DDevice9* d3dDev)
 {
 	TH08Control_FrameInit();
+	
 }
 
-void D3D9_EndScene_Hook(IDirect3DDevice9 *d3dDev)
+void th08_d3d_controller::end(IDirect3DDevice9* d3dDev)
 {
 	BYTE diKeys[256];
 
@@ -33,3 +34,5 @@ void D3D9_EndScene_Hook(IDirect3DDevice9 *d3dDev)
 	}
 	TH08Control_FrameCleanup();
 }
+
+
