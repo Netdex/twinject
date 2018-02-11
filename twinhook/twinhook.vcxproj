@@ -173,7 +173,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TH08Control.cpp" />
-    <ClCompile Include="AutoBombPatch.cpp" />
+    <ClCompile Include="th08_patch_autobomb.cpp" />
+    <ClCompile Include="th08_player.cpp" />
     <ClCompile Include="twinhook.cpp" />
     <ClCompile Include="vec2.cpp" />
   </ItemGroup>
@@ -184,6 +185,7 @@
     <ClInclude Include="cdraw.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="D3D9Control.h" />
+    <ClInclude Include="data.h" />
     <ClInclude Include="detour.h" />
     <ClInclude Include="DI8Control.h" />
     <ClInclude Include="Direct3DCreate9Hook.h" />
@@ -197,7 +199,10 @@
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TH08Control.h" />
-    <ClInclude Include="AutoBombPatch.h" />
+    <ClInclude Include="th08_patch_autobomb.h" />
+    <ClInclude Include="th08_player.h" />
+    <ClInclude Include="th_patch.h" />
+    <ClInclude Include="th_player.h" />
     <ClInclude Include="vec2.h" />
   </ItemGroup>
   <ItemGroup>

@@ -49,6 +49,15 @@
     <Filter Include="Source Files\gfx">
       <UniqueIdentifier>{4e16eb2d-224a-4c92-9fef-36d6015431b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\config">
+      <UniqueIdentifier>{89fa642a-b13c-4cdf-b5ad-bc1fd5508948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\config">
+      <UniqueIdentifier>{49a97a80-c650-4c17-a2ea-51cd95f90782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\construct">
+      <UniqueIdentifier>{ad4bd57f-225b-4881-96f4-5f26fdfc0690}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -114,8 +123,11 @@
     <ClCompile Include="InputOverlayRenderer.cpp">
       <Filter>Source Files\gfx</Filter>
     </ClCompile>
-    <ClCompile Include="AutoBombPatch.cpp">
+    <ClCompile Include="th08_patch_autobomb.cpp">
       <Filter>Source Files\patch</Filter>
+    </ClCompile>
+    <ClCompile Include="th08_player.cpp">
+      <Filter>Source Files\control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +182,6 @@
     <ClInclude Include="color.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="AutoBombPatch.h">
-      <Filter>Header Files\patch</Filter>
-    </ClInclude>
     <ClInclude Include="vec2.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
@@ -181,6 +190,21 @@
     </ClInclude>
     <ClInclude Include="BotOverlayRenderer.h">
       <Filter>Header Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="th_patch.h">
+      <Filter>Header Files\patch</Filter>
+    </ClInclude>
+    <ClInclude Include="th08_patch_autobomb.h">
+      <Filter>Header Files\patch</Filter>
+    </ClInclude>
+    <ClInclude Include="th_player.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="data.h">
+      <Filter>Source Files\construct</Filter>
+    </ClInclude>
+    <ClInclude Include="th08_player.h">
+      <Filter>Header Files\control</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,8 +13,6 @@
 #include "ini.h"
 #include "config.h"
 
-bool Injected = false;
-
 STARTUPINFOA si;
 PROCESS_INFORMATION pi;
 

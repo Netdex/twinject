@@ -2,7 +2,7 @@
 #include "BotControl.h"
 #include "TH08Control.h"
 #include "DI8Control.h"
-#include "AutoBombPatch.h"
+#include "th08_patch_autobomb.h"
 #include "vec2.h"
 
 const double M_PI = acos(-1);
@@ -32,12 +32,14 @@ bool BotControl_FlagRenderDetailed = false;
 
 void Bot_OnEnable()
 {
-	AutoBomb_Patch(TH08_ProcessHandle);
+	th08_patch_autobomb ptch;
+	ptch.patch();
 }
 
 void Bot_OnDisable()
 {
-	AutoBomb_Unpatch(TH08_ProcessHandle);
+	th08_patch_autobomb ptch;
+	ptch.unpatch();
 }
 
 void Bot_SetEnable(BOOL enable)
