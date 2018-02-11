@@ -106,10 +106,10 @@ Bullets and the player are not actually circles, but are boxes. The collision de
 #### Powerup Locations
 This is actually demonstrated above, it's the exact same process as the bullets but with a return address of `0x0044095B` instead.
 
-One extra note, at `*(BYTE*)(a1 - 676 + 727)` is an identifier for the ephemerality of the powerup. Those tiny ass time orbs and other small particles count as powerups as well, but we don't want to target them because they'll be sucked into Reimu, Marisa or 'whoever the hell you fancy' anyways.
+One extra note, at `*(BYTE*)(a1 - 676 + 727)` is an identifier for the ephemerality of the powerup. Those tiny time orbs and other small particles count as powerups as well, but we don't want to target them because they'll be sucked into the player anyways. We will only target important powerups, such as point, power, bomb, and 1-up.
 
 #### Player Location
-This was luckily simple enough, finding the memory location (it's static by the way) for the player location with Cheat Engine should be a breeze for anyone. It's two sequential floats (X, then Y) at `0x017D6110`.
+This was luckily not that difficult, finding the memory location (it's static by the way) for the player location with Cheat Engine should be simple enough. It's two sequential floats (X, then Y) at `0x017D6110`.
 
 ```cpp
 // TH08Control.cpp
@@ -127,7 +127,6 @@ D3DVECTOR TH08_GetPlayerLocation()
 
 #### Enemy Locations
 `TODO`
-I'll probably just spend a moment in Cheat Engine for this
   
 ### Decision Making
 Now that we have all this information and a way to manipulate the game, we can program a bot.
