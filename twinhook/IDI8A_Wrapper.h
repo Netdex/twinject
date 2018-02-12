@@ -6,7 +6,7 @@ typedef HRESULT(*GetDeviceState_t)(DirectInputDevice8Wrapper *lpDirectInput, DWO
 
 struct DirectInput8Hook
 {
-	GetDeviceState_t GetDeviceState_Hook;
+	GetDeviceState_t GetDeviceStateHook;
 };
 
 class DirectInput8Wrapper : public IDirectInput8A {

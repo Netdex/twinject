@@ -69,20 +69,11 @@
     <ClCompile Include="logfs.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="BulletProcessHook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
     <ClCompile Include="detour.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
     <ClCompile Include="cdraw.cpp">
       <Filter>Source Files\util</Filter>
-    </ClCompile>
-    <ClCompile Include="Direct3DCreate9Hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadLibraryAHook.cpp">
-      <Filter>Source Files\hook</Filter>
     </ClCompile>
     <ClCompile Include="ID3D9Device_Wrapper.cpp">
       <Filter>Source Files\directx</Filter>
@@ -96,13 +87,7 @@
     <ClCompile Include="IDI8ADevice_Wrapper.cpp">
       <Filter>Source Files\directx</Filter>
     </ClCompile>
-    <ClCompile Include="DirectInput8CreateHook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
     <ClCompile Include="DI8Control.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D9Control.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
     <ClCompile Include="TH08Control.cpp">
@@ -129,10 +114,13 @@
     <ClCompile Include="th08_player.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
-    <ClCompile Include="th08_d3d_controller.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
     <ClCompile Include="th_d3d9_hook.cpp">
+      <Filter>Source Files\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="th_di8_hook.cpp">
+      <Filter>Source Files\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="th08_bullet_process_hook.cpp">
       <Filter>Source Files\hook</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,17 +134,8 @@
     <ClInclude Include="detour.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="BulletProcessHook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
     <ClInclude Include="cdraw.h">
       <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="Direct3DCreate9Hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadLibraryAHook.h">
-      <Filter>Header Files\hook</Filter>
     </ClInclude>
     <ClInclude Include="ID3D9_Wrapper.h">
       <Filter>Header Files\directx</Filter>
@@ -170,13 +149,7 @@
     <ClInclude Include="IDI8ADevice_Wrapper.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="DirectInput8CreateHook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
     <ClInclude Include="DI8Control.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D9Control.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
     <ClInclude Include="TH08Control.h">
@@ -212,16 +185,16 @@
     <ClInclude Include="th08_player.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
-    <ClInclude Include="d3d_controller.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="th08_d3d_controller.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
     <ClInclude Include="th_hook.h">
       <Filter>Header Files\hook</Filter>
     </ClInclude>
     <ClInclude Include="th_d3d9_hook.h">
+      <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="th_di8_hook.h">
+      <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="th08_bullet_process_hook.h">
       <Filter>Header Files\hook</Filter>
     </ClInclude>
   </ItemGroup>

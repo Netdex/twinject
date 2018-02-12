@@ -62,8 +62,8 @@ HRESULT DirectInputDevice8Wrapper::Unacquire()
 
 HRESULT DirectInputDevice8Wrapper::GetDeviceState(DWORD cbData, LPVOID lpvData)
 {
-	if (DirectInput8->Hook.GetDeviceState_Hook)
-		return DirectInput8->Hook.GetDeviceState_Hook(this, cbData, lpvData);
+	if (DirectInput8->Hook.GetDeviceStateHook)
+		return DirectInput8->Hook.GetDeviceStateHook(this, cbData, lpvData);
 	return DirectInputDevice8->GetDeviceState(cbData, lpvData);
 }
 

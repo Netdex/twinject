@@ -1,11 +1,16 @@
 #include "stdafx.h"
-#include "BulletProcessHook.h"
+#include "th08_bullet_process_hook.h"
 #include "detour.h"
 #include "TH08Control.h"
 
+void th08_bullet_process_hook::hook()
+{
+	Hook_TH08_sub_410A70();
+}
+
 /*
- * Hook of bullet/object processing code
- */
+* Hook of bullet/object processing code
+*/
 
 PBYTE pSub_410A70 = (PBYTE)0x00410A70;
 sub_410A70_t sub_410A70_Original = (sub_410A70_t)pSub_410A70;
@@ -45,7 +50,7 @@ __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 void Hook_TH08_sub_410A70()
 {
 	if (DetourFunction(&(PVOID&)sub_410A70_Original, sub_410A70_Hook))
-		logfs("Detours: Hooked sub_410A70");
+		LOG("Detours: Hooked sub_410A70");
 	else
-		logfs("Detours: Failed to hook sub_410A70");
+		LOG("Detours: Failed to hook sub_410A70");
 }

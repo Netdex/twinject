@@ -21,6 +21,8 @@ void CDraw_Init(IDirect3DDevice9 *d3dDev)
 	CDraw_InitSolidTexture(d3dDev);
 	CDraw_InitFont(d3dDev, 14, L"Consolas");
 	CDraw_InitLine(d3dDev);
+
+	LOG("CDraw: initialized graphics primitives");
 }
 
 void CDraw_FillRect(float x, float y, float w, float h, D3DCOLOR Color)

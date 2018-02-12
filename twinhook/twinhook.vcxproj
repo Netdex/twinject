@@ -153,59 +153,50 @@
   <ItemGroup>
     <ClCompile Include="BotControl.cpp" />
     <ClCompile Include="BotOverlayRenderer.cpp" />
-    <ClCompile Include="BulletProcessHook.cpp" />
     <ClCompile Include="cdraw.cpp" />
     <ClCompile Include="color.cpp" />
-    <ClCompile Include="D3D9Control.cpp" />
     <ClCompile Include="detour.cpp" />
     <ClCompile Include="DI8Control.cpp" />
-    <ClCompile Include="Direct3DCreate9Hook.cpp" />
-    <ClCompile Include="DirectInput8CreateHook.cpp" />
     <ClCompile Include="ID3D9_Wrapper.cpp" />
     <ClCompile Include="ID3D9Device_Wrapper.cpp" />
     <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
     <ClCompile Include="IDI8A_Wrapper.cpp" />
     <ClCompile Include="InputOverlayRenderer.cpp" />
-    <ClCompile Include="LoadLibraryAHook.cpp" />
     <ClCompile Include="logfs.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TH08Control.cpp" />
-    <ClCompile Include="th08_d3d_controller.cpp" />
+    <ClCompile Include="th08_bullet_process_hook.cpp" />
     <ClCompile Include="th08_patch_autobomb.cpp" />
     <ClCompile Include="th08_player.cpp" />
     <ClCompile Include="th_d3d9_hook.cpp" />
+    <ClCompile Include="th_di8_hook.cpp" />
     <ClCompile Include="twinhook.cpp" />
     <ClCompile Include="vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BotControl.h" />
     <ClInclude Include="BotOverlayRenderer.h" />
-    <ClInclude Include="BulletProcessHook.h" />
     <ClInclude Include="cdraw.h" />
     <ClInclude Include="color.h" />
-    <ClInclude Include="D3D9Control.h" />
-    <ClInclude Include="d3d_controller.h" />
     <ClInclude Include="data.h" />
     <ClInclude Include="detour.h" />
     <ClInclude Include="DI8Control.h" />
-    <ClInclude Include="Direct3DCreate9Hook.h" />
-    <ClInclude Include="DirectInput8CreateHook.h" />
     <ClInclude Include="ID3D9_Wrapper.h" />
     <ClInclude Include="ID3D9Device_Wrapper.h" />
     <ClInclude Include="IDI8ADevice_Wrapper.h" />
     <ClInclude Include="IDI8A_Wrapper.h" />
     <ClInclude Include="InputOverlayRenderer.h" />
-    <ClInclude Include="LoadLibraryAHook.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TH08Control.h" />
-    <ClInclude Include="th08_d3d_controller.h" />
+    <ClInclude Include="th08_bullet_process_hook.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
     <ClInclude Include="th08_player.h" />
     <ClInclude Include="th_d3d9_hook.h" />
+    <ClInclude Include="th_di8_hook.h" />
     <ClInclude Include="th_hook.h" />
     <ClInclude Include="th_patch.h" />
     <ClInclude Include="th_player.h" />
