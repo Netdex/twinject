@@ -151,7 +151,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BotControl.cpp" />
     <ClCompile Include="BotOverlayRenderer.cpp" />
     <ClCompile Include="cdraw.cpp" />
     <ClCompile Include="color.cpp" />
@@ -176,7 +175,6 @@
     <ClCompile Include="vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BotControl.h" />
     <ClInclude Include="BotOverlayRenderer.h" />
     <ClInclude Include="cdraw.h" />
     <ClInclude Include="color.h" />
@@ -190,6 +188,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TH08Control.h" />
     <ClInclude Include="th08_bullet_process_hook.h" />
+    <ClInclude Include="th08_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
     <ClInclude Include="th08_player.h" />
     <ClInclude Include="th_d3d9_hook.h" />

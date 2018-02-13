@@ -87,9 +87,6 @@
     <ClCompile Include="TH08Control.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
-    <ClCompile Include="BotControl.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
     <ClCompile Include="color.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
@@ -146,9 +143,6 @@
     <ClInclude Include="TH08Control.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
-    <ClInclude Include="BotControl.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
     <ClInclude Include="color.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
@@ -184,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="th08_bullet_process_hook.h">
       <Filter>Header Files\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="th08_config.h">
+      <Filter>Header Files\config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

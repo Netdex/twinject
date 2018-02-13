@@ -7,8 +7,10 @@
  */
 class th_player
 {
-
+	
 public:
+	bool enabled = false;
+
 	th_player() {}
 	virtual ~th_player() = default;
 
@@ -19,4 +21,13 @@ public:
 	virtual void on_before_tick() {}
 	virtual void on_tick() {}
 	virtual void draw(IDirect3DDevice9 *d3dDev) {}
+
+	virtual void handle_input(BYTE diKeys[256]) {}
+	virtual void on_enable_changed(bool enable) {}
+
+	void set_enable(bool enable)
+	{
+		enabled = enable;
+		on_enable_changed(enable);
+	}
 };
