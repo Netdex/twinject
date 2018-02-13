@@ -14,7 +14,7 @@
 #include <detours.h>
 #include <fstream>
 #include <cstdio>
-#include <cassert>
+//#include <cassert> // cassert doesn't work with dll injection
 
 #include <vector>
 #include <tuple>

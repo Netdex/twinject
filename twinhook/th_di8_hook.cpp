@@ -4,26 +4,30 @@
 #include "detour.h"
 #include "IDI8ADevice_Wrapper.h"
 
-void th_di8_hook::hook()
+th_di8_hook* th_di8_hook::instance = nullptr;
+
+void th_di8_hook::bind(th_player* player)
 {
+	assert(("cannot multi-bind", !instance));
+	instance = new th_di8_hook(player);
+
 	DirectInput8Hook di8_hk;
 	di8_hk.GetDeviceStateHook = di8_get_device_state_hook;
 	Hook_DInput8_DirectInput8Create(di8_hk);
 }
 
-DirectInput8Wrapper *DirectInput8 = nullptr;
-static DirectInput8Create_t DirectInput8Create_Original = DirectInput8Create;
-
-static BYTE DI8Control_LastKeys[256] = { 0 };
-static BYTE DI8Control_ProxyKeys[256] = { 0 };
-static BOOL DI8Control_KeyMask[256] = { FALSE };
+th_di8_hook* th_di8_hook::inst()
+{
+	assert(("cannot obtain unbounded instance", instance));
+	return instance;
+}
 
 void th_di8_hook::set_vk_data(BYTE *pData, BYTE *pActual)
 {
 	for (int i = 0; i < 256; i++)
 	{
-		if (DI8Control_KeyMask[i])
-			pActual[i] = DI8Control_ProxyKeys[i];
+		if (di8_key_mask[i])
+			pActual[i] = di8_proxy_keys[i];
 		else
 			pActual[i] = pData[i];
 	}
@@ -31,34 +35,31 @@ void th_di8_hook::set_vk_data(BYTE *pData, BYTE *pActual)
 
 HRESULT th_di8_hook::di8_get_device_state_hook(DirectInputDevice8Wrapper* lpDirectInput, DWORD cbData, LPVOID lpvData)
 {
-	HRESULT result = lpDirectInput->DirectInputDevice8->GetDeviceState(cbData, DI8Control_LastKeys);
-	set_vk_data(DI8Control_LastKeys, (BYTE*)lpvData);
+	HRESULT result = lpDirectInput->DirectInputDevice8->GetDeviceState(cbData, inst()->di8_last_keys);
+	inst()->set_vk_data(inst()->di8_last_keys, (BYTE*)lpvData);
 	return result;
-}
-
-DirectInput8Wrapper* th_di8_hook::get_di8w()
-{
-	return DirectInput8;
 }
 
 BYTE th_di8_hook::get_vk_state(BYTE vk)
 {
-	if (DI8Control_KeyMask[vk])
-		return DI8Control_ProxyKeys[vk];
-	return DI8Control_LastKeys[vk];
+	if (di8_key_mask[vk])
+		return di8_proxy_keys[vk];
+	return di8_last_keys[vk];
 }
 
 void th_di8_hook::set_vk_state(BYTE vk, BYTE state)
 {
-	DI8Control_ProxyKeys[vk] = state;
-	DI8Control_KeyMask[vk] = true;
+	di8_proxy_keys[vk] = state;
+	di8_key_mask[vk] = true;
 }
 
 void th_di8_hook::reset_vk_state(BYTE vk)
 {
-	DI8Control_ProxyKeys[vk] = 0;
-	DI8Control_KeyMask[vk] = false;
+	di8_proxy_keys[vk] = 0;
+	di8_key_mask[vk] = false;
 }
+
+static DirectInput8Create_t DirectInput8Create_Original = DirectInput8Create;
 
 /**
 * \brief Due to the nature of trampolined functions, we must memoize the
@@ -70,9 +71,9 @@ HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersion, REFI
 {
 	LOG("DI8Create: Feeding fake DirectInput");
 	LPDIRECTINPUT8A legit;
-	HRESULT result = DirectInput8Create_Original(hinst, dwVersion, riidltf, (LPVOID*)&legit, punkOuter);
-	DirectInput8 = new DirectInput8Wrapper(legit, di8_hook);
-	*ppvOut = DirectInput8;
+	HRESULT result =DirectInput8Create_Original(hinst, dwVersion, riidltf, (LPVOID*)&legit, punkOuter);
+	th_di8_hook::inst()->DirectInput8 = new DirectInput8Wrapper(legit, di8_hook);
+	*ppvOut = th_di8_hook::inst()->DirectInput8;
 	return result;
 }
 

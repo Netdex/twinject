@@ -22,11 +22,13 @@ void Hook_Kernel32_LoadLibraryA(Direct3D9Hook hok);
  */
 class th_d3d9_hook : th_hook
 {
+	static th_d3d9_hook *instance;
 public:
 	explicit th_d3d9_hook(th_player *player) : th_hook(player) {}
 	virtual ~th_d3d9_hook() = default;
 
-	void hook() override;
+	static void bind(th_player *player);
+	static th_d3d9_hook* inst();
 
 	static void d3d9_init_hook(IDirect3DDevice9 *d3dDev);
 	static void d3d9_begin_hook(IDirect3DDevice9 *d3dDev);

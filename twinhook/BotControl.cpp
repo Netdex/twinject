@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BotControl.h"
 #include "TH08Control.h"
-#include "DI8Control.h"
 #include "th08_patch_autobomb.h"
 #include "vec2.h"
 
@@ -162,6 +161,7 @@ void Bot_ProcessControl(BYTE *diKeys)
 
 void Bot_Tick()
 {
+	/*
 	if (!BotControl_FlagBotEnabled) {
 		DI8C_ResetKeyState(DIK_LEFT);
 		DI8C_ResetKeyState(DIK_RIGHT);
@@ -224,5 +224,5 @@ void Bot_Tick()
 	else
 	{
 		DI8C_SetKeyState(DIK_LSHIFT, 0x80);
-	}
+	}*/
 }

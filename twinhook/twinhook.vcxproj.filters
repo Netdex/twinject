@@ -55,9 +55,6 @@
     <Filter Include="Header Files\config">
       <UniqueIdentifier>{49a97a80-c650-4c17-a2ea-51cd95f90782}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\construct">
-      <UniqueIdentifier>{ad4bd57f-225b-4881-96f4-5f26fdfc0690}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -86,9 +83,6 @@
     </ClCompile>
     <ClCompile Include="IDI8ADevice_Wrapper.cpp">
       <Filter>Source Files\directx</Filter>
-    </ClCompile>
-    <ClCompile Include="DI8Control.cpp">
-      <Filter>Source Files\control</Filter>
     </ClCompile>
     <ClCompile Include="TH08Control.cpp">
       <Filter>Source Files\control</Filter>
@@ -149,9 +143,6 @@
     <ClInclude Include="IDI8ADevice_Wrapper.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="DI8Control.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
     <ClInclude Include="TH08Control.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
@@ -178,9 +169,6 @@
     </ClInclude>
     <ClInclude Include="th_player.h">
       <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="data.h">
-      <Filter>Source Files\construct</Filter>
     </ClInclude>
     <ClInclude Include="th08_player.h">
       <Filter>Header Files\control</Filter>

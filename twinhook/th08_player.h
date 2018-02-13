@@ -1,20 +1,27 @@
 #pragma once
 #include "th_player.h"
-#include "th_d3d9_hook.h"
-#include "th_di8_hook.h"
-#include "th08_bullet_process_hook.h"
+#include "vec2.h"
+
+struct entity
+{
+	vec2 p;
+	vec2 v;
+	vec2 sz;			// bullet size
+	DWORD me;			// metadata
+};
 
 class th08_player : public th_player
 {
-	th_d3d9_hook d3d9_hook;
-	th_di8_hook di8_hook;
-	th08_bullet_process_hook bp_hook;
 public:
+	std::vector<entity> bullets;
+	std::vector<entity> powerups;
+
 	th08_player();
 	~th08_player() = default;
 
 
 	void on_init() override;
-	void hook() override;
 	void on_tick() override;
+	void on_before_tick() override;
+	void draw(IDirect3DDevice9* d3dDev) override;
 };

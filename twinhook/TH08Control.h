@@ -1,14 +1,6 @@
 #pragma once
 #include "vec2.h"
 
-struct entity
-{
-	vec2 p;
-	vec2 v;
-	vec2 sz;			// bullet size
-	DWORD me;			// metadata
-};
-
 void TH08Control_FrameInit();
 void TH08Control_FrameCleanup();
 

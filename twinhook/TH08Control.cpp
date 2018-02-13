@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TH08Control.h"
+#include "th08_player.h"
 
 std::vector<entity> TH08_Bullets;
 std::vector<entity> TH08_Powerups;

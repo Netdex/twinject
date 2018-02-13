@@ -3,11 +3,9 @@
 
 class th_hook
 {
-protected:
-	th_player *player;
 public:
+	th_player *player;
+
 	th_hook(th_player *player) : player(player) {}
 	virtual ~th_hook() = default;
-
-	virtual void hook() = 0;
 };

@@ -2,53 +2,43 @@
 #include "th_d3d9_hook.h"
 #include "ID3D9_Wrapper.h"
 #include "cdraw.h"
-#include "IDI8A_Wrapper.h"
-#include "IDI8ADevice_Wrapper.h"
 #include "detour.h"
 
+th_d3d9_hook* th_d3d9_hook::instance = nullptr;
 
-// TODO remove this, and move any code relying on this to game tick
-extern DirectInput8Wrapper *DirectInput8;
-
-/* we must store the active player context for the d3d9 hook,
-* because we cannot use a member function as a hook.
-*/
-static th_player *player_context = nullptr;
-
-void th_d3d9_hook::hook()
+void th_d3d9_hook::bind(th_player* player)
 {
-	player_context = this->player;
-	LOG("bound d3d9 local player context to %p", player_context);
+	assert(("cannot multi-bind", !instance));
+	instance = new th_d3d9_hook(player);
+
 	Direct3D9Hook hook;
 	hook.CreateDeviceHook = d3d9_init_hook;
 	hook.BeginSceneHook = d3d9_begin_hook;
 	hook.EndSceneHook = d3d9_end_hook;
 	Hook_Kernel32_LoadLibraryA(hook);
-	LOG("hook set");
+}
+
+th_d3d9_hook* th_d3d9_hook::inst()
+{
+	assert(("cannot obtain unbounded instance", instance));
+	return instance;
 }
 
 void th_d3d9_hook::d3d9_init_hook(IDirect3DDevice9 *d3dDev)
 {
-	assert(("no th_d3d9_hook has been hooked", player_context));
-
 	CDraw_Init(d3dDev);
-	player_context->on_init();
+	inst()->player->on_init();
 }
 
 void th_d3d9_hook::d3d9_begin_hook(IDirect3DDevice9 *d3dDev)
 {
-	assert(("no th_d3d9_hook has been hooked", player_context));
-
-	player_context->on_before_tick();
+	inst()->player->on_before_tick();
 }
 
 void th_d3d9_hook::d3d9_end_hook(IDirect3DDevice9 *d3dDev)
 {
-	assert(("no th_d3d9_hook has been hooked", player_context));
-
-
-	player_context->on_tick();
-	player_context->draw(d3dDev);
+	inst()->player->on_tick();
+	inst()->player->draw(d3dDev);
 }
 
 Direct3DCreate9_t Direct3DCreate9_Original = Direct3DCreate9;

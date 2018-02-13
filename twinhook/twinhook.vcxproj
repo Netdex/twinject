@@ -156,7 +156,6 @@
     <ClCompile Include="cdraw.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="detour.cpp" />
-    <ClCompile Include="DI8Control.cpp" />
     <ClCompile Include="ID3D9_Wrapper.cpp" />
     <ClCompile Include="ID3D9Device_Wrapper.cpp" />
     <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
@@ -181,9 +180,7 @@
     <ClInclude Include="BotOverlayRenderer.h" />
     <ClInclude Include="cdraw.h" />
     <ClInclude Include="color.h" />
-    <ClInclude Include="data.h" />
     <ClInclude Include="detour.h" />
-    <ClInclude Include="DI8Control.h" />
     <ClInclude Include="ID3D9_Wrapper.h" />
     <ClInclude Include="ID3D9Device_Wrapper.h" />
     <ClInclude Include="IDI8ADevice_Wrapper.h" />

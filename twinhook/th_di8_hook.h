@@ -18,17 +18,22 @@ void Hook_DInput8_DirectInput8Create(DirectInput8Hook hook);
  */
 class th_di8_hook : th_hook
 {
-	static bool first = false;
-	static void set_vk_data(BYTE *pData, BYTE *pActual);
+	static th_di8_hook *instance;
+
+	BYTE di8_last_keys[256] = { 0 };
+	BYTE di8_proxy_keys[256] = { 0 };
+	BOOL di8_key_mask[256] = { FALSE };
+
+	void set_vk_data(BYTE *pData, BYTE *pActual);
 public:
-	th_di8_hook(th_player *player) : th_hook(player)
-	{
-		
-	}
+	DirectInput8Wrapper *DirectInput8 = nullptr;
+
+	th_di8_hook(th_player *player) : th_hook(player) {}
 	virtual ~th_di8_hook() = default;
 
-	void hook() override;
-	DirectInput8Wrapper* get_di8w();
+	static void hook();
+	static void bind(th_player *player);
+	static th_di8_hook* inst();
 
 	BYTE get_vk_state(BYTE vk);
 	void set_vk_state(BYTE vk, BYTE state);
