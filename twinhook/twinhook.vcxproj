@@ -165,7 +165,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TH08Control.cpp" />
     <ClCompile Include="th08_bullet_process_hook.cpp" />
     <ClCompile Include="th08_patch_autobomb.cpp" />
     <ClCompile Include="th08_player.cpp" />
@@ -186,7 +185,6 @@
     <ClInclude Include="InputOverlayRenderer.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TH08Control.h" />
     <ClInclude Include="th08_bullet_process_hook.h" />
     <ClInclude Include="th08_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
