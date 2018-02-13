@@ -67,7 +67,7 @@ static DirectInput8Create_t DirectInput8Create_Original = DirectInput8Create;
 */
 static DirectInput8Hook di8_hook;
 
-HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter)
+static HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter)
 {
 	LOG("DI8Create: Feeding fake DirectInput");
 	LPDIRECTINPUT8A legit;
@@ -77,7 +77,7 @@ HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersion, REFI
 	return result;
 }
 
-void Hook_DInput8_DirectInput8Create(DirectInput8Hook hook)
+static  void Hook_DInput8_DirectInput8Create(DirectInput8Hook hook)
 {
 	di8_hook = hook;
 	if (DetourFunction(&(PVOID&)DirectInput8Create_Original, DirectInput8Create_Hook))

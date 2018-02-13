@@ -32,21 +32,22 @@ void th_d3d9_hook::d3d9_init_hook(IDirect3DDevice9 *d3dDev)
 
 void th_d3d9_hook::d3d9_begin_hook(IDirect3DDevice9 *d3dDev)
 {
-	inst()->player->on_before_tick();
+	inst()->player->on_begin_tick();
 }
 
 void th_d3d9_hook::d3d9_end_hook(IDirect3DDevice9 *d3dDev)
 {
 	inst()->player->on_tick();
 	inst()->player->draw(d3dDev);
+	inst()->player->on_after_tick();
 }
 
-Direct3DCreate9_t Direct3DCreate9_Original = Direct3DCreate9;
+static Direct3DCreate9_t Direct3DCreate9_Original = Direct3DCreate9;
 
 static Direct3D9Hook d3d9_hook;
 static bool d3d9_created = false;
 
-IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
+static IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 {
 	LOG("D3D9: Feeding fake IDirect3D9");
 	IDirect3D9 *legit = Direct3DCreate9_Original(sdkVers);
@@ -54,7 +55,8 @@ IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 	d3d9_created = true;
 	return Direct3D9;
 }
-void Hook_D3D9_Direct3DCreate9(Direct3D9Hook hook)
+
+static void Hook_D3D9_Direct3DCreate9(Direct3D9Hook hook)
 {
 	assert(("d3d9 already created", !d3d9_created));
 
@@ -64,12 +66,10 @@ void Hook_D3D9_Direct3DCreate9(Direct3D9Hook hook)
 		LOG("Detours: Failed to hook Direct3DCreate9");
 }
 
-extern Direct3DCreate9_t Direct3DCreate9_Original;
-
 static bool HookedD3D = false;
 
-LoadLibrary_t LoadLibraryA_Original;
-HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
+static LoadLibrary_t LoadLibraryA_Original;
+static HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
 {
 	HMODULE hM = LoadLibraryA_Original(lpFileName);
 	// logfs("LoadLibrary: %s" , lpFileName);
@@ -83,7 +83,8 @@ HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
 	}
 	return hM;
 }
-void Hook_Kernel32_LoadLibraryA(Direct3D9Hook hook)
+
+static void Hook_Kernel32_LoadLibraryA(Direct3D9Hook hook)
 {
 	assert(("d3d9 already loaded", !HookedD3D));
 

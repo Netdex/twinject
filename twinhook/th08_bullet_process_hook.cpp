@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "th08_bullet_process_hook.h"
 #include "detour.h"
-#include "TH08Control.h"
 #include "th08_player.h"
 
 th08_bullet_process_hook* th08_bullet_process_hook::instance = nullptr;
@@ -21,7 +20,7 @@ th08_bullet_process_hook* th08_bullet_process_hook::inst()
 
 PBYTE pSub_410A70 = (PBYTE)0x00410A70;
 sub_410A70_t sub_410A70_Original = (sub_410A70_t)pSub_410A70;
-__declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
+static __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 {
 	// this is why you need MSVC to compile this
 	__asm {
@@ -41,7 +40,7 @@ __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 	unsigned int addr;
 	__asm mov addr, eax
 
-	TH08_VectorUpdate_Hook(addr, a1, a2, a3);
+	th08_bullet_process_hook::vector_update_hook(addr, a1, a2, a3);
 
 	// return original value
 	int retval;
@@ -54,7 +53,7 @@ __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 		ret
 	}
 }
-void Hook_TH08_sub_410A70()
+static void Hook_TH08_sub_410A70()
 {
 	if (DetourFunction(&(PVOID&)sub_410A70_Original, sub_410A70_Hook))
 		LOG("Detours: Hooked sub_410A70");
@@ -62,9 +61,10 @@ void Hook_TH08_sub_410A70()
 		LOG("Detours: Failed to hook sub_410A70");
 }
 
-void TH08_VectorUpdate_Hook(int retaddr, int a1, int a2, int a3)
+void th08_bullet_process_hook::vector_update_hook(int retaddr, int a1, int a2, int a3)
 {
-	th08_player *player = dynamic_cast<th08_player*>(th08_bullet_process_hook::inst()->player);
+	// HACK this might cause performance problems, also are we guaranteed a th08_player?
+	th08_player *player = dynamic_cast<th08_player*>(inst()->player);
 	std::vector<entity> &TH08_Bullets = player->bullets;
 	std::vector<entity> &TH08_Powerups = player->powerups;
 

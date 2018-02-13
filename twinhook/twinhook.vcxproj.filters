@@ -90,12 +90,6 @@
     <ClCompile Include="vec2.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="BotOverlayRenderer.cpp">
-      <Filter>Source Files\gfx</Filter>
-    </ClCompile>
-    <ClCompile Include="InputOverlayRenderer.cpp">
-      <Filter>Source Files\gfx</Filter>
-    </ClCompile>
     <ClCompile Include="th08_patch_autobomb.cpp">
       <Filter>Source Files\patch</Filter>
     </ClCompile>
@@ -110,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="th08_bullet_process_hook.cpp">
       <Filter>Source Files\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="th08_input_overlay.cpp">
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,12 +140,6 @@
     <ClInclude Include="vec2.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="InputOverlayRenderer.h">
-      <Filter>Header Files\gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="BotOverlayRenderer.h">
-      <Filter>Header Files\gfx</Filter>
-    </ClInclude>
     <ClInclude Include="th_patch.h">
       <Filter>Header Files\patch</Filter>
     </ClInclude>
@@ -175,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="th08_config.h">
       <Filter>Header Files\config</Filter>
+    </ClInclude>
+    <ClInclude Include="th08_input_overlay.h">
+      <Filter>Header Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

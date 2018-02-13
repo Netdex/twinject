@@ -14,4 +14,6 @@ public:
 
 	static void bind(th08_player *player);
 	static th08_bullet_process_hook *inst();
+	
+	static void vector_update_hook(int retaddr, int a1, int a2, int a3);
 };

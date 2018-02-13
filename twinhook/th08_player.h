@@ -28,7 +28,8 @@ public:
 
 	void on_init() override;
 	void on_tick() override;
-	void on_before_tick() override;
+	void on_begin_tick() override;
+	void on_after_tick() override;
 	void draw(IDirect3DDevice9* d3dDev) override;
 
 	void handle_input(BYTE diKeys[256]) override;

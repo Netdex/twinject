@@ -151,7 +151,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BotOverlayRenderer.cpp" />
     <ClCompile Include="cdraw.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="detour.cpp" />
@@ -159,7 +158,7 @@
     <ClCompile Include="ID3D9Device_Wrapper.cpp" />
     <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
     <ClCompile Include="IDI8A_Wrapper.cpp" />
-    <ClCompile Include="InputOverlayRenderer.cpp" />
+    <ClCompile Include="th08_input_overlay.cpp" />
     <ClCompile Include="logfs.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -174,7 +173,6 @@
     <ClCompile Include="vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BotOverlayRenderer.h" />
     <ClInclude Include="cdraw.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="detour.h" />
@@ -182,7 +180,7 @@
     <ClInclude Include="ID3D9Device_Wrapper.h" />
     <ClInclude Include="IDI8ADevice_Wrapper.h" />
     <ClInclude Include="IDI8A_Wrapper.h" />
-    <ClInclude Include="InputOverlayRenderer.h" />
+    <ClInclude Include="th08_input_overlay.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="th08_bullet_process_hook.h" />
