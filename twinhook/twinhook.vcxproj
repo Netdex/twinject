@@ -158,13 +158,15 @@
     <ClCompile Include="ID3D9Device_Wrapper.cpp" />
     <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
     <ClCompile Include="IDI8A_Wrapper.cpp" />
-    <ClCompile Include="th08_input_overlay.cpp" />
+    <ClCompile Include="th07_bullet_proc_hook.cpp" />
+    <ClCompile Include="th07_player.cpp" />
+    <ClCompile Include="di8_input_overlay.cpp" />
     <ClCompile Include="logfs.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="th08_bullet_process_hook.cpp" />
+    <ClCompile Include="th08_bullet_proc_hook.cpp" />
     <ClCompile Include="th08_patch_autobomb.cpp" />
     <ClCompile Include="th08_player.cpp" />
     <ClCompile Include="th_d3d9_hook.cpp" />
@@ -180,10 +182,13 @@
     <ClInclude Include="ID3D9Device_Wrapper.h" />
     <ClInclude Include="IDI8ADevice_Wrapper.h" />
     <ClInclude Include="IDI8A_Wrapper.h" />
-    <ClInclude Include="th08_input_overlay.h" />
+    <ClInclude Include="th07_bullet_proc_hook.h" />
+    <ClInclude Include="th07_config.h" />
+    <ClInclude Include="th07_player.h" />
+    <ClInclude Include="di8_input_overlay.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="th08_bullet_process_hook.h" />
+    <ClInclude Include="th08_bullet_proc_hook.h" />
     <ClInclude Include="th08_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
     <ClInclude Include="th08_player.h" />

@@ -1,25 +1,24 @@
 #include "stdafx.h"
-#include "th08_bullet_process_hook.h"
+#include "th08_bullet_proc_hook.h"
 #include "detour.h"
 #include "th08_player.h"
 
-th08_bullet_process_hook* th08_bullet_process_hook::instance = nullptr;
+th08_bullet_proc_hook* th08_bullet_proc_hook::instance = nullptr;
 
-void th08_bullet_process_hook::bind(th08_player* player)
+void th08_bullet_proc_hook::bind(th08_player* player)
 {
 	assert(("cannot multi-bind", !instance));
-	instance = new th08_bullet_process_hook(player);
+	instance = new th08_bullet_proc_hook(player);
 	Hook_TH08_sub_410A70();
 }
 
-th08_bullet_process_hook* th08_bullet_process_hook::inst()
+th08_bullet_proc_hook* th08_bullet_proc_hook::inst()
 {
 	assert(("cannot obtain unbounded instance", instance));
 	return instance;
 }
 
-PBYTE pSub_410A70 = (PBYTE)0x00410A70;
-sub_410A70_t sub_410A70_Original = (sub_410A70_t)pSub_410A70;
+sub_410A70_t sub_410A70_Original = (sub_410A70_t)0x00410A70;
 static __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 {
 	// this is why you need MSVC to compile this
@@ -40,7 +39,7 @@ static __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 	unsigned int addr;
 	__asm mov addr, eax
 
-	th08_bullet_process_hook::vector_update_hook(addr, a1, a2, a3);
+	th08_bullet_proc_hook::vector_update_hook(addr, a1, a2, a3);
 
 	// return original value
 	int retval;
@@ -61,17 +60,18 @@ static void Hook_TH08_sub_410A70()
 		LOG("Detours: Failed to hook sub_410A70");
 }
 
-void th08_bullet_process_hook::vector_update_hook(int retaddr, int a1, int a2, int a3)
+void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int a3)
 {
 	// HACK this might cause performance problems, also are we guaranteed a th08_player?
 	th08_player *player = dynamic_cast<th08_player*>(inst()->player);
-	std::vector<entity> &TH08_Bullets = player->bullets;
-	std::vector<entity> &TH08_Powerups = player->powerups;
+	assert(("wrong player type bound to hook", player));
+	std::vector<th08_entity> &TH08_Bullets = player->bullets;
+	std::vector<th08_entity> &TH08_Powerups = player->powerups;
 
 	// routine from bullet update
 	if (retaddr == 0x004314B3)
 	{
-		entity b;
+		th08_entity b;
 		b.p.x = *(float*)(a1 + 0);
 		b.p.y = *(float*)(a1 + 4);
 		b.v.x = *(float*)(a3 + 0);
@@ -87,7 +87,7 @@ void th08_bullet_process_hook::vector_update_hook(int retaddr, int a1, int a2, i
 	}
 	else if (retaddr == 0x0044095B)
 	{
-		entity b;
+		th08_entity b;
 		b.p.x = *(float*)(a1 + 0);
 		b.p.y = *(float*)(a1 + 4);
 		b.v.x = *(float*)(a3 + 0);

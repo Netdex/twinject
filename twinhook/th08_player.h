@@ -2,14 +2,7 @@
 #include "th_player.h"
 #include "vec2.h"
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
-#define GAME_WIDTH 384
-#define GAME_HEIGHT 448
-#define GAME_X_OFFSET 32
-#define GAME_Y_OFFSET 16
-
-struct entity
+struct th08_entity
 {
 	vec2 p;
 	vec2 v;
@@ -20,10 +13,10 @@ struct entity
 class th08_player : public th_player
 {
 public:
-	std::vector<entity> bullets;
-	std::vector<entity> powerups;
+	std::vector<th08_entity> bullets;
+	std::vector<th08_entity> powerups;
 
-	th08_player();
+	th08_player() {}
 	~th08_player() = default;
 
 	void on_init() override;

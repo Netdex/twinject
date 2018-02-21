@@ -1,6 +1,6 @@
 #pragma once
 
-namespace th08_param {
+namespace th07_param {
 	const int WINDOW_WIDTH = 640;
 	const int WINDOW_HEIGHT = 480;
 	const int GAME_WIDTH = 384;

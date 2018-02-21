@@ -1,6 +1,6 @@
 #pragma once
 
-#define ZERO_EPSILON .00001f
+#define ZERO_EPSILON .000001f
 
 class vec2 {
 public:

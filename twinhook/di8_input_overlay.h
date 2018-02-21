@@ -65,4 +65,4 @@ const key_graphic kg_MonitoredKeys[] = {
 	},
 };
 
-void Overlay_RenderInput(IDirect3DDevice9 *d3dDev);
+void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev);

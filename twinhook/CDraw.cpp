@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "cdraw.h"
 
-IDirect3DDevice9 *CDrawDefaultD3DDevice = NULL;
-IDirect3DTexture9* CDrawDefaultPrimitive = NULL;
-LPD3DXFONT CDrawDefaultDxFont;
-LPD3DXLINE CDrawDefaultDxLine;
+static IDirect3DDevice9 *CDrawDefaultD3DDevice = NULL;
+static IDirect3DTexture9* CDrawDefaultPrimitive = NULL;
+static LPD3DXFONT CDrawDefaultDxFont;
+static LPD3DXLINE CDrawDefaultDxLine;
+static LPD3DXSPRITE CDrawTextSprite;
 
-bool CDrawFlagInit = false;
+static bool CDrawFlagInit = false;
 
 void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev);
 void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face);
@@ -60,8 +61,11 @@ void CDraw_Text(char *str, D3DCOLOR color, int x, int y, int w, int h)
 
 	static RECT textbox;
 	SetRect(&textbox, x, y, w, h);
-	if (CDrawDefaultDxFont)
-		CDrawDefaultDxFont->DrawTextA(NULL, str, -1, &textbox, DT_LEFT | DT_TOP, color);
+	if (CDrawDefaultDxFont) {
+		CDrawTextSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
+		CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, -1, &textbox, DT_LEFT | DT_TOP, color);
+		CDrawTextSprite->End();
+	}
 }
 
 void CDraw_Line(float x1, float y1, float x2, float y2, D3DCOLOR color)
@@ -122,8 +126,10 @@ void CDraw_InitSolidTexture(LPDIRECT3DDEVICE9 m_pD3Ddev)
 void CDraw_InitFont(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face)
 {
 	D3DXCreateFont(m_pD3Ddev, sz, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET,
-		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face, &CDrawDefaultDxFont);
+		OUT_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face, &CDrawDefaultDxFont);
+	D3DXCreateSprite(m_pD3Ddev, &CDrawTextSprite);
 }
+
 void CDraw_InitLine(IDirect3DDevice9 *m_pD3Ddev)
 {
 	D3DXCreateLine(m_pD3Ddev, &CDrawDefaultDxLine);

@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "th08_input_overlay.h"
+#include "di8_input_overlay.h"
 
 #include "cdraw.h"
 #include "th_di8_hook.h"
 
-void Overlay_RenderInput(IDirect3DDevice9 *d3dDev)
+void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev)
 {
 	for (int i = 0; i < sizeof kg_MonitoredKeys / sizeof key_graphic; i++)
 	{

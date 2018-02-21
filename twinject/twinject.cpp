@@ -1,4 +1,3 @@
-#define FIXED_PATH
 
 #include <windows.h>
 #include <detours.h>
@@ -19,13 +18,24 @@ PROCESS_INFORMATION pi;
 
 const char *ininame = "twinject.ini";
 
+#define TH07_LOADER
+
 int main(const int argc, const char *argv[])
 {
-#ifdef FIXED_PATH
+	// The following block of code defines debugging paths to the games I have in my debug environment.
+	// TODO use dynamic configuration based loading instead of hard coding everything
+#if defined(TH07_LOADER)
+	_putenv("th=th07");
+	char *exepath = "D:\\Programming\\Multi\\th07\\th07.exe";
+	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
+	char *currentdir = "D:\\Programming\\Multi\\th07";
+#elif defined(TH08_LOADER)
+	_putenv("th=th08");
 	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";
 	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th08";
 #else
+	// The following code loads configuration data from an external file
 	configuration config;
 
 	if (ini_parse(ininame, handler, &config) < 0) {
@@ -40,7 +50,7 @@ int main(const int argc, const char *argv[])
 	PathCombine(exepath, currentdir, config.exename);
 	PathCombine(dllpath, currentdir, config.dllname);
 #endif
-
+	
 	memset(&si, 0, sizeof(si));
 	memset(&pi, 0, sizeof(pi));
 	si.cb = sizeof(si);
@@ -48,11 +58,11 @@ int main(const int argc, const char *argv[])
 		CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE | DEBUG_PROCESS, NULL,
 		currentdir, &si, &pi, dllpath, NULL))
 	{
-		printf("Injection: OK\n");
+		printf("twinject: Injection OK\n");
 	}
 	else
 	{
-		printf("Injection: Fail\n");
+		printf("twinject: Injection Fail\n");
 	}
 
 	DEBUG_EVENT debugEv;
