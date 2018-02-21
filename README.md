@@ -13,16 +13,24 @@ So far, I plan to implement bindings for this bot for every mainline game. As of
 
 ### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
+## Support
+|                      |th07 |th08 |
+|----------------------|-----|-----|
+|Dodge Bullet          |✔️   |✔️  |
+|Dodge Laser           |❌   |❌  |
+|Collect Powerups      |❌   |✔️  |
+|Target Enemies        |❌   |❌  |
+
 ## Functionality
 Consists of two parts, **twinhook** and **twinject**.
 
 ### twinhook
-twinhook is a DLL, injected during runtime into a Touhou game. It uses MS Detours to trampoline functions.
+twinhook is a DLL, injected during runtime into a game. It uses MS Detours to trampoline functions.
 
 [Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinhook_technical.md)
 
 ### twinject
-twinject loads twinhook into th08.exe with Detours.
+twinject loads twinhook into game with MS Detours.
 
 [Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinject_technical.md)
 
