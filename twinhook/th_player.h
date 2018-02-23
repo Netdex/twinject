@@ -1,5 +1,15 @@
 #pragma once
-#include <unordered_map>
+
+#include "vec2.h"
+#include "th_algorithm.h"
+
+struct entity
+{
+	vec2 p;
+	vec2 v;
+	vec2 sz;			// bullet size
+	DWORD me;			// metadata
+};
 
 
 /**
@@ -7,9 +17,14 @@
  */
 class th_player
 {
-	
+protected:
+	th_algorithm *algorithm = nullptr;
 public:
+	std::vector<entity> bullets;
+	std::vector<entity> powerups;
+
 	bool enabled = false;
+	bool render = false;
 
 	th_player() {}
 	virtual ~th_player() = default;
@@ -61,4 +76,13 @@ public:
 		enabled = enable;
 		on_enable_changed(enable);
 	}
+
+	void bind_algorithm(th_algorithm *algo);
+
+	virtual vec2 get_plyr_loc() = 0;
 };
+
+inline void th_player::bind_algorithm(th_algorithm* algo)
+{
+	algorithm = algo;
+}

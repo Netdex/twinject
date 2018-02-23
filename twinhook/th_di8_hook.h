@@ -31,7 +31,6 @@ public:
 	th_di8_hook(th_player *player) : th_hook(player) {}
 	virtual ~th_di8_hook() = default;
 
-	static void hook();
 	static void bind(th_player *player);
 	static th_di8_hook* inst();
 

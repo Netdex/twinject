@@ -1,24 +1,19 @@
 
 #include <windows.h>
 #include <detours.h>
-#include <cstdio>
 #include <tchar.h>
-#include <string.h>
 #include <psapi.h>
 #include <strsafe.h>
-#include <vector>
 #include <atlstr.h>
 
 #include "debugger.h"
-#include "ini.h"
-#include "config.h"
 
 STARTUPINFOA si;
 PROCESS_INFORMATION pi;
 
 const char *ininame = "twinject.ini";
 
-#define TH07_LOADER
+#define TH08_LOADER
 
 int main(const int argc, const char *argv[])
 {

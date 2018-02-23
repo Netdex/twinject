@@ -52,6 +52,12 @@
     <Filter Include="Header Files\config">
       <UniqueIdentifier>{49a97a80-c650-4c17-a2ea-51cd95f90782}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\algo">
+      <UniqueIdentifier>{c80fed97-9471-4d07-8943-e25b107febf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\algo">
+      <UniqueIdentifier>{39f9bbbb-8ac8-4f78-8777-ccfa63bf6788}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -110,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="di8_input_overlay.cpp">
       <Filter>Source Files\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="th_vector_algo.cpp">
+      <Filter>Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="th_vo_algo.cpp">
+      <Filter>Source Files\algo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="di8_input_overlay.h">
       <Filter>Header Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="th_algorithm.h">
+      <Filter>Header Files\algo</Filter>
+    </ClInclude>
+    <ClInclude Include="th_vector_algo.h">
+      <Filter>Header Files\algo</Filter>
+    </ClInclude>
+    <ClInclude Include="th_vo_algo.h">
+      <Filter>Header Files\algo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

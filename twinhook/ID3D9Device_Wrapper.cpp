@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ID3D9Device_Wrapper.h"
-#include "cdraw.h"
 
 Direct3DDevice9Wrapper::Direct3DDevice9Wrapper(IDirect3DDevice9 *pDirect3DDevice9, Direct3D9Wrapper *pDirect3D9, D3DPRESENT_PARAMETERS *pPresentationParameters)
 {

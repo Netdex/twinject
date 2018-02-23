@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "cdraw.h"
+#include <math.h>
 
 static IDirect3DDevice9 *CDrawDefaultD3DDevice = NULL;
 static IDirect3DTexture9* CDrawDefaultPrimitive = NULL;

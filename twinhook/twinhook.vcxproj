@@ -171,6 +171,8 @@
     <ClCompile Include="th08_player.cpp" />
     <ClCompile Include="th_d3d9_hook.cpp" />
     <ClCompile Include="th_di8_hook.cpp" />
+    <ClCompile Include="th_vector_algo.cpp" />
+    <ClCompile Include="th_vo_algo.cpp" />
     <ClCompile Include="twinhook.cpp" />
     <ClCompile Include="vec2.cpp" />
   </ItemGroup>
@@ -192,11 +194,14 @@
     <ClInclude Include="th08_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
     <ClInclude Include="th08_player.h" />
+    <ClInclude Include="th_algorithm.h" />
     <ClInclude Include="th_d3d9_hook.h" />
     <ClInclude Include="th_di8_hook.h" />
     <ClInclude Include="th_hook.h" />
     <ClInclude Include="th_patch.h" />
     <ClInclude Include="th_player.h" />
+    <ClInclude Include="th_vector_algo.h" />
+    <ClInclude Include="th_vo_algo.h" />
     <ClInclude Include="vec2.h" />
   </ItemGroup>
   <ItemGroup>

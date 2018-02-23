@@ -1,14 +1,21 @@
 #include "stdafx.h"
+#include <unordered_map>
+
 #include "th_di8_hook.h"
 #include "th08_player.h"
 #include "th_d3d9_hook.h"
 #include "th08_bullet_proc_hook.h"
 #include "th07_player.h"
 #include "th07_bullet_proc_hook.h"
+#include "th_vector_algo.h"
 
 void th07_init()
 {
-	th07_player *player = new th07_player;
+	
+	th07_player *player = new th07_player();
+	th_vector_algo *algo = new th_vector_algo(player);
+	player->bind_algorithm(algo);
+
 	th_d3d9_hook::bind(player);
 	th_di8_hook::bind(player);
 	th07_bullet_proc_hook::bind(player);
@@ -16,7 +23,10 @@ void th07_init()
 
 void th08_init()
 {
-	th08_player *player = new th08_player;
+	th08_player *player = new th08_player();
+	th_vector_algo *algo = new th_vector_algo(player);
+	player->bind_algorithm(algo);
+
 	th_d3d9_hook::bind(player);
 	th_di8_hook::bind(player);
 	th08_bullet_proc_hook::bind(player);

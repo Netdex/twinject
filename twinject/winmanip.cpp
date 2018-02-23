@@ -22,9 +22,7 @@ LPTSTR GetFileName(LPTSTR path)
 
 LPTSTR GetFilePathFromHandle(HANDLE hFile)
 {
-	BOOL bSuccess = FALSE;
 	TCHAR *pszFilePath = new TCHAR[MAX_PATH + 1];
-	HANDLE hFileMap;
 
 	// Get the file size.
 	DWORD dwFileSizeHi = 0;
@@ -36,12 +34,7 @@ LPTSTR GetFilePathFromHandle(HANDLE hFile)
 	}
 
 	// Create a file mapping object.
-	hFileMap = CreateFileMapping(hFile,
-		NULL,
-		PAGE_READONLY,
-		0,
-		1,
-		NULL);
+	HANDLE hFileMap = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 1, NULL);
 
 	if (hFileMap)
 	{
@@ -96,16 +89,13 @@ LPTSTR GetFilePathFromHandle(HANDLE hFile)
 								}
 							}
 						}
-
 						// Go to the next NULL character.
 						while (*p++);
 					} while (!bFound && *p); // end of string
 				}
 			}
-			bSuccess = TRUE;
 			UnmapViewOfFile(pMem);
 		}
-
 		CloseHandle(hFileMap);
 	}
 	return pszFilePath;

@@ -65,13 +65,13 @@ void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int 
 	// HACK this might cause performance problems, also are we guaranteed a th08_player?
 	th08_player *player = dynamic_cast<th08_player*>(inst()->player);
 	assert(("wrong player type bound to hook", player));
-	std::vector<th08_entity> &TH08_Bullets = player->bullets;
-	std::vector<th08_entity> &TH08_Powerups = player->powerups;
+	std::vector<entity> &TH08_Bullets = player->bullets;
+	std::vector<entity> &TH08_Powerups = player->powerups;
 
 	// routine from bullet update
 	if (retaddr == 0x004314B3)
 	{
-		th08_entity b;
+		entity b;
 		b.p.x = *(float*)(a1 + 0);
 		b.p.y = *(float*)(a1 + 4);
 		b.v.x = *(float*)(a3 + 0);
@@ -87,7 +87,7 @@ void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int 
 	}
 	else if (retaddr == 0x0044095B)
 	{
-		th08_entity b;
+		entity b;
 		b.p.x = *(float*)(a1 + 0);
 		b.p.y = *(float*)(a1 + 4);
 		b.v.x = *(float*)(a3 + 0);

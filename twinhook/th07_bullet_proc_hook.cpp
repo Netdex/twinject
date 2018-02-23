@@ -38,10 +38,11 @@ void th07_bullet_proc_hook::vector_update_hook(void *ecx)
 	th07_player *player = dynamic_cast<th07_player*>(inst()->player);
 	assert(("wrong player type bound to hook", player));
 
-	std::vector<th07_entity> &bullets = player->bullets;
-	std::vector<th07_entity> &powerups = player->powerups;
+	std::vector<entity> &bullets = player->bullets;
+	std::vector<entity> &powerups = player->powerups;
 
-	th07_entity e = {
+	// TODO something is quite wrong with the bullet size
+	entity e = {
 		{ *(float*)((char*)ecx + 0xB8C), *((float*)((char*)ecx + 0xB8C) + 1) },
 		{ *(float*)((char*)ecx + 0xB98), *((float*)((char*)ecx + 0xB98) + 1) },
 		{ *(float*)(*(int*)((char*)ecx + 0x1E4) + 48), *(float*)(*(int*)((char*)ecx + 0x1E4) + 44) },
