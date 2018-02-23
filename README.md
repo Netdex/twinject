@@ -14,12 +14,14 @@ So far, I plan to implement bindings for this bot for every mainline game. As of
 ### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
-|                      |th07 |th08 |
+|Feature               |th07 |th08 |
 |----------------------|-----|-----|
 |Dodge Bullet          |✔️   |✔️  |
 |Dodge Laser           |❌   |❌  |
 |Collect Powerups      |❌   |✔️  |
 |Target Enemies        |❌   |❌  |
+
+... and some other undocumented features.
 
 ## Functionality
 Consists of two parts, **twinhook** and **twinject**.
@@ -82,3 +84,14 @@ Disable the debug visualization if it is enabled.
 
 #### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)
 #### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)
+
+## Structure
+Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
+
+An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are supported.
+
+The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm.
+
+Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
+
+
