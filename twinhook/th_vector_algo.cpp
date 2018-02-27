@@ -19,8 +19,8 @@ void th_vector_algo::on_tick()
 		return;
 	}
 
-	di8->set_vk_state(DIK_Z, 0x80);			// fire continuously
-	di8->set_vk_state(DIK_LCONTROL, 0x80);	// skip dialogue continuously
+	di8->set_vk_state(DIK_Z, DIK_KEY_DOWN);			// fire continuously
+	di8->set_vk_state(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
 
 	vec2 plyr = player->get_plyr_loc();
 	vec2 guide, threat;
@@ -30,45 +30,45 @@ void th_vector_algo::on_tick()
 	if (abs(net.x) > BOT_ACTION_THRESHOLD)
 	{
 		if (net.x > 0) {
-			di8->set_vk_state(DIK_LEFT, 0x80);
-			di8->set_vk_state(DIK_RIGHT, 0);
+			di8->set_vk_state(DIK_LEFT, DIK_KEY_DOWN);
+			di8->set_vk_state(DIK_RIGHT, DIK_KEY_UP);
 		}
 		else
 		{
-			di8->set_vk_state(DIK_RIGHT, 0x80);
-			di8->set_vk_state(DIK_LEFT, 0);
+			di8->set_vk_state(DIK_RIGHT, DIK_KEY_DOWN);
+			di8->set_vk_state(DIK_LEFT, DIK_KEY_UP);
 		}
 	}
 	else
 	{
-		di8->set_vk_state(DIK_RIGHT, 0);
-		di8->set_vk_state(DIK_LEFT, 0);
+		di8->set_vk_state(DIK_RIGHT, DIK_KEY_UP);
+		di8->set_vk_state(DIK_LEFT, DIK_KEY_UP);
 	}
 	if (abs(net.y) > BOT_ACTION_THRESHOLD)
 	{
 		if (net.y > 0) {
-			di8->set_vk_state(DIK_UP, 0x80);
-			di8->set_vk_state(DIK_DOWN, 0);
+			di8->set_vk_state(DIK_UP, DIK_KEY_DOWN);
+			di8->set_vk_state(DIK_DOWN, DIK_KEY_UP);
 		}
 		else
 		{
-			di8->set_vk_state(DIK_DOWN, 0x80);
-			di8->set_vk_state(DIK_UP, 0);
+			di8->set_vk_state(DIK_DOWN, DIK_KEY_DOWN);
+			di8->set_vk_state(DIK_UP, DIK_KEY_UP);
 		}
 	}
 	else
 	{
-		di8->set_vk_state(DIK_DOWN, 0);
-		di8->set_vk_state(DIK_UP, 0);
+		di8->set_vk_state(DIK_DOWN, DIK_KEY_UP);
+		di8->set_vk_state(DIK_UP, DIK_KEY_UP);
 	}
 	if (abs(threat.x) > FOCUS_FORCE_THRESHOLD || abs(threat.y) > FOCUS_FORCE_THRESHOLD ||
 		(abs(threat.x) < ZERO_EPSILON && abs(threat.y) < ZERO_EPSILON))
 	{
-		di8->set_vk_state(DIK_LSHIFT, 0);
+		di8->set_vk_state(DIK_LSHIFT, DIK_KEY_UP);
 	}
 	else
 	{
-		di8->set_vk_state(DIK_LSHIFT, 0x80);
+		di8->set_vk_state(DIK_LSHIFT, DIK_KEY_DOWN);
 	}
 }
 

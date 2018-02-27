@@ -110,6 +110,7 @@ void th08_player::on_enable_changed(bool enable)
 	th08_patch_autobomb ptch;
 	if (enable)
 	{
+		algorithm->on_begin();
 		ptch.patch();
 	}
 	else
@@ -117,8 +118,6 @@ void th08_player::on_enable_changed(bool enable)
 		ptch.unpatch();
 	}
 }
-
-
 
 static PBYTE PlayerPosAddr = (PBYTE)0x017D6110;
 static PBYTE BossPosAddr = (PBYTE)0x004CE7EC;

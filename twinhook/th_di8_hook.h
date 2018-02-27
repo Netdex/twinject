@@ -11,6 +11,9 @@ typedef HRESULT(__stdcall *DirectInput8Create_t)(HINSTANCE hinst, DWORD dwVersio
 HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter);
 void Hook_DInput8_DirectInput8Create(DirectInput8Hook hook);
 
+#define DIK_KEY_UP		0x0
+#define DIK_KEY_DOWN	0x80
+
 /**
  * \brief Function hook for statically loaded DirectInput8.
  * Hooking must be done immediately after DLL attach, or else

@@ -8,6 +8,7 @@
 #include "th07_player.h"
 #include "th07_bullet_proc_hook.h"
 #include "th_vector_algo.h"
+#include "th_vo_algo.h"
 
 void th07_init()
 {
@@ -24,7 +25,8 @@ void th07_init()
 void th08_init()
 {
 	th08_player *player = new th08_player();
-	th_vector_algo *algo = new th_vector_algo(player);
+	//th_vector_algo *algo = new th_vector_algo(player);
+	th_vo_algo *algo = new th_vo_algo(player);
 	player->bind_algorithm(algo);
 
 	th_d3d9_hook::bind(player);

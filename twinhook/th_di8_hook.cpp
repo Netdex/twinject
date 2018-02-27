@@ -71,7 +71,7 @@ static HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersio
 {
 	LOG("DI8Create: Feeding fake DirectInput");
 	LPDIRECTINPUT8A legit;
-	HRESULT result =DirectInput8Create_Original(hinst, dwVersion, riidltf, (LPVOID*)&legit, punkOuter);
+	HRESULT result = DirectInput8Create_Original(hinst, dwVersion, riidltf, (LPVOID*)&legit, punkOuter);
 	th_di8_hook::inst()->DirectInput8 = new DirectInput8Wrapper(legit, di8_hook);
 	*ppvOut = th_di8_hook::inst()->DirectInput8;
 	return result;

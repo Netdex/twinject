@@ -73,8 +73,10 @@ public:
 	 */
 	void set_enable(bool enable)
 	{
+		// debounce
+		if(enable != enabled)
+			on_enable_changed(enable);
 		enabled = enable;
-		on_enable_changed(enable);
 	}
 
 	void bind_algorithm(th_algorithm *algo);

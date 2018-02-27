@@ -49,6 +49,8 @@ void th07_player::handle_input(BYTE diKeys[256])
 
 void th07_player::on_enable_changed(bool enable)
 {
+	if(enable)
+		algorithm->on_begin();
 }
 
 #define D BotOverlayRenderer_DisplayDebugString
