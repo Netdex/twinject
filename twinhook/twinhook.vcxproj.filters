@@ -58,6 +58,9 @@
     <Filter Include="Header Files\algo">
       <UniqueIdentifier>{39f9bbbb-8ac8-4f78-8777-ccfa63bf6788}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\test">
+      <UniqueIdentifier>{8cd88d1b-2e8e-4d3c-ad14-154bc041babc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="th_vo_algo.cpp">
       <Filter>Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="vec2_test.cpp">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

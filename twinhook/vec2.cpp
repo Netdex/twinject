@@ -149,7 +149,7 @@ bool vec2::nan() const
 	return isnan(x) || isnan(y);
 }
 
-vec2 vec2::transform(float(* t)(float)) const
+vec2 vec2::transform(float(*t)(float)) const
 {
 	return vec2(t(x), t(y));
 }
@@ -179,4 +179,39 @@ bool vec2::in_aabb(vec2 &p, vec2 &a, vec2 &b)
 	vec2 topleft = minv(a, b);
 	vec2 botright = maxv(a, b);
 	return p.x >= topleft.x && p.x <= botright.x && p.y >= topleft.y && p.y <= botright.y;
+}
+
+bool vec2::is_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2)
+{
+	return p1.x <= p2.x + s2.x
+		&& p1.x + s1.x >= p2.x
+		&& p1.y <= p2.y + s2.y
+		&& s1.y + p1.y >= p2.y;
+}
+
+int vec2::will_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2, vec2 v1, vec2 v2)
+{
+	// check if they're already colliding
+	if (is_collide_aabb(p1, p2, s1, s2))
+		return 0;
+
+	// check time required until collision for each side
+	float t = (s2.y + p2.x - p1.x) / (v1.x - v2.x);
+	int minE = INT_MAX;
+	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = min(minE, (int)floor(t));
+	t = (p2.x - p1.x - s1.x) / (v1.x - v2.x);
+	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = min(minE, (int)floor(t));
+	t = (p2.y + s2.y - p1.y) / (v1.y - v2.y);
+	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = min(minE, (int)floor(t));
+	t = (p2.y - p1.y - s1.y) / (v1.y - v2.y);
+	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = min(minE, (int)floor(t));
+
+	// check if finite collision time exists
+	if (minE != INT_MAX && minE < 600 /* imposed limit */)
+		return minE;
+	return -1;
 }

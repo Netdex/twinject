@@ -46,7 +46,7 @@ void th07_bullet_proc_hook::vector_update_hook(void *ecx)
 		{ *(float*)((char*)ecx + 0xB8C), *((float*)((char*)ecx + 0xB8C) + 1) },
 		{ *(float*)((char*)ecx + 0xB98), *((float*)((char*)ecx + 0xB98) + 1) },
 		{ *(float*)(*(int*)((char*)ecx + 0x1E4) + 48), *(float*)(*(int*)((char*)ecx + 0x1E4) + 44) },
-		static_cast<long>(*(int*)((char*)ecx + 0xBF4))
+		static_cast<DWORD>(*(int*)((char*)ecx + 0xBF4))
 	};
 	bullets.push_back(e);
 }

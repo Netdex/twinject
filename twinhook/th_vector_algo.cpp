@@ -105,7 +105,7 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 
 		// player area
 
-		CDraw_FillRect(plyr.x - 2 + th08_param::GAME_X_OFFSET, plyr.y - 2 + th08_param::GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
+		CDraw_FillRect(plyr.x - 2 + th08_param::GAME_X_OFFSET, plyr.y - 2 + th08_param::GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
 
 		//CDraw_Line(boss.x + th08_param::GAME_X_OFFSET, 0, boss.x + th08_param::GAME_X_OFFSET, (float)th08_param::WINDOW_HEIGHT, D3DCOLOR_ARGB(255, 255, 0, 0));
 	}
