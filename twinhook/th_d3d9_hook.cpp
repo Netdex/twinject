@@ -26,7 +26,7 @@ th_d3d9_hook* th_d3d9_hook::inst()
 
 void th_d3d9_hook::d3d9_init_hook(IDirect3DDevice9 *d3dDev)
 {
-	CDraw_Init(d3dDev);
+	cdraw::init(d3dDev);
 	inst()->player->on_init();
 }
 

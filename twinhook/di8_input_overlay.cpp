@@ -14,6 +14,6 @@ void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev)
 		float w = kg.w * InputOverlayUnitSize;
 		float h = kg.h * InputOverlayUnitSize;
 		D3DCOLOR c = th_di8_hook::inst()->get_vk_state(kg.vkCode) ? kg.active_color : kg.default_color;
-		CDraw_FillRect(x, y, w, h, c);
+		cdraw::fill_rect(x, y, w, h, c);
 	}
 }

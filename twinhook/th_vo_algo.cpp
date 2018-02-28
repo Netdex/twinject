@@ -4,14 +4,7 @@
 #include "th_di8_hook.h"
 #include "th_config.h"
 
-/*
- * Unit velocity as a result of moving in specified direction
- * [0]: Hold, [1]: Up, [2]: Down, [3]: Left, [4]: Right,
- * [5]: Top-left, [6]: Top-right, [7]: Bottom-left, [8]: Bottom-right
- */
-const vec2 th_vo_algo::direction_vel[] =
-{ vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
-	vec2(-1, -1), vec2(1, -1), vec2(-1, 1), vec2(1,1) };
+
 
 void th_vo_algo::on_begin()
 {
@@ -84,8 +77,27 @@ void th_vo_algo::on_tick()
 		}
 	}
 
+	// find direction with maximum frames until collision
+	int minIdx = 0;
+	for (int dir = 1; dir < 9; ++dir)
+	{
+		if (collisionTicks[dir] != FLT_MAX &&
+			collisionTicks[dir] > collisionTicks[minIdx])
+		{
+			minIdx = dir;
+		}
+	}
 
+	auto di8 = th_di8_hook::inst();
+	
+	// release all control keys
+	for (int i = 0; i < 4; ++i)
+		di8->reset_vk_state(ctrl_keys[i]);
 
+	// press required keys for moving in desired direction
+	for (int i = 0; i < 2; ++i)
+		if (dir_keys[minIdx][i])
+			di8->set_vk_state(ctrl_keys[i], DIK_KEY_DOWN);
 }
 
 void th_vo_algo::calibration_init()

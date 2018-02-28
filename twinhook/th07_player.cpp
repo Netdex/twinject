@@ -60,7 +60,7 @@ static int BotOverlayRenderer_DebugLineOffset = 0;
 
 static void BotOverlayRenderer_BeginDebugString()
 {
-	CDraw_FillRect(445, 250, 640, 480, D3DCOLOR_ARGB(200, 0, 0, 0));
+	cdraw::fill_rect(445, 250, 640, 480, D3DCOLOR_ARGB(200, 0, 0, 0));
 	BotOverlayRenderer_DebugLineOffset = 0;
 }
 
@@ -72,7 +72,7 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	va_list args;
 	va_start(args, fmt);
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
-	CDraw_Text(BotOverlayRenderer_StringBuffer, color,
+	cdraw::text(BotOverlayRenderer_StringBuffer, color,
 		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, th_param::WINDOW_WIDTH, th_param::WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;

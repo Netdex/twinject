@@ -82,14 +82,14 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 		{
 			if ((*i).me)
 			{
-				CDraw_Rect((*i).p.x - 7 + th_param::GAME_X_OFFSET, (*i).p.y - 7 + th_param::GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
+				cdraw::rect((*i).p.x - 7 + th_param::GAME_X_OFFSET, (*i).p.y - 7 + th_param::GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
 			}
 			else {
-				CDraw_Rect((*i).p.x - (*i).sz.x / 2 + th_param::GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param::GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+				cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param::GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param::GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
 			}
 			vec2 proj = (*i).p + (*i).v.transform(proj_transform);
 
-			CDraw_Line((*i).p.x + th_param::GAME_X_OFFSET, (*i).p.y + th_param::GAME_Y_OFFSET,
+			cdraw::line((*i).p.x + th_param::GAME_X_OFFSET, (*i).p.y + th_param::GAME_Y_OFFSET,
 				proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
 
@@ -105,7 +105,7 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 
 		// player area
 
-		CDraw_FillRect(plyr.x - 2 + th_param::GAME_X_OFFSET, plyr.y - 2 + th_param::GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
+		cdraw::fill_rect(plyr.x - 2 + th_param::GAME_X_OFFSET, plyr.y - 2 + th_param::GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
 
 		//CDraw_Line(boss.x + th08_param::GAME_X_OFFSET, 0, boss.x + th08_param::GAME_X_OFFSET, (float)th08_param::WINDOW_HEIGHT, D3DCOLOR_ARGB(255, 255, 0, 0));
 	}
