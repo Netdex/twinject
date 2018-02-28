@@ -2,7 +2,7 @@
 #include "th08_player.h"
 #include "IDI8ADevice_Wrapper.h"
 #include "th08_patch_autobomb.h"
-#include "th08_config.h"
+#include "th_config.h"
 #include "th_di8_hook.h"
 #include "cdraw.h"
 #include "di8_input_overlay.h"
@@ -74,7 +74,7 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	va_start(args, fmt);
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
 	CDraw_Text(BotOverlayRenderer_StringBuffer, color,
-		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, th08_param::WINDOW_WIDTH, th08_param::WINDOW_HEIGHT);
+		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, th_param::WINDOW_WIDTH, th_param::WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;
 }
@@ -124,12 +124,12 @@ static PBYTE BossPosAddr = (PBYTE)0x004CE7EC;
 
 vec2 th08_player::get_plyr_loc()
 {
-	return vec2(*(float*)PlayerPosAddr - th08_param::GAME_X_OFFSET, *(float*)(PlayerPosAddr + 4) - th08_param::GAME_Y_OFFSET);
+	return vec2(*(float*)PlayerPosAddr - th_param::GAME_X_OFFSET, *(float*)(PlayerPosAddr + 4) - th_param::GAME_Y_OFFSET);
 }
 
 vec2 th08_player::get_boss_loc()
 {
-	vec2 a(*(float*)BossPosAddr - th08_param::GAME_X_OFFSET, *(float*)(BossPosAddr + 4) - th08_param::GAME_Y_OFFSET);
+	vec2 a(*(float*)BossPosAddr - th_param::GAME_X_OFFSET, *(float*)(BossPosAddr + 4) - th_param::GAME_Y_OFFSET);
 	if (a.x < 0 || a.y < 0) return vec2(NAN, NAN);
 	return a;
 }

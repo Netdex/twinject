@@ -32,8 +32,8 @@ public:
 	bool nan() const;
 	vec2 transform(float(*t)(float)) const;
 
-	static float dot(vec2 &a, vec2 &b);
-	static vec2 proj(vec2 &a, vec2 &b);
+	static float dot(const vec2 &a, const vec2 &b);
+	static vec2 proj(const vec2 &a, const vec2 &b);
 
 	/**
 	 * \brief Determine the minimum component-wise vector
@@ -41,7 +41,7 @@ public:
 	 * \param b Second vector
 	 * \return The minimum component-wise vector
 	 */
-	static vec2 minv(vec2 &a, vec2 &b);
+	static vec2 minv(const vec2 &a, const vec2 &b);
 
 	/**
 	* \brief Determine the maximum component-wise vector
@@ -49,7 +49,7 @@ public:
 	* \param b Second vector
 	* \return the minimum component-wise vector
 	*/
-	static vec2 maxv(vec2 &a, vec2 &b);
+	static vec2 maxv(const vec2 &a, const vec2 &b);
 
 	/**
 	 * \brief Determine if p is inside an AABB defined by a and b
@@ -58,7 +58,7 @@ public:
 	 * \param b Arbitrary corner of AABB
 	 * \return If p is inside an AABB defined by a and b
 	 */
-	static bool in_aabb(vec2 &p, vec2 &a, vec2 &b);
+	static bool in_aabb(const vec2 &p, const vec2 &a, const vec2 &b);
 
 	/**
 	 * \brief Determine if AABB 1 is colliding with AABB 2
@@ -68,7 +68,7 @@ public:
 	 * \param s2 Size (x=width, y=height) of AABB 2
 	 * \return Whether or not AABB 1 is colliding with AABB 2
 	 */
-	static bool is_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2);
+	static bool is_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2);
 
 	/**
 	 * \brief Determine if AABB 1 will collide with AABB 2 in the future
@@ -81,7 +81,8 @@ public:
 	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision.
 	 * If the collision occurs between frames, it will return the lower frame.
 	 */
-	static int will_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2, vec2 v1, vec2 v2);
+	static int will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2, 
+								 const vec2 &v1, const vec2 &v2);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);

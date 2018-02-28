@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "th07_player.h"
 #include "cdraw.h"
-#include "th07_config.h"
-#include "color.h"
 #include "di8_input_overlay.h"
 #include "th_di8_hook.h"
 #include "IDI8ADevice_Wrapper.h"
+#include "th_config.h"
 
 void th07_player::on_init()
 {
@@ -74,7 +73,7 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	va_start(args, fmt);
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
 	CDraw_Text(BotOverlayRenderer_StringBuffer, color,
-		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, th07_param::WINDOW_WIDTH, th07_param::WINDOW_HEIGHT);
+		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, th_param::WINDOW_WIDTH, th_param::WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;
 }
@@ -99,5 +98,5 @@ void th07_player::draw(IDirect3DDevice9* d3dDev)
 static PBYTE PlayerPosAddr = (PBYTE)0x004BDCA0;
 vec2 th07_player::get_plyr_loc()
 {
-	return vec2(*(float*)PlayerPosAddr - th07_param::GAME_X_OFFSET, *(float*)(PlayerPosAddr + 4) - th07_param::GAME_Y_OFFSET);
+	return vec2(*(float*)PlayerPosAddr - th_param::GAME_X_OFFSET, *(float*)(PlayerPosAddr + 4) - th_param::GAME_Y_OFFSET);
 }

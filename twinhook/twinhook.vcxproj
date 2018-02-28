@@ -145,13 +145,12 @@
     <ClInclude Include="IDI8ADevice_Wrapper.h" />
     <ClInclude Include="IDI8A_Wrapper.h" />
     <ClInclude Include="th07_bullet_proc_hook.h" />
-    <ClInclude Include="th07_config.h" />
     <ClInclude Include="th07_player.h" />
     <ClInclude Include="di8_input_overlay.h" />
     <ClInclude Include="logfs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="th08_bullet_proc_hook.h" />
-    <ClInclude Include="th08_config.h" />
+    <ClInclude Include="th_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
     <ClInclude Include="th08_player.h" />
     <ClInclude Include="th_algorithm.h" />

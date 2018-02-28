@@ -154,34 +154,34 @@ vec2 vec2::transform(float(*t)(float)) const
 	return vec2(t(x), t(y));
 }
 
-float vec2::dot(vec2& a, vec2& b)
+float vec2::dot(const vec2& a, const vec2& b)
 {
 	return a.x * b.x + a.y * b.y;
 }
 
-vec2 vec2::proj(vec2& a, vec2& b)
+vec2 vec2::proj(const vec2& a, const vec2& b)
 {
 	return b * (dot(a, b) / b.lensq());
 }
 
-vec2 vec2::minv(vec2& a, vec2& b)
+vec2 vec2::minv(const vec2& a, const vec2& b)
 {
 	return vec2(min(a.x, b.x), min(a.y, b.y));
 }
 
-vec2 vec2::maxv(vec2& a, vec2& b)
+vec2 vec2::maxv(const vec2& a, const vec2& b)
 {
 	return vec2(max(a.x, b.x), max(a.y, b.y));
 }
 
-bool vec2::in_aabb(vec2 &p, vec2 &a, vec2 &b)
+bool vec2::in_aabb(const vec2 &p, const vec2 &a, const vec2 &b)
 {
 	vec2 topleft = minv(a, b);
 	vec2 botright = maxv(a, b);
 	return p.x >= topleft.x && p.x <= botright.x && p.y >= topleft.y && p.y <= botright.y;
 }
 
-bool vec2::is_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2)
+bool vec2::is_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2)
 {
 	return p1.x <= p2.x + s2.x
 		&& p1.x + s1.x >= p2.x
@@ -189,7 +189,8 @@ bool vec2::is_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2)
 		&& s1.y + p1.y >= p2.y;
 }
 
-int vec2::will_collide_aabb(vec2 p1, vec2 p2, vec2 s1, vec2 s2, vec2 v1, vec2 v2)
+int vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
+							const vec2 &v1, const vec2 &v2)
 {
 	// check if they're already colliding
 	if (is_collide_aabb(p1, p2, s1, s2))

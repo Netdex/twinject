@@ -19,23 +19,30 @@
  */
 class th_vo_algo : public th_algorithm
 {
+	static const vec2 direction_vel[];
+
 	bool is_calibrated = false;
+
 	/**
 	 * \brief Number of frames spent calibrating so far
 	 */
 	int cal_frames = 0;
+
 	/**
 	 * \brief Starting x position when beginning calibration
 	 */
 	float cal_start_x = -1;
+
 	float player_vel = 0;
 
 	void calibration_init();
+
 	/**
 	 * \brief Do one tick of calibration
 	 * \return Whether calibration is complete or not
 	 */
 	bool calibration_tick();
+
 public:
 	th_vo_algo(th_player *player) : th_algorithm(player) {}
 	~th_vo_algo() = default;
