@@ -7,8 +7,8 @@
 * [5]: Top-left, [6]: Top-right, [7]: Bottom-left, [8]: Bottom-right
 */
 static const vec2 direction_vel[] =
-{ vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
-vec2(-1, -1), vec2(1, -1), vec2(-1, 1), vec2(1,1) };
+	{ vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
+	vec2(-1, -1), vec2(1, -1), vec2(-1, 1), vec2(1,1) };
 
 static const BYTE dir_keys[9][2] = {
 	{ NULL,			NULL },
@@ -41,29 +41,24 @@ static const BYTE ctrl_keys[] = { DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT };
  */
 class th_vo_algo : public th_algorithm
 {
-
-
+	/* Calibration Parameters */
 	bool is_calibrated = false;
-
-	/**
-	 * \brief Number of frames spent calibrating so far
-	 */
+	// Number of frames spent calibrating so far
 	int cal_frames = 0;
-
-	/**
-	 * \brief Starting x position when beginning calibration
-	 */
+	// Starting x position when beginning calibration
 	float cal_start_x = -1;
-
 	float player_vel = 0;
 
 	void calibration_init();
 
 	/**
-	 * \brief Do one tick of calibration
-	 * \return Whether calibration is complete or not
-	 */
+	* \brief Do one tick of calibration
+	* \return Whether calibration is complete or not
+	*/
 	bool calibration_tick();
+
+	/* Visualization Parameters*/
+
 
 public:
 	th_vo_algo(th_player *player) : th_algorithm(player) {}

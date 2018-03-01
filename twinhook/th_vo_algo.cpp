@@ -3,7 +3,8 @@
 #include "th_player.h"
 #include "th_di8_hook.h"
 #include "th_config.h"
-
+#include "cdraw.h"
+#include "color.h"
 
 
 void th_vo_algo::on_begin()
@@ -13,8 +14,18 @@ void th_vo_algo::on_begin()
 
 void th_vo_algo::on_tick()
 {
-	if (!player->enabled)
+	auto di8 = th_di8_hook::inst();
+
+	if (!player->enabled) {
+		di8->reset_vk_state(DIK_LEFT);
+		di8->reset_vk_state(DIK_RIGHT);
+		di8->reset_vk_state(DIK_UP);
+		di8->reset_vk_state(DIK_DOWN);
+		di8->reset_vk_state(DIK_Z);
+		di8->reset_vk_state(DIK_LSHIFT);
+		di8->reset_vk_state(DIK_LCONTROL);
 		return;
+	}
 
 	if (!is_calibrated)
 	{
@@ -30,7 +41,8 @@ void th_vo_algo::on_tick()
 	 * Ticks until collision whilst moving in this direction
 	 * Uses same direction numbering schema
 	 */
-	float collisionTicks[9] = { FLT_MAX };
+	float collisionTicks[9];
+	std::fill_n(collisionTicks, 9, FLT_MAX);
 
 	// Bullet collision frame calculations
 	for (auto bullet = player->bullets.begin(); bullet != player->bullets.end(); ++bullet)
@@ -46,8 +58,9 @@ void th_vo_algo::on_tick()
 				direction_vel[dir] * player_vel,
 				bullet->v
 			);
-			if (colTick >= 0)
+			if (colTick >= 0) {
 				collisionTicks[dir] = min(colTick, collisionTicks[dir]);
+			}
 		}
 	}
 
@@ -77,6 +90,7 @@ void th_vo_algo::on_tick()
 		}
 	}
 
+
 	// find direction with maximum frames until collision
 	int minIdx = 0;
 	for (int dir = 1; dir < 9; ++dir)
@@ -88,8 +102,14 @@ void th_vo_algo::on_tick()
 		}
 	}
 
-	auto di8 = th_di8_hook::inst();
-	
+	/*LOG("C[%d] | H:%.0f U:%.0f D:%.0f L:%.0f R:%.0f",
+		minIdx,
+		collisionTicks[0] == FLT_MAX ? -1 : collisionTicks[0], collisionTicks[1],
+		collisionTicks[2], collisionTicks[3], collisionTicks[4]);*/
+
+	di8->set_vk_state(DIK_Z, DIK_KEY_DOWN);			// fire continuously
+	di8->set_vk_state(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
+
 	// release all control keys
 	for (int i = 0; i < 4; ++i)
 		di8->reset_vk_state(ctrl_keys[i]);
@@ -97,7 +117,7 @@ void th_vo_algo::on_tick()
 	// press required keys for moving in desired direction
 	for (int i = 0; i < 2; ++i)
 		if (dir_keys[minIdx][i])
-			di8->set_vk_state(ctrl_keys[i], DIK_KEY_DOWN);
+			di8->set_vk_state(dir_keys[minIdx][i], DIK_KEY_DOWN);
 }
 
 void th_vo_algo::calibration_init()
@@ -106,6 +126,40 @@ void th_vo_algo::calibration_init()
 	cal_frames = 0;
 	cal_start_x = -1;
 	player_vel = 0;
+}
+
+void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
+{
+	vec2 pos = player->get_plyr_loc();
+	if (player->render)
+	{
+		// bullet markers
+		for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
+		{
+			if ((*i).me)
+			{
+				cdraw::rect((*i).p.x - 7 + th_param::GAME_X_OFFSET, (*i).p.y - 7 + th_param::GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
+			}
+			else {
+				cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param::GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param::GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+			}
+			vec2 proj = (*i).p + (*i).v * 10;
+
+			cdraw::line((*i).p.x + th_param::GAME_X_OFFSET, (*i).p.y + th_param::GAME_Y_OFFSET,
+				proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+		}
+
+		cdraw::line(th_param::GAME_X_OFFSET, pos.y + th_param::GAME_Y_OFFSET, 
+			th_param::GAME_WIDTH + th_param::GAME_X_OFFSET, pos.y + th_param::GAME_Y_OFFSET,
+			D3DCOLOR_ARGB(255, 0, 255, 0));
+		cdraw::line(pos.x + th_param::GAME_X_OFFSET, th_param::GAME_Y_OFFSET,
+			pos.x + th_param::GAME_X_OFFSET, th_param::GAME_HEIGHT + th_param::GAME_Y_OFFSET,
+			D3DCOLOR_ARGB(255, 0, 255, 0));
+
+		cdraw::fill_rect(pos.x - 2 + th_param::GAME_X_OFFSET, pos.y - 2 + th_param::GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
+	}
+
+
 }
 
 bool th_vo_algo::calibration_tick()
@@ -140,6 +194,4 @@ bool th_vo_algo::calibration_tick()
 	return false;
 }
 
-void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
-{
-}
+
