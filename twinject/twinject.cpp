@@ -23,7 +23,7 @@ int main(const int argc, const char *argv[])
 	_putenv("th=th07");
 	char *exepath = "D:\\Programming\\Multi\\th07\\th07.exe";
 	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
-	char *currentdir = "D:\\Programming\\Multi\\th07";
+	char *currentdir = "D:\\Progrbamming\\Multi\\th07";
 #elif defined(TH08_LOADER)
 	_putenv("th=th08");
 	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";

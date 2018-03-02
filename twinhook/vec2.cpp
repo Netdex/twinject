@@ -189,7 +189,15 @@ bool vec2::is_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const
 		&& s1.y + p1.y >= p2.y;
 }
 
-int vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
+bool vec2::is_contain_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2)
+{
+	return p2.x >= p1.x
+		&& p2.x + s2.x <= p1.x + s1.x
+		&& p2.y >= p1.y
+		&& p2.y + s2.y <= p1.y + s1.y;
+}
+
+float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
 							const vec2 &v1, const vec2 &v2)
 {
 	// check if they're already colliding
@@ -198,21 +206,49 @@ int vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, cons
 
 	// check time required until collision for each side
 	float t = (s2.y + p2.x - p1.x) / (v1.x - v2.x);
-	int minE = INT_MAX;
+	float minE = FLT_MAX;
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, (int)floor(t));
+		minE = min(minE, t);
 	t = (p2.x - p1.x - s1.x) / (v1.x - v2.x);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, (int)floor(t));
+		minE = min(minE, t);
 	t = (p2.y + s2.y - p1.y) / (v1.y - v2.y);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, (int)floor(t));
+		minE = min(minE, t);
 	t = (p2.y - p1.y - s1.y) / (v1.y - v2.y);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, (int)floor(t));
+		minE = min(minE, t);
 
 	// check if finite collision time exists
-	if (minE != INT_MAX && minE < 600 /* imposed limit */)
+	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
 		return minE;
+	return -1;
+}
+
+float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2, const vec2& v1, const vec2& v2)
+{
+	// check if they're already exited
+	if (!is_contain_aabb(p1, p2, s1, s2))
+		return 0;
+
+	// check time required for each side to exit
+
+	float minE = FLT_MAX;
+	float t = (p1.x + s1.x - p2.x - s2.x) / (v2.x - v1.x);
+	if (t >= 0)
+		minE = min(minE, t);
+	t = (p1.x - p2.x) / (v2.x - v1.x);
+	if (t >= 0)
+		minE = min(minE, t);
+	t = (p1.y - p2.y) / (v2.y - v1.y);
+	if (t >= 0)
+		minE = min(minE, t);
+	t = (p1.y + s1.y - p2.y - s2.y) / (v2.y - v1.y);
+	if (t >= 0)
+		minE = min(minE, t);
+
+	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
+		return minE;
+
 	return -1;
 }

@@ -74,7 +74,8 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	va_start(args, fmt);
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
 	cdraw::text(BotOverlayRenderer_StringBuffer, color,
-		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, th_param::WINDOW_WIDTH, th_param::WINDOW_HEIGHT);
+		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, 
+		(int) th_param::WINDOW_WIDTH, (int) th_param::WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;
 }

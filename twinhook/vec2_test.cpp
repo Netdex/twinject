@@ -42,7 +42,7 @@ public:
 				vec2(0, 0), vec2(10, 0),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(1, 0), vec2(-1, 0)			// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will collide, converging horizontal", LINE_INFO()
 		);
 		Assert::IsTrue(
@@ -50,7 +50,7 @@ public:
 				vec2(0, 0), vec2(10, 10),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(1, 1), vec2(-1, -1)		// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will collide, converging diagonal", LINE_INFO()
 		);
 		Assert::IsTrue(
@@ -58,7 +58,7 @@ public:
 				vec2(0, 0), vec2(0, 10),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(0, 1), vec2(0, -1)		// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will collide, converging vertical", LINE_INFO()
 		);
 
@@ -68,7 +68,7 @@ public:
 				vec2(0, 0), vec2(10, 0),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(1, 0), vec2(1, 0)			// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will not collide, parallel velocity", LINE_INFO()
 		);
 		Assert::IsFalse(
@@ -76,7 +76,7 @@ public:
 				vec2(0, 0), vec2(10, 2),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(1, 0), vec2(-1, 0)			// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will not collide, separating axis", LINE_INFO()
 		);
 		Assert::IsFalse(
@@ -84,7 +84,7 @@ public:
 				vec2(0, 0), vec2(10, 0),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(-1, 0), vec2(1, 0)			// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will collide, diverging horizontal", LINE_INFO()
 		);
 		Assert::IsFalse(
@@ -92,7 +92,7 @@ public:
 				vec2(0, 0), vec2(10, 10),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(-1, -1), vec2(1, 1)		// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will collide, diverging diagonal", LINE_INFO()
 		);
 		Assert::IsFalse(
@@ -100,7 +100,7 @@ public:
 				vec2(0, 0), vec2(0, 10),		// points
 				vec2(1, 1), vec2(1, 1),			// sizes
 				vec2(0, -1), vec2(0, 1)		// velocities
-			) > 0,
+			) > 0.f,
 			L"aabb will collide, diverging vertical", LINE_INFO()
 		);
 
@@ -110,8 +110,112 @@ public:
 				vec2(0, 0), vec2(2, 2),			// points
 				vec2(3, 3), vec2(3, 3),			// sizes
 				vec2(-1, -1), vec2(1, 1)		// velocities
-			), 0,
+			), 0.f,
 			L"aabb already collided", LINE_INFO()
+		);
+	}
+
+	TEST_METHOD(VectorIsContainAABB)
+	{
+		Assert::IsTrue(
+			vec2::is_contain_aabb(
+				vec2(0, 0), vec2(0, 0),
+				vec2(1, 1), vec2(1, 1)
+			),
+			L"aabb identical", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::is_contain_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(3, 3), vec2(1, 1)
+			),
+			L"aabb fully contained", LINE_INFO()
+		);
+
+		Assert::IsFalse(
+			vec2::is_contain_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(1, 1), vec2(1, 1)
+			),
+			L"aabb corner touching", LINE_INFO()
+		);
+		Assert::IsFalse(
+			vec2::is_contain_aabb(
+				vec2(0, 0), vec2(2, 0),
+				vec2(1, 1), vec2(1, 1)
+			),
+			L"aabb not intersecting", LINE_INFO()
+		);
+		Assert::IsFalse(
+			vec2::is_contain_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(2, 2), vec2(2, 2)
+			),
+			L"aabb intersecting, but not contained", LINE_INFO()
+		);
+	}
+	TEST_METHOD(VectorWillExitAABB)
+	{
+		// Positive cases
+		Assert::IsTrue(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(3, 3), vec2(1, 1),
+				vec2(0, 0), vec2(1, 1)
+			) > 0.f,
+			L"aabb 1 stationary, aabb 2 moving outside", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(3, 3), vec2(1, 1),
+				vec2(-1, -1), vec2(1, 1)
+			) > 0.f,
+			L"aabb moving in opposite directions", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(3, 3), vec2(1, 1),
+				vec2(1, 1), vec2(0, 0)
+			) > 0.f,
+			L"aabb 1 moving, aabb 2 stationary", LINE_INFO()
+		);
+
+		// Negative cases
+		Assert::IsTrue(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(3, 3), vec2(1, 1),
+				vec2(0, 0), vec2(0, 0)
+			) < 0.f,
+			L"aabb 1 and aabb 2 not moving", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(3, 3), vec2(1, 1),
+				vec2(1, 1), vec2(1, 1)
+			) < 0.f,
+			L"aabb 1 and aabb 2 moving, same velocity", LINE_INFO()
+		);
+
+		// Special cases
+		Assert::AreEqual(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(1, 1), vec2(1, 1),
+				vec2(1, 1), vec2(1, 1)
+			), 0.f,
+			L"already exited, completely", LINE_INFO()
+		);
+		Assert::AreEqual(
+			vec2::will_exit_aabb(
+				vec2(0, 0), vec2(1, 1),
+				vec2(2, 2), vec2(2, 2),
+				vec2(1, 1), vec2(1, 1)
+			), 0.f,
+			L"already exited, colliding", LINE_INFO()
 		);
 	}
 };

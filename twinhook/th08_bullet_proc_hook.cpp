@@ -94,6 +94,9 @@ void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int 
 		b.v.y = *(float*)(a3 + 4);
 		// get powerup temporal factor
 		b.me = *(BYTE*)(a1 - 676 + 727);
+		/*float bx = *(float*)(a2 + 3380);
+		float by = *((float*)(a2 + 3380) + 1);
+		b.sz = vec2(bx, by);*/
 		TH08_Powerups.push_back(b);
 	}
 }

@@ -1,14 +1,18 @@
 #pragma once
 #include "th_vector_algo.h"
 
+static const float SQRT_2 = sqrt(2.f);
 /*
 * Unit velocity as a result of moving in specified direction
 * [0]: Hold, [1]: Up, [2]: Down, [3]: Left, [4]: Right,
 * [5]: Top-left, [6]: Top-right, [7]: Bottom-left, [8]: Bottom-right
 */
 static const vec2 direction_vel[] =
-	{ vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
-	vec2(-1, -1), vec2(1, -1), vec2(-1, 1), vec2(1,1) };
+	{ 
+		vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
+		vec2(-SQRT_2, -SQRT_2), vec2(SQRT_2, -SQRT_2), 
+		vec2(-SQRT_2, SQRT_2), vec2(SQRT_2, SQRT_2) 
+	};
 
 static const BYTE dir_keys[9][2] = {
 	{ NULL,			NULL },
