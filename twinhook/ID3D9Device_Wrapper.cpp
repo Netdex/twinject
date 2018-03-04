@@ -41,8 +41,10 @@ HRESULT Direct3DDevice9Wrapper::EvictManagedResources()
 }
 HRESULT Direct3DDevice9Wrapper::GetDirect3D(IDirect3D9 **ppD3D9)
 {
-	*ppD3D9 = Direct3D9;
-	return D3D_OK;
+	return Direct3DDevice9->GetDirect3D(ppD3D9);
+	// BUG for some reason, returning the wrapper d3d leads to a crash in th15
+	// *ppD3D9 = Direct3D9;
+	// return D3D_OK;
 }
 HRESULT Direct3DDevice9Wrapper::GetDeviceCaps(D3DCAPS9* pCaps)
 {
@@ -182,13 +184,13 @@ HRESULT Direct3DDevice9Wrapper::GetDepthStencilSurface(IDirect3DSurface9** ppZSt
 }
 HRESULT Direct3DDevice9Wrapper::BeginScene()
 {
-	if(Direct3D9->Hook.BeginSceneHook)
+	if (Direct3D9->Hook.BeginSceneHook)
 		Direct3D9->Hook.BeginSceneHook(Direct3DDevice9);
 	return Direct3DDevice9->BeginScene();
 }
 HRESULT Direct3DDevice9Wrapper::EndScene()
 {
-	if(Direct3D9->Hook.EndSceneHook)
+	if (Direct3D9->Hook.EndSceneHook)
 		Direct3D9->Hook.EndSceneHook(Direct3DDevice9);
 	return Direct3DDevice9->EndScene();
 }

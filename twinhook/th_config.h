@@ -7,6 +7,4 @@ namespace th_param {
 	const float GAME_HEIGHT = 448;
 	const float GAME_X_OFFSET = 32;
 	const float GAME_Y_OFFSET = 16;
-
-	const vec2 PLAYER_SIZE(6, 6);
 }

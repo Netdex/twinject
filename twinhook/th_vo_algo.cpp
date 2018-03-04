@@ -5,6 +5,7 @@
 #include "th_config.h"
 #include "cdraw.h"
 #include "color.h"
+#include "th15_player.h"
 
 
 void th_vo_algo::on_begin()
@@ -30,33 +31,49 @@ void th_vo_algo::on_tick()
 	if (!is_calibrated)
 	{
 		is_calibrated = calibration_tick();
-		if (is_calibrated)
-			LOG("calibrated plyr vel: %f", player_vel);
+		if (is_calibrated) {
+			LOG("calibrated plyr vel: %f %f", player_vel, player_f_vel);
+		}
 		return;
 	}
 
-	vec2 pos = player->get_plyr_loc();
+	entity plyr = player->get_plyr_cz();
 
 	/*
 	 * Ticks until collision whilst moving in this direction
 	 * Uses same direction numbering schema
+	 *
+	 * TODO: include focus speeds
 	 */
-	float collisionTicks[9];
-	std::fill_n(collisionTicks, 9, FLT_MAX);
+	float collisionTicks[n_dirs];
+	std::fill_n(collisionTicks, n_dirs, FLT_MAX);
 
 	// Bullet collision frame calculations
 	for (auto bullet = player->bullets.begin(); bullet != player->bullets.end(); ++bullet)
 	{
-		for (int dir = 0; dir < 9; ++dir)
+		for (int dir = 0; dir < n_dirs; ++dir)
 		{
-			float colTick = vec2::will_collide_aabb(
-				pos - th_param::PLAYER_SIZE / 2,
-				bullet->p - bullet->sz / 2,
-				th_param::PLAYER_SIZE,
-				bullet->sz,
-				direction_vel[dir] * player_vel,
-				bullet->v
-			);
+			vec2 pvel = direction_vel[dir] * (focused_dir[dir] ? player_f_vel : player_vel);
+			float colTick;
+			if (hit_circle) {
+				colTick = vec2::will_collide_circle(
+					plyr.p, bullet->p,
+					plyr.sz.x, bullet->sz.y,
+					pvel,
+					bullet->v
+				);
+			}
+			else
+			{
+				colTick = vec2::will_collide_aabb(
+					plyr.p - plyr.sz / 2,
+					bullet->p - bullet->sz / 2,
+					plyr.sz,
+					bullet->sz,
+					pvel,
+					bullet->v
+				);
+			}
 			if (colTick >= 0) {
 				collisionTicks[dir] = min(colTick, collisionTicks[dir]);
 			}
@@ -64,28 +81,44 @@ void th_vo_algo::on_tick()
 	}
 
 	// Powerup collision frame calculations
+	// BUG powerups move non-linearly so this doesn't work well
+	// TODO do not target powerups that will go off the screen
+	// TODO do not target powerups that are too high
 	/*
 	 * Ticks until collision with target whilst moving in this diretion
 	 * Uses same direction numbering schema
 	 */
-	float targetTicks[9];
-	std::fill_n(targetTicks, 9, FLT_MAX);
+	float targetTicks[n_dirs];
+	std::fill_n(targetTicks, n_dirs, FLT_MAX);
 
-	vec2 ppsz(10, 10);
 	for (auto powerup = player->powerups.begin(); powerup != player->powerups.end(); ++powerup)
 	{
 		// filter out unwanted powerups
 		if (powerup->me == 0 && powerup->p.y > 200) {
-			for (int dir = 0; dir < 9; ++dir)
+			for (int dir = 0; dir < n_dirs; ++dir)
 			{
-				float colTick = vec2::will_collide_aabb(
-					pos - th_param::PLAYER_SIZE / 2,
-					powerup->p - ppsz / 2,
-					th_param::PLAYER_SIZE,
-					ppsz,					// guess to powerup size, because we don't know
-					direction_vel[dir] * player_vel,
-					powerup->v
-				);
+				vec2 pvel = direction_vel[dir] * (focused_dir[dir] ? player_f_vel : player_vel);
+				float colTick;
+				if (hit_circle)
+				{
+					colTick = vec2::will_collide_circle(
+						plyr.p, powerup->p,
+						plyr.sz.x, powerup->sz.x,
+						pvel,
+						powerup->v
+					);
+				}
+				else
+				{
+					colTick = vec2::will_collide_aabb(
+						plyr.p - plyr.sz / 2,
+						powerup->p - powerup->sz / 2,
+						plyr.sz,
+						powerup->sz,
+						pvel,
+						powerup->v
+					);
+				}
 				if (colTick >= 0) {
 					targetTicks[dir] = min(colTick, targetTicks[dir]);
 				}
@@ -94,14 +127,27 @@ void th_vo_algo::on_tick()
 	}
 
 	// Wall collision frame calculations
-	for (int dir = 0; dir < 9; ++dir)
+	for (int dir = 0; dir < n_dirs; ++dir)
 	{
-		vec2 pvel = direction_vel[dir] * player_vel;
-		float t = vec2::will_exit_aabb(
-			vec2(0, 0), pos - th_param::PLAYER_SIZE / 2,
-			vec2(th_param::GAME_WIDTH, th_param::GAME_HEIGHT), th_param::PLAYER_SIZE,
-			vec2(), pvel
-		);
+		vec2 pvel = direction_vel[dir] * (focused_dir[dir] ? player_f_vel : player_vel);
+		float t;
+		if (hit_circle)
+		{
+			t = vec2::will_exit_aabb(
+				vec2(0, 0), plyr.p - plyr.sz,
+				vec2(th_param::GAME_WIDTH, th_param::GAME_HEIGHT), plyr.sz * 2,
+				vec2(), pvel
+			);
+		}
+		else
+		{
+			t = vec2::will_exit_aabb(
+				vec2(0, 0), plyr.p - plyr.sz / 2,
+				vec2(th_param::GAME_WIDTH, th_param::GAME_HEIGHT), plyr.sz,
+				vec2(), pvel
+			);
+		}
+
 		if (t >= 0)
 			collisionTicks[dir] = min(t, collisionTicks[dir]);
 	}
@@ -109,20 +155,18 @@ void th_vo_algo::on_tick()
 
 	// Viable target calculations
 	int tarIdx = -1;
-	for(int dir = 0; dir < 9; ++dir)
+	for (int dir = 0; dir < n_dirs; ++dir)
 	{
-		if (targetTicks[dir] < collisionTicks[dir] 
+		if (targetTicks[dir] < collisionTicks[dir]
 			&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
 			tarIdx = dir;
 	}
 
 	// check if we could find a targetable powerup
-	// TODO do not target powerups that will go off the screen
-	// TODO do not target powerups that are too high
 	if (tarIdx == -1) {
 		// find direction with maximum frames until collision
 		int minIdx = 0;
-		for (int dir = 1; dir < 9; ++dir)
+		for (int dir = 1; dir < n_dirs; ++dir)
 		{
 			if (collisionTicks[dir] != FLT_MAX &&
 				collisionTicks[dir] > collisionTicks[minIdx])
@@ -145,11 +189,11 @@ void th_vo_algo::on_tick()
 	di8->set_vk_state(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
 
 	// release all control keys
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < sizeof ctrl_keys / sizeof BYTE; ++i)
 		di8->reset_vk_state(ctrl_keys[i]);
 
 	// press required keys for moving in desired direction
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 3; ++i)
 		if (dir_keys[tarIdx][i])
 			di8->set_vk_state(dir_keys[tarIdx][i], DIK_KEY_DOWN);
 }
@@ -164,40 +208,63 @@ void th_vo_algo::calibration_init()
 
 void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 {
-	vec2 pos = player->get_plyr_loc();
 	if (player->render)
 	{
-		// bullet markers
-		for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
-		{
-			if ((*i).me)
+		entity plyr = player->get_plyr_cz();
+		if (!hit_circle) {
+			// bullet markers
+			for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
 			{
-				cdraw::rect((*i).p.x - 7 + th_param::GAME_X_OFFSET, (*i).p.y - 7 + th_param::GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
-			}
-			else {
-				cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param::GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param::GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
-			}
-			vec2 proj = (*i).p + (*i).v * 10;
+				if ((*i).me)
+				{
+					cdraw::rect((*i).p.x - 7 + th_param::GAME_X_OFFSET, (*i).p.y - 7 + th_param::GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
+				}
+				else {
+					cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param::GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param::GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+				}
+				vec2 proj = (*i).p + (*i).v * 10;
 
-			cdraw::line((*i).p.x + th_param::GAME_X_OFFSET, (*i).p.y + th_param::GAME_Y_OFFSET,
-				proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+				cdraw::line((*i).p.x + th_param::GAME_X_OFFSET, (*i).p.y + th_param::GAME_Y_OFFSET,
+					proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+			}
+
+			/*for(auto i = player->powerups.begin(); i != player->powerups.end(); ++i)
+			{
+				char buf[16];
+				sprintf_s(buf, 16, "%d", i->me);
+				cdraw::text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), i->p.x, i->p.y, 700, 700);
+			}*/
+
+			cdraw::line(th_param::GAME_X_OFFSET, plyr.p.y + th_param::GAME_Y_OFFSET,
+				th_param::GAME_WIDTH + th_param::GAME_X_OFFSET, plyr.p.y + th_param::GAME_Y_OFFSET,
+				D3DCOLOR_ARGB(255, 0, 255, 0));
+			cdraw::line(plyr.p.x + th_param::GAME_X_OFFSET, th_param::GAME_Y_OFFSET,
+				plyr.p.x + th_param::GAME_X_OFFSET, th_param::GAME_HEIGHT + th_param::GAME_Y_OFFSET,
+				D3DCOLOR_ARGB(255, 0, 255, 0));
+
+			cdraw::fill_rect(plyr.p.x - 2 + th_param::GAME_X_OFFSET, plyr.p.y - 2 + th_param::GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
-
-		/*for(auto i = player->powerups.begin(); i != player->powerups.end(); ++i)
+		else
 		{
-			char buf[16];
-			sprintf_s(buf, 16, "%d", i->me);
-			cdraw::text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), i->p.x, i->p.y, 700, 700);
-		}*/
+			for (auto b = player->bullets.begin(); b != player->bullets.end(); ++b)
+			{
+				// note that bullets are actually circles
+				/*cdraw::circle(th_param::GAME_X_OFFSET + b->p.x,
+				th_param::GAME_Y_OFFSET + b->p.y, b->sz.x, 8, D3DCOLOR_ARGB(255, 0, 255, 0));*/
+				cdraw::rect(
+					th_param::GAME_X_OFFSET + b->p.x - b->sz.x,
+					th_param::GAME_Y_OFFSET + b->p.y - b->sz.y,
+					b->sz.x * 2, b->sz.y * 2, D3DCOLOR_ARGB(255, 0, 255, 0));
+				vec2 proj = (*b).p + (*b).v * 10;
 
-		cdraw::line(th_param::GAME_X_OFFSET, pos.y + th_param::GAME_Y_OFFSET,
-			th_param::GAME_WIDTH + th_param::GAME_X_OFFSET, pos.y + th_param::GAME_Y_OFFSET,
-			D3DCOLOR_ARGB(255, 0, 255, 0));
-		cdraw::line(pos.x + th_param::GAME_X_OFFSET, th_param::GAME_Y_OFFSET,
-			pos.x + th_param::GAME_X_OFFSET, th_param::GAME_HEIGHT + th_param::GAME_Y_OFFSET,
-			D3DCOLOR_ARGB(255, 0, 255, 0));
-
-		cdraw::fill_rect(pos.x - 2 + th_param::GAME_X_OFFSET, pos.y - 2 + th_param::GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
+				cdraw::line((*b).p.x + th_param::GAME_X_OFFSET, (*b).p.y + th_param::GAME_Y_OFFSET,
+					proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+			}
+			cdraw::fill_rect(
+				plyr.p.x - plyr.sz.x + th_param::GAME_X_OFFSET,
+				plyr.p.y - plyr.sz.y + th_param::GAME_Y_OFFSET, plyr.sz.x * 2, plyr.sz.y * 2,
+				D3DCOLOR_ARGB(255, 0, 255, 0));
+		}
 	}
 
 
@@ -205,7 +272,8 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 
 bool th_vo_algo::calibration_tick()
 {
-	vec2 pos = player->get_plyr_loc();
+	entity plyr = player->get_plyr_cz();
+
 	switch (cal_frames)
 	{
 	case 0:
@@ -217,18 +285,51 @@ bool th_vo_algo::calibration_tick()
 		break;
 	case 1:
 		th_di8_hook::inst()->set_vk_state(DIK_LEFT, DIK_KEY_UP);
-		cal_start_x = pos.x;
+		cal_start_x = plyr.p.x;
 		break;
 	case 2:
 		th_di8_hook::inst()->set_vk_state(DIK_RIGHT, DIK_KEY_DOWN);
 		break;
 	case 3:
+		th_di8_hook::inst()->reset_vk_state(DIK_LEFT);
+		th_di8_hook::inst()->reset_vk_state(DIK_RIGHT);
+		th_di8_hook::inst()->reset_vk_state(DIK_UP);
+		th_di8_hook::inst()->reset_vk_state(DIK_DOWN);
+
+		// BUG why does LoLK do this differently
+		if (dynamic_cast<th15_player*>(player))
+			player_vel = plyr.p.x - cal_start_x;
+		else
+			player_vel = cal_start_x - plyr.p.x;
+		break;
+	case 4:
+		// do not allow player interaction during calibration
+		th_di8_hook::inst()->set_vk_state(DIK_LEFT, DIK_KEY_DOWN);
+		th_di8_hook::inst()->set_vk_state(DIK_RIGHT, DIK_KEY_UP);
+		th_di8_hook::inst()->set_vk_state(DIK_UP, DIK_KEY_UP);
+		th_di8_hook::inst()->set_vk_state(DIK_DOWN, DIK_KEY_UP);
+		th_di8_hook::inst()->set_vk_state(DIK_LSHIFT, DIK_KEY_DOWN);
+		break;
+	case 5:
+		th_di8_hook::inst()->set_vk_state(DIK_LEFT, DIK_KEY_UP);
+		cal_start_x = plyr.p.x;
+		break;
+	case 6:
+		th_di8_hook::inst()->set_vk_state(DIK_RIGHT, DIK_KEY_DOWN);
+		break;
+	case 7:
 		is_calibrated = true;
 		th_di8_hook::inst()->reset_vk_state(DIK_LEFT);
 		th_di8_hook::inst()->reset_vk_state(DIK_RIGHT);
 		th_di8_hook::inst()->reset_vk_state(DIK_UP);
 		th_di8_hook::inst()->reset_vk_state(DIK_DOWN);
-		player_vel = cal_start_x - pos.x;
+		th_di8_hook::inst()->reset_vk_state(DIK_LSHIFT);
+
+		// BUG why does LoLK do this differently
+		if (dynamic_cast<th15_player*>(player))
+			player_f_vel = plyr.p.x - cal_start_x;
+		else
+			player_f_vel = cal_start_x - plyr.p.x;
 		return true;
 	}
 	++cal_frames;

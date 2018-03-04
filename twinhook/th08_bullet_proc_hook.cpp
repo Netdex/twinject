@@ -18,8 +18,8 @@ th08_bullet_proc_hook* th08_bullet_proc_hook::inst()
 	return instance;
 }
 
-sub_410A70_t sub_410A70_Original = (sub_410A70_t)0x00410A70;
-static __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
+static sub_410A70_t sub_410A70_Original = (sub_410A70_t)0x00410A70;
+__declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 {
 	// this is why you need MSVC to compile this
 	__asm {
@@ -63,7 +63,7 @@ static void Hook_TH08_sub_410A70()
 void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int a3)
 {
 	// HACK this might cause performance problems, also are we guaranteed a th08_player?
-	th08_player *player = dynamic_cast<th08_player*>(inst()->player);
+	th_player *player =inst()->player;
 	assert(("wrong player type bound to hook", player));
 	std::vector<entity> &TH08_Bullets = player->bullets;
 	std::vector<entity> &TH08_Powerups = player->powerups;
@@ -88,15 +88,14 @@ void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int 
 	else if (retaddr == 0x0044095B)
 	{
 		entity b;
-		b.p.x = *(float*)(a1 + 0);
-		b.p.y = *(float*)(a1 + 4);
-		b.v.x = *(float*)(a3 + 0);
-		b.v.y = *(float*)(a3 + 4);
+		b.p = vec2(*(float*)(a1 + 0),*(float*)(a1 + 4));
+		b.v = vec2(*(float*)(a3 + 0), *(float*)(a3 + 4));
 		// get powerup temporal factor
 		b.me = *(BYTE*)(a1 - 676 + 727);
 		/*float bx = *(float*)(a2 + 3380);
 		float by = *((float*)(a2 + 3380) + 1);
 		b.sz = vec2(bx, by);*/
+		b.sz = vec2(10, 10);				// assumption
 		TH08_Powerups.push_back(b);
 	}
 }

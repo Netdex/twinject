@@ -9,16 +9,18 @@
 #include "th07_bullet_proc_hook.h"
 #include "th_vector_algo.h"
 #include "th_vo_algo.h"
+#include "th15_player.h"
+#include "detour.h"
+#include "th15_bullet_proc_hook.h"
 
 void th07_init()
 {
-	
 	th07_player *player = new th07_player();
 	//th_vector_algo *algo = new th_vector_algo(player);
 	th_vo_algo *algo = new th_vo_algo(player);
 	player->bind_algorithm(algo);
 
-	th_d3d9_hook::bind(player);
+	th_d3d9_hook::bind(player, true);
 	th_di8_hook::bind(player);
 	th07_bullet_proc_hook::bind(player);
 }
@@ -30,15 +32,25 @@ void th08_init()
 	th_vo_algo *algo = new th_vo_algo(player);
 	player->bind_algorithm(algo);
 
-	th_d3d9_hook::bind(player);
+	th_d3d9_hook::bind(player, true);
 	th_di8_hook::bind(player);
 	th08_bullet_proc_hook::bind(player);
 }
 
+void th15_init()
+{
+	th15_player *player = new th15_player();
+	th_vo_algo *algo = new th_vo_algo(player, true);
+	player->bind_algorithm(algo);
+	th_d3d9_hook::bind(player, false);
+	th_di8_hook::bind(player);
+	th15_bullet_proc_hook::bind(player);
+}
 typedef void(*th_loader_t)();
 static std::unordered_map<std::string, th_loader_t> th_init{
 	{"th07", th07_init},
-	{"th08", th08_init}
+	{"th08", th08_init},
+	{"th15", th15_init}
 };
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)

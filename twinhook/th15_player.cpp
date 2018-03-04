@@ -1,34 +1,19 @@
 #include "stdafx.h"
-#include "th08_player.h"
+#include "th15_player.h"
 #include "IDI8ADevice_Wrapper.h"
-#include "th08_patch_autobomb.h"
 #include "th_config.h"
 #include "th_di8_hook.h"
 #include "cdraw.h"
 #include "di8_input_overlay.h"
 #include "th_algorithm.h"
 
-/*
-* TODO
-*
-* X - BUG: Bullets that come directly will not be dodged (fixed?)
-* X - Bullet sizes contribute to action range (fixed?)
-*
-* - Handle focusing better
-* - Lasers
-* - Reimplement shrinking radius system
-* - Implement simulated annealing tuning of parameters
-* - Decrease focus dodge force (ie. focus more often)
-* - Implement player velocity determination/calibration
-* - Enemy detection and targeting (partially implemented through boss detection)
-*/
 
-void th08_player::on_init()
+void th15_player::on_init()
 {
-	LOG("th08 player initialized");
+	LOG("th15 player initialized");
 }
 
-void th08_player::on_tick()
+void th15_player::on_tick()
 {
 	th_di8_hook* di8 = th_di8_hook::inst();
 	BYTE diKeys[256];
@@ -42,12 +27,12 @@ void th08_player::on_tick()
 		algorithm->on_tick();
 }
 
-void th08_player::on_begin_tick()
+void th15_player::on_begin_tick()
 {
 
 }
 
-void th08_player::on_after_tick()
+void th15_player::on_after_tick()
 {
 	bullets.clear();
 	powerups.clear();
@@ -74,13 +59,13 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	va_start(args, fmt);
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
 	cdraw::text(BotOverlayRenderer_StringBuffer, color,
-		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, 
-		(int) th_param::WINDOW_WIDTH, (int) th_param::WINDOW_HEIGHT);
+		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset,
+		(int)th_param::WINDOW_WIDTH, (int)th_param::WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;
 }
 
-void th08_player::draw(IDirect3DDevice9* d3dDev)
+void th15_player::draw(IDirect3DDevice9* d3dDev)
 {
 	B();
 	D(D3DCOLOR_ARGB(255, 0, 255, 255), "TWINJECT [netdex]");
@@ -90,11 +75,11 @@ void th08_player::draw(IDirect3DDevice9* d3dDev)
 
 	if (algorithm)
 		algorithm->visualize(d3dDev);
-
+	
 	DI8_Overlay_RenderInput(d3dDev);
 }
 
-void th08_player::handle_input(BYTE diKeys[256])
+void th15_player::handle_input(BYTE diKeys[256])
 {
 	if (diKeys[DIK_G])
 		set_enable(true);
@@ -106,32 +91,42 @@ void th08_player::handle_input(BYTE diKeys[256])
 		render = false;
 }
 
-void th08_player::on_enable_changed(bool enable)
+void th15_player::on_enable_changed(bool enable)
 {
-	th08_patch_autobomb ptch;
 	if (enable)
 	{
 		algorithm->on_begin();
-		ptch.patch();
-	}
-	else
-	{
-		ptch.unpatch();
 	}
 }
 
+static PBYTE *PlayerPtrAddr = (PBYTE*)0x004E9BB8;
 
-static PBYTE PlayerPtrAddr = (PBYTE)0x017D6110;
-static PBYTE BossPosAddr = (PBYTE)0x004CE7EC;
-
-entity th08_player::get_plyr_cz()
+entity th15_player::get_plyr_cz()
 {
-	entity plyr = {
-		vec2(*(float*)PlayerPtrAddr - th_param::GAME_X_OFFSET, *(float*)(PlayerPtrAddr + 4) - th_param::GAME_Y_OFFSET),
-		vec2(),
-		vec2(6,6),		// hard-coded player size
-		0
-	};
-	return plyr;
+	if (*PlayerPtrAddr) {
+		PBYTE plyrAddr = *PlayerPtrAddr;
+
+		// we must check if size is readable, because it doesn't initialize immediately
+		vec2 size;
+		if(*(DWORD*)(plyrAddr + 0x2C008))
+		{
+			size = vec2(
+				*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4),
+				*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4));
+		}
+
+		entity e = {
+			vec2(
+				*(float*)(plyrAddr + 0x618) + th_param::GAME_WIDTH / 2,
+				*(float*)(plyrAddr + 0x61C)),
+			vec2(),
+			size,
+			0
+		};
+		return e;
+	}
+	return {};
 }
+
+
 

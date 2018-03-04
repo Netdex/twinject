@@ -198,7 +198,7 @@ bool vec2::is_contain_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 }
 
 float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
-							const vec2 &v1, const vec2 &v2)
+	const vec2 &v1, const vec2 &v2)
 {
 	// check if they're already colliding
 	if (is_collide_aabb(p1, p2, s1, s2))
@@ -251,4 +251,36 @@ float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 		return minE;
 
 	return -1;
+}
+
+bool vec2::is_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2)
+{
+	return (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y) <= (r1 + r2) * (r1 + r2);
+}
+
+float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2,
+	const vec2 &v1, const vec2 &v2)
+{
+	if (is_collide_circle(p1, p2, r1, r2))
+		return 0;
+
+	float a = (v2.x - v1.x) * (v2.x - v1.x) + (v2.y - v1.y) * (v2.y - v1.y);
+	float b = 2 * ((p2.x - p1.x)*(v2.x - v1.x) + (p2.y - p1.y)*(v2.y - v1.y));
+	float c = (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y)
+		- (r1 + r2) * (r1 + r2);
+
+	float disc = b * b - 4 * a*c;
+	if (disc < 0)
+	{
+		return -1;
+	}
+
+	float rt = (-b + sqrt(b*b - 4 * a*c)) / (2 * a);
+	if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
+		return rt;
+	rt = (-b - sqrt(b*b - 4 * a*c)) / (2 * a);
+	if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
+		return rt;
+	return -1;
+
 }

@@ -81,7 +81,6 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 
 void th07_player::draw(IDirect3DDevice9* d3dDev)
 {
-	vec2 plyr = get_plyr_loc();
 
 	B();
 	D(D3DCOLOR_ARGB(255, 0, 255, 255), "TWINJECT [netdex]");
@@ -96,8 +95,14 @@ void th07_player::draw(IDirect3DDevice9* d3dDev)
 }
 
 
-static PBYTE PlayerPosAddr = (PBYTE)0x004BDCA0;
-vec2 th07_player::get_plyr_loc()
+static PBYTE PlayerPtrAddr = (PBYTE)0x004BDCA0;
+entity th07_player::get_plyr_cz()
 {
-	return vec2(*(float*)PlayerPosAddr - th_param::GAME_X_OFFSET, *(float*)(PlayerPosAddr + 4) - th_param::GAME_Y_OFFSET);
+	entity plyr = {
+		vec2(*(float*)PlayerPtrAddr - th_param::GAME_X_OFFSET, *(float*)(PlayerPtrAddr + 4) - th_param::GAME_Y_OFFSET),
+		vec2(),
+		vec2(6,6),		// hard-coded player size
+		0
+	};
+	return plyr;
 }

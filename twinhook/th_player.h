@@ -81,7 +81,11 @@ public:
 
 	void bind_algorithm(th_algorithm *algo);
 
-	virtual vec2 get_plyr_loc() = 0;
+	/**
+	 * \brief Get player characteristics
+	 * \return An entity struct populated with player characteristics
+	 */
+	virtual entity get_plyr_cz() = 0;
 };
 
 inline void th_player::bind_algorithm(th_algorithm* algo)

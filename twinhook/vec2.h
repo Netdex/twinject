@@ -107,6 +107,27 @@ public:
 	 */
 	static float will_exit_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
 							  const vec2 &v1, const vec2 &v2);
+
+	/**
+	 * \brief Determine if two circles are collided
+	 * \param p1 Position of circle 1 center
+	 * \param p2 Position of circle 2 center
+	 * \param r1 Radius of circle 1
+	 * \param r2 Radius of circle 2 
+	 * \return Whether the circles are collided
+	 */
+	static bool is_collide_circle(const vec2 &p1, const vec2 &p2, float r1, float r2);
+
+	/**
+	 * \brief Determine if circle 1 will collide with circle 2 in the future
+	 * \param p1 Position of circle 1 center
+	 * \param p2 Position of circle 2 center
+	 * \param r1 Radius of circle 1
+	 * \param r2 Radius of circle 2
+	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision
+	 */
+	static float will_collide_circle(const vec2 &p1, const vec2 &p2, float r1, float r2,
+								const vec2 &v1, const vec2 &v2);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);

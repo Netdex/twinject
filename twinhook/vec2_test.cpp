@@ -61,6 +61,14 @@ public:
 			) > 0.f,
 			L"aabb will collide, converging vertical", LINE_INFO()
 		);
+		Assert::IsTrue(
+			vec2::will_collide_aabb(
+				vec2(0, 0), vec2(10, 0),		// points
+				vec2(1, 1), vec2(1, 1),			// sizes
+				vec2(2, 0), vec2(1, 0)		// velocities
+			) > 0.f,
+			L"aabb will collide, converging horiz same dir", LINE_INFO()
+		);
 
 		// negative cases
 		Assert::IsFalse(
@@ -216,6 +224,79 @@ public:
 				vec2(1, 1), vec2(1, 1)
 			), 0.f,
 			L"already exited, colliding", LINE_INFO()
+		);
+	}
+
+	TEST_METHOD(VectorWillCollideCircle)
+	{
+		// Positive cases
+		Assert::IsTrue(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(3, 0),
+				1, 1,
+				vec2(1, 0), vec2(-1, 0)
+			) > 0,
+			L"two separate circles toward each other", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(3, 3),
+				1, 1,
+				vec2(0, 0), vec2(-1, -1)
+			) > 0,
+			L"two separate circles toward each other diag, 1 stationary", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(10, 0),
+				1, 1,
+				vec2(3, 0), vec2(1, 0)
+			) > 0,
+			L"two separate circles same dir diff speed", LINE_INFO()
+		);
+		
+		// Negative cases
+		Assert::IsTrue(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(3, 0),
+				1, 1,
+				vec2(-1, 0), vec2(1, 0)
+			) < 0,
+			L"two separate circles away from other", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(3, 0),
+				1, 1,
+				vec2(0, 0), vec2(1, 0)
+			) < 0,
+			L"two separate circles not moving", LINE_INFO()
+		);
+		Assert::IsTrue(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(3, 0),
+				1, 1,
+				vec2(1, 1), vec2(1, 1)
+			) < 0,
+			L"two separate circles moving parallel", LINE_INFO()
+		);
+
+		// Special cases
+		Assert::AreEqual(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(3, 0),
+				2, 2,
+				vec2(-1, 0), vec2(1, 0)
+			), 0.0f,
+			L"two collided circles, overlapping", LINE_INFO()
+		);
+		Assert::AreEqual(
+			vec2::will_collide_circle(
+				vec2(0, 0), vec2(0, 0),
+				1, 4,
+				vec2(-1, 0), vec2(1, 0)
+			), 0.0f,
+			L"two collided circles, encased", LINE_INFO()
 		);
 	}
 };

@@ -22,9 +22,9 @@ void th_vector_algo::on_tick()
 	di8->set_vk_state(DIK_Z, DIK_KEY_DOWN);			// fire continuously
 	di8->set_vk_state(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
 
-	vec2 plyr = player->get_plyr_loc();
+	entity plyr = player->get_plyr_cz();
 	vec2 guide, threat;
-	net_vector(plyr, vec2(), guide, threat);
+	net_vector(plyr.p, vec2(), guide, threat);
 	vec2 net = guide + threat;
 
 	if (abs(net.x) > BOT_ACTION_THRESHOLD)
@@ -74,7 +74,7 @@ void th_vector_algo::on_tick()
 
 void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 {
-	vec2 plyr = player->get_plyr_loc();
+	entity plyr = player->get_plyr_cz();
 	//vec2 boss = player->get_boss_loc();
 	if (player->render) {
 		// bullet markers
@@ -105,7 +105,7 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 
 		// player area
 
-		cdraw::fill_rect(plyr.x - 2 + th_param::GAME_X_OFFSET, plyr.y - 2 + th_param::GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
+		cdraw::fill_rect(plyr.p.x - 2 + th_param::GAME_X_OFFSET, plyr.p.y - 2 + th_param::GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
 
 		//CDraw_Line(boss.x + th08_param::GAME_X_OFFSET, 0, boss.x + th08_param::GAME_X_OFFSET, (float)th08_param::WINDOW_HEIGHT, D3DCOLOR_ARGB(255, 255, 0, 0));
 	}

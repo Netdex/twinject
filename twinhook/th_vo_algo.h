@@ -5,28 +5,48 @@ static const float SQRT_2 = sqrt(2.f);
 /*
 * Unit velocity as a result of moving in specified direction
 * [0]: Hold, [1]: Up, [2]: Down, [3]: Left, [4]: Right,
-* [5]: Top-left, [6]: Top-right, [7]: Bottom-left, [8]: Bottom-right
+* [5]: Top-left, [6]: Top-right, [7]: Bottom-left, [8]: Bottom-right,
+* [9]: F Up, [10]: F Down, [11]: F Left, [12]: F Right, [13]: F Top-left,
+* [14]: F top-right, [15]: F bottom-left, [16]: F bottom-right
 */
 static const vec2 direction_vel[] =
-	{ 
-		vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
-		vec2(-SQRT_2, -SQRT_2), vec2(SQRT_2, -SQRT_2), 
-		vec2(-SQRT_2, SQRT_2), vec2(SQRT_2, SQRT_2) 
-	};
-
-static const BYTE dir_keys[9][2] = {
-	{ NULL,			NULL },
-	{ DIK_UP,		NULL },
-	{ DIK_DOWN,		NULL },
-	{ DIK_LEFT,		NULL },
-	{ DIK_RIGHT,	NULL },
-	{ DIK_UP,		DIK_LEFT },
-	{ DIK_UP,		DIK_RIGHT },
-	{ DIK_DOWN,		DIK_LEFT },
-	{ DIK_DOWN,		DIK_RIGHT },
+{
+	vec2(0,0), vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
+	vec2(-SQRT_2, -SQRT_2), vec2(SQRT_2, -SQRT_2),
+	vec2(-SQRT_2, SQRT_2), vec2(SQRT_2, SQRT_2),
+	vec2(0,-1), vec2(0,1), vec2(-1,0), vec2(1,0),
+	vec2(-SQRT_2, -SQRT_2), vec2(SQRT_2, -SQRT_2),
+	vec2(-SQRT_2, SQRT_2), vec2(SQRT_2, SQRT_2)
 };
 
-static const BYTE ctrl_keys[] = { DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT };
+static const int n_dirs = sizeof direction_vel / sizeof vec2;
+
+static const bool focused_dir[] = {
+	false,false,false,false,false,false,false,false,false,
+	true,true,true,true,true,true,true,true
+};
+
+static const BYTE dir_keys[][3] = {
+	{ NULL,			NULL,			NULL },
+	{ DIK_UP,		NULL,			NULL },
+	{ DIK_DOWN,		NULL,			NULL },
+	{ DIK_LEFT,		NULL,			NULL },
+	{ DIK_RIGHT,	NULL,			NULL },
+	{ DIK_UP,		DIK_LEFT,		NULL },
+	{ DIK_UP,		DIK_RIGHT,		NULL },
+	{ DIK_DOWN,		DIK_LEFT,		NULL },
+	{ DIK_DOWN,		DIK_RIGHT,		NULL },
+	{ DIK_UP,		NULL,			DIK_LSHIFT },
+	{ DIK_DOWN,		NULL,			DIK_LSHIFT },
+	{ DIK_LEFT,		NULL,			DIK_LSHIFT },
+	{ DIK_RIGHT,	NULL,			DIK_LSHIFT },
+	{ DIK_UP,		DIK_LEFT,		DIK_LSHIFT },
+	{ DIK_UP,		DIK_RIGHT,		DIK_LSHIFT },
+	{ DIK_DOWN,		DIK_LEFT,		DIK_LSHIFT },
+	{ DIK_DOWN,		DIK_RIGHT,		DIK_LSHIFT }
+};
+
+static const BYTE ctrl_keys[] = { DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT, DIK_LSHIFT };
 
 /**
  * \brief Implementation of velocity obstacle based algorithm
@@ -45,6 +65,10 @@ static const BYTE ctrl_keys[] = { DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT };
  */
 class th_vo_algo : public th_algorithm
 {
+	/* Adaptibility Parameters */
+	// Should we use hitcircles instead of hitboxes
+	bool hit_circle = false;
+
 	/* Calibration Parameters */
 	bool is_calibrated = false;
 	// Number of frames spent calibrating so far
@@ -52,6 +76,7 @@ class th_vo_algo : public th_algorithm
 	// Starting x position when beginning calibration
 	float cal_start_x = -1;
 	float player_vel = 0;
+	float player_f_vel = 0;
 
 	void calibration_init();
 
@@ -66,6 +91,8 @@ class th_vo_algo : public th_algorithm
 
 public:
 	th_vo_algo(th_player *player) : th_algorithm(player) {}
+	th_vo_algo(th_player *player, bool hit_circle) : th_algorithm(player), hit_circle(hit_circle) {}
+
 	~th_vo_algo() = default;
 
 	void on_begin() override;

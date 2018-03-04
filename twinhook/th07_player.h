@@ -19,5 +19,5 @@ public:
 	void on_enable_changed(bool enable) override;
 
 private:
-	vec2 get_plyr_loc() override;
+	entity get_plyr_cz() override;
 };

@@ -4,11 +4,11 @@
 
 
 
-class th08_player : public th_player
+class th15_player : public th_player
 {
 public:
-	th08_player() {}
-	~th08_player() = default;
+	th15_player() {}
+	~th15_player() = default;
 
 	void on_init() override;
 	void on_tick() override;
@@ -20,5 +20,8 @@ public:
 	void on_enable_changed(bool enable) override;
 
 private:
+	/**
+	 * Note: the size for players in th15 is radius, not diameter.
+	 */
 	entity get_plyr_cz() override;
 };

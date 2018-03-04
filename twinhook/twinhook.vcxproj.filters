@@ -129,6 +129,12 @@
     <ClCompile Include="vec2_test.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
+    <ClCompile Include="th15_player.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="th15_bullet_proc_hook.cpp">
+      <Filter>Source Files\hook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -205,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="th_config.h">
       <Filter>Header Files\config</Filter>
+    </ClInclude>
+    <ClInclude Include="th15_player.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="th15_bullet_proc_hook.h">
+      <Filter>Header Files\hook</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

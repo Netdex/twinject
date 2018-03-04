@@ -13,7 +13,8 @@ PROCESS_INFORMATION pi;
 
 const char *ininame = "twinject.ini";
 
-#define TH08_LOADER
+#define DEBUGGER
+#define TH15_LOADER
 
 int main(const int argc, const char *argv[])
 {
@@ -23,12 +24,17 @@ int main(const int argc, const char *argv[])
 	_putenv("th=th07");
 	char *exepath = "D:\\Programming\\Multi\\th07\\th07.exe";
 	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
-	char *currentdir = "D:\\Progrbamming\\Multi\\th07";
+	char *currentdir = "D:\\Programming\\Multi\\th07";
 #elif defined(TH08_LOADER)
 	_putenv("th=th08");
 	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";
 	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th08";
+#elif defined(TH15_LOADER)
+	_putenv("th=th15");
+	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";
+	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
+	char *currentdir = "D:\\Programming\\Multi\\th15";
 #else
 	// The following code loads configuration data from an external file
 	configuration config;
@@ -50,7 +56,11 @@ int main(const int argc, const char *argv[])
 	memset(&pi, 0, sizeof(pi));
 	si.cb = sizeof(si);
 	if (DetourCreateProcessWithDll(exepath, NULL, NULL, NULL, TRUE,
-		CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE | DEBUG_PROCESS, NULL,
+		CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE 
+#ifdef DEBUGGER
+		| DEBUG_PROCESS
+#endif
+		, NULL,
 		currentdir, &si, &pi, dllpath, NULL))
 	{
 		printf("twinject: Injection OK\n");
@@ -64,6 +74,5 @@ int main(const int argc, const char *argv[])
 	EnterDebugLoop(&debugEv);
 
 	return 0;
-
 }
 
