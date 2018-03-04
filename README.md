@@ -11,15 +11,17 @@ Why did I do this? I thought it would be a neat challenge to apply my knowledge 
 
 So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed bindings for th08 with the d3d9 patch. th07 should follow soon, as their engines are very similar.
 
-### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
+### [Video Demonstration (Difficult)](https://youtu.be/9WElfhVE-Lk)
+#### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
-|Feature               |th07 |th08 |
-|----------------------|-----|-----|
-|Dodge Bullet          |✔️   |✔️  |
-|Dodge Laser           |❌   |❌  |
-|Collect Powerups      |❌   |✔️  |
-|Target Enemies        |❌   |❌  |
+|Feature               |th07 |th08 |th15 |
+|----------------------|-----|-----|-----|
+|Dodge Bullet          |✔️   |✔️  |✔️  |
+|Dodge Enemy           |❌   |❌  |✔️  |
+|Dodge Laser           |❌   |❌  |❌  |
+|Collect Powerups      |❌   |✔️  |❌  |
+|Target Enemies        |❌   |❌  |❌  |
 
 ... and some other undocumented features.
 
