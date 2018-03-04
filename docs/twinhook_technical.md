@@ -1,5 +1,5 @@
 # Twinhook Technical Description
-`Note: This information is a bit outdated now. I'll update it in the future when the codebase is more concrete.`
+`Note: This information is a bit outdated now, mainly due to the addition of multi-game compatibility and velocity obstacle dodging. I'll update it in the future when the codebase is more concrete.`
 
 ## Functionality Summary
 twinhook is a DLL which is injected into *Touhou Eiyashou ~ Imperishable Night* (henceforth referred to as IN), that allows direct interfacing with IN's nitty gritty bits. It's functionality can be split into several parts:
