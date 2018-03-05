@@ -9,7 +9,7 @@ For the unaware, bullet hells are a category of *Shoot 'em Up* video games where
 
 Why did I do this? I thought it would be a neat challenge to apply my knowledge of reverse engineering, and low-level development. This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available. The dodging algorithm uses a mix of linear algebra and analytical optimization to quickly approximate good movements for the bot to make. This is explained in detail in the Technical Descriptions linked below.
 
-So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed bindings for th08 with the d3d9 patch. th07 should follow soon, as their engines are very similar.
+So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for th07, th08 and th15.
 
 ### [Video Demonstration (Difficult)](https://youtu.be/9WElfhVE-Lk)
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
@@ -29,7 +29,8 @@ So far, I plan to implement bindings for this bot for every mainline game. As of
 Consists of two parts, **twinhook** and **twinject**.
 
 ### twinhook
-twinhook is a DLL, injected during runtime into a game. It uses MS Detours to trampoline functions.
+twinhook is a DLL, injected during runtime into a game. It uses MS Detours to trampoline functions.  
+This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
 
 [Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinhook_technical.md)
 
