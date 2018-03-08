@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ID3D9_Wrapper.h"
 #include "ID3D9Device_Wrapper.h"
+#include "th_d3d9_hook.h"
 
 Direct3D9Wrapper::Direct3D9Wrapper(LPDIRECT3D9 pDirect3D,
 	Direct3D9Hook stHook)
@@ -93,8 +94,10 @@ HRESULT Direct3D9Wrapper::CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND
 {
 	IDirect3DDevice9* pDirect3DDevice9;
 	HRESULT hRes = Direct3D9->CreateDevice(Adapter, DeviceType, hFocusWindow, BehaviorFlags, pPresentationParameters, &pDirect3DDevice9);
-	this->Hook.CreateDeviceHook(pDirect3DDevice9);
-	*ppReturnedDeviceInterface = new Direct3DDevice9Wrapper(pDirect3DDevice9, this, pPresentationParameters);
+	Direct3DDevice9Wrapper *w = new Direct3DDevice9Wrapper(pDirect3DDevice9, this, pPresentationParameters);
+	*ppReturnedDeviceInterface = w;
+	th_d3d9_hook::inst()->d3ddev9_wrapper = w;
+	this->Hook.CreateDeviceHook(w);
 	return hRes;
 }
 

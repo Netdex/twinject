@@ -15,8 +15,6 @@ struct key_graphic
 };
 
 /* key visualization positional information */
-const float InputOverlayPositionX = 520.f;
-const float InputOverlayPositionY = 430.f;
 const float InputOverlayUnitSize = 15.f;
 
 /* key visualization display information */

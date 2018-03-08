@@ -200,22 +200,24 @@ bool vec2::is_contain_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
 	const vec2 &v1, const vec2 &v2)
 {
+	// BUG this implementation is way too inefficient
+
 	// check if they're already colliding
 	if (is_collide_aabb(p1, p2, s1, s2))
 		return 0;
 
 	// check time required until collision for each side
-	float t = (s2.y + p2.x - p1.x) / (v1.x - v2.x);
+	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = min(minE, t);
-	t = (p2.x - p1.x - s1.x) / (v1.x - v2.x);
+	t = (p1.x - p2.x + s1.x) / (v2.x - v1.x);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = min(minE, t);
-	t = (p2.y + s2.y - p1.y) / (v1.y - v2.y);
+	t = (p1.y - p2.y - s2.y) / (v2.y - v1.y);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = min(minE, t);
-	t = (p2.y - p1.y - s1.y) / (v1.y - v2.y);
+	t = (p1.y - p2.y + s1.y) / (v2.y - v1.y);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = min(minE, t);
 
@@ -255,7 +257,8 @@ float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 
 bool vec2::is_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2)
 {
-	return (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y) <= (r1 + r2) * (r1 + r2);
+//	return (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y) <= (r1 + r2) * (r1 + r2);
+	return (p2 - p1).lensq() <= (r1 + r2) * (r1 + r2);
 }
 
 float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2,
@@ -264,10 +267,12 @@ float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float 
 	if (is_collide_circle(p1, p2, r1, r2))
 		return 0;
 
-	float a = (v2.x - v1.x) * (v2.x - v1.x) + (v2.y - v1.y) * (v2.y - v1.y);
-	float b = 2 * ((p2.x - p1.x)*(v2.x - v1.x) + (p2.y - p1.y)*(v2.y - v1.y));
-	float c = (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y)
-		- (r1 + r2) * (r1 + r2);
+	//float a = (v2.x - v1.x) * (v2.x - v1.x) + (v2.y - v1.y) * (v2.y - v1.y);
+	float a = (v2 - v1).lensq();
+	//float b = 2 * ((p2.x - p1.x)*(v2.x - v1.x) + (p2.y - p1.y)*(v2.y - v1.y));
+	float b = 2 * dot(p2 - p1, v2 - v1);
+	//float c = (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y) - (r1 + r2) * (r1 + r2);
+	float c = (p2 - p1).lensq() - (r1 + r2) * (r1 + r2);
 
 	float disc = b * b - 4 * a*c;
 	if (disc < 0)

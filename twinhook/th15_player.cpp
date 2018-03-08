@@ -6,11 +6,28 @@
 #include "cdraw.h"
 #include "di8_input_overlay.h"
 #include "th_algorithm.h"
+#include "th15_patch_autobomb.h"
+#include "th_d3d9_hook.h"
 
 
 void th15_player::on_init()
 {
 	LOG("th15 player initialized");
+	
+
+	if (th_d3d9_hook::inst()->d3ddev9_wrapper) {
+		D3DDEVICE_CREATION_PARAMETERS cparams;
+		RECT rect;
+		th_d3d9_hook::inst()->d3ddev9_wrapper->GetCreationParameters(&cparams);
+		GetClientRect(cparams.hFocusWindow, &rect);
+		th_param.WINDOW_WIDTH = (float) rect.right;
+		th_param.WINDOW_HEIGHT = (float) rect.bottom;
+		LOG("detected window dimensions %ld %ld", rect.right, rect.bottom);
+	}
+	else
+	{
+		assert("fatal, d3ddev9_wrapper inaccessible");
+	}
 }
 
 void th15_player::on_tick()
@@ -36,6 +53,7 @@ void th15_player::on_after_tick()
 {
 	bullets.clear();
 	powerups.clear();
+	lasers.clear();
 }
 
 #define D BotOverlayRenderer_DisplayDebugString
@@ -46,7 +64,8 @@ static int BotOverlayRenderer_DebugLineOffset = 0;
 
 static void BotOverlayRenderer_BeginDebugString()
 {
-	cdraw::fill_rect(445, 250, 640, 480, D3DCOLOR_ARGB(200, 0, 0, 0));
+	cdraw::fill_rect(th_param.WINDOW_WIDTH - (650 - 445), th_param.WINDOW_HEIGHT - (480 - 250), 
+		th_param.WINDOW_WIDTH, th_param.WINDOW_HEIGHT, D3DCOLOR_ARGB(200, 0, 0, 0));
 	BotOverlayRenderer_DebugLineOffset = 0;
 }
 
@@ -59,8 +78,8 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	va_start(args, fmt);
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
 	cdraw::text(BotOverlayRenderer_StringBuffer, color,
-		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset,
-		(int)th_param::WINDOW_WIDTH, (int)th_param::WINDOW_HEIGHT);
+		(int)th_param.WINDOW_WIDTH - (640 - 450), (int)th_param.WINDOW_HEIGHT - (480 - 255) + 15 * BotOverlayRenderer_DebugLineOffset,
+		(int)th_param.WINDOW_WIDTH, (int)th_param.WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;
 }
@@ -75,7 +94,7 @@ void th15_player::draw(IDirect3DDevice9* d3dDev)
 
 	if (algorithm)
 		algorithm->visualize(d3dDev);
-	
+
 	DI8_Overlay_RenderInput(d3dDev);
 }
 
@@ -93,9 +112,16 @@ void th15_player::handle_input(BYTE diKeys[256])
 
 void th15_player::on_enable_changed(bool enable)
 {
+	// this is cheating
+	th15_patch_autobomb ptch;
 	if (enable)
 	{
 		algorithm->on_begin();
+		ptch.patch();
+	}
+	else
+	{
+		ptch.unpatch();
 	}
 }
 
@@ -108,7 +134,7 @@ entity th15_player::get_plyr_cz()
 
 		// we must check if size is readable, because it doesn't initialize immediately
 		vec2 size;
-		if(*(DWORD*)(plyrAddr + 0x2C008))
+		if (*(DWORD*)(plyrAddr + 0x2C008))
 		{
 			size = vec2(
 				*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4),
@@ -117,7 +143,7 @@ entity th15_player::get_plyr_cz()
 
 		entity e = {
 			vec2(
-				*(float*)(plyrAddr + 0x618) + th_param::GAME_WIDTH / 2,
+				*(float*)(plyrAddr + 0x618) + th_param.GAME_WIDTH / 2,
 				*(float*)(plyrAddr + 0x61C)),
 			vec2(),
 			size,

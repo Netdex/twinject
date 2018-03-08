@@ -185,13 +185,13 @@ HRESULT Direct3DDevice9Wrapper::GetDepthStencilSurface(IDirect3DSurface9** ppZSt
 HRESULT Direct3DDevice9Wrapper::BeginScene()
 {
 	if (Direct3D9->Hook.BeginSceneHook)
-		Direct3D9->Hook.BeginSceneHook(Direct3DDevice9);
+		Direct3D9->Hook.BeginSceneHook(this);
 	return Direct3DDevice9->BeginScene();
 }
 HRESULT Direct3DDevice9Wrapper::EndScene()
 {
 	if (Direct3D9->Hook.EndSceneHook)
-		Direct3D9->Hook.EndSceneHook(Direct3DDevice9);
+		Direct3D9->Hook.EndSceneHook(this);
 	return Direct3DDevice9->EndScene();
 }
 HRESULT Direct3DDevice9Wrapper::Clear(DWORD Count, const D3DRECT* pRects, DWORD Flags, D3DCOLOR Color, float Z, DWORD Stencil)

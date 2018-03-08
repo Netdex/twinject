@@ -50,7 +50,7 @@
     <LibraryPath>$(LibraryPath);$(SolutionDir)\dependencies\directx_2010\Lib\x86;$(SolutionDir)\dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VSInstallDir)\VC\Auxiliary\VS\UnitTest\include;$(IncludePath);$(SolutionDir)\dependencies\directx_2010\Include;$(SolutionDir)\dependencies\detours\include</IncludePath>
     <LibraryPath>$(VSInstallDir)\VC\Auxiliary\VS\UnitTest\lib;$(LibraryPath);$(SolutionDir)\dependencies\directx_2010\Lib\x86;$(SolutionDir)\dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
@@ -129,7 +129,9 @@
     <ClCompile Include="th08_patch_autobomb.cpp" />
     <ClCompile Include="th08_player.cpp" />
     <ClCompile Include="th15_bullet_proc_hook.cpp" />
+    <ClCompile Include="th15_patch_autobomb.cpp" />
     <ClCompile Include="th15_player.cpp" />
+    <ClCompile Include="th_config.cpp" />
     <ClCompile Include="th_d3d9_hook.cpp" />
     <ClCompile Include="th_di8_hook.cpp" />
     <ClCompile Include="th_vector_algo.cpp" />
@@ -153,6 +155,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="th08_bullet_proc_hook.h" />
     <ClInclude Include="th15_bullet_proc_hook.h" />
+    <ClInclude Include="th15_patch_autobomb.h" />
     <ClInclude Include="th15_player.h" />
     <ClInclude Include="th_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />

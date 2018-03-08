@@ -1,6 +1,12 @@
 #pragma once
 #include "th_vector_algo.h"
+#include "th_player.h"
 
+/* Visualization Constants */
+static const float VEC_FIELD_RESOLUTION = 32.f;
+static const float MAX_FRAMES_TILL_COLLISION = 200.f;	// used for coloring vector field
+
+/* Algorithmic Constants */
 static const float SQRT_2 = sqrt(2.f);
 /*
 * Unit velocity as a result of moving in specified direction
@@ -27,7 +33,7 @@ static const bool focused_dir[] = {
 };
 
 static const BYTE dir_keys[][3] = {
-	{ NULL,			NULL,			NULL },
+	{ DIK_LSHIFT,	NULL,			NULL },	// focus by default
 	{ DIK_UP,		NULL,			NULL },
 	{ DIK_DOWN,		NULL,			NULL },
 	{ DIK_LEFT,		NULL,			NULL },

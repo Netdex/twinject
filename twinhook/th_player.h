@@ -22,6 +22,7 @@ protected:
 public:
 	std::vector<entity> bullets;
 	std::vector<entity> powerups;
+	std::vector<entity> lasers;
 
 	bool enabled = false;
 	bool render = false;

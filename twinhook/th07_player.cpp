@@ -5,9 +5,25 @@
 #include "th_di8_hook.h"
 #include "IDI8ADevice_Wrapper.h"
 #include "th_config.h"
+#include "th_d3d9_hook.h"
 
 void th07_player::on_init()
 {
+	LOG("th07 player initialized");
+
+	if (th_d3d9_hook::inst()->d3ddev9_wrapper) {
+		D3DDEVICE_CREATION_PARAMETERS cparams;
+		RECT rect;
+		th_d3d9_hook::inst()->d3ddev9_wrapper->GetCreationParameters(&cparams);
+		GetClientRect(cparams.hFocusWindow, &rect);
+		th_param.WINDOW_WIDTH = (float)rect.right;
+		th_param.WINDOW_HEIGHT = (float)rect.bottom;
+		LOG("detected window dimensions %ld %ld", rect.right, rect.bottom);
+	}
+	else
+	{
+		assert("fatal, d3ddev9_wrapper inaccessible");
+	}
 }
 
 void th07_player::on_tick()
@@ -74,7 +90,7 @@ static void BotOverlayRenderer_DisplayDebugString(D3DCOLOR color, const char* fm
 	vsprintf_s(BotOverlayRenderer_StringBuffer, 256, fmt, args);
 	cdraw::text(BotOverlayRenderer_StringBuffer, color,
 		450, 255 + 15 * BotOverlayRenderer_DebugLineOffset, 
-		(int) th_param::WINDOW_WIDTH, (int) th_param::WINDOW_HEIGHT);
+		(int) th_param.WINDOW_WIDTH, (int) th_param.WINDOW_HEIGHT);
 	va_end(args);
 	BotOverlayRenderer_DebugLineOffset++;
 }
@@ -99,7 +115,7 @@ static PBYTE PlayerPtrAddr = (PBYTE)0x004BDCA0;
 entity th07_player::get_plyr_cz()
 {
 	entity plyr = {
-		vec2(*(float*)PlayerPtrAddr - th_param::GAME_X_OFFSET, *(float*)(PlayerPtrAddr + 4) - th_param::GAME_Y_OFFSET),
+		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET, *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
 		vec2(),
 		vec2(6,6),		// hard-coded player size
 		0

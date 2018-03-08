@@ -135,7 +135,7 @@ void th_vo_algo::on_tick()
 		{
 			t = vec2::will_exit_aabb(
 				vec2(0, 0), plyr.p - plyr.sz,
-				vec2(th_param::GAME_WIDTH, th_param::GAME_HEIGHT), plyr.sz * 2,
+				vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), plyr.sz * 2,
 				vec2(), pvel
 			);
 		}
@@ -143,7 +143,7 @@ void th_vo_algo::on_tick()
 		{
 			t = vec2::will_exit_aabb(
 				vec2(0, 0), plyr.p - plyr.sz / 2,
-				vec2(th_param::GAME_WIDTH, th_param::GAME_HEIGHT), plyr.sz,
+				vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), plyr.sz,
 				vec2(), pvel
 			);
 		}
@@ -211,21 +211,83 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 	if (player->render)
 	{
 		entity plyr = player->get_plyr_cz();
+
+		// draw vector field (laggy)
+		// TODO use quadtree algorithm instead 
+		float sizeX = th_param.GAME_WIDTH / VEC_FIELD_RESOLUTION;
+		float sizeY = th_param.GAME_HEIGHT / VEC_FIELD_RESOLUTION;
+		vec2 s(VEC_FIELD_RESOLUTION, VEC_FIELD_RESOLUTION);
+		for (int y = 0; y < sizeY; y++)
+		{
+			for (int x = 0; x < sizeX; x++)
+			{
+				vec2 p(x * s.x, y * s.y);
+				// this code is duplicated
+				float minTick = FLT_MAX;
+				for (auto bullet = player->bullets.begin(); bullet != player->bullets.end(); ++bullet)
+				{
+					float colTick;
+					if (hit_circle) {
+						colTick = vec2::will_collide_aabb(
+							p, bullet->p - bullet->sz,
+							s, bullet->sz * 2,
+							vec2(), bullet->v
+						);
+					}
+					else
+					{
+						colTick = vec2::will_collide_aabb(
+							p, bullet->p - bullet->sz / 2,
+							s, bullet->sz,
+							vec2(), bullet->v
+						);
+					}
+					if (colTick >= 0) {
+						minTick = min(colTick, minTick);
+					}
+					// don't do more calculations if the density is saturated
+					if (minTick != FLT_MAX && minTick / MAX_FRAMES_TILL_COLLISION > 1)
+						goto saturated;
+				}
+			saturated:
+				if (minTick != FLT_MAX)
+				{
+					hsv col_hsv = { minTick / MAX_FRAMES_TILL_COLLISION * 360, 1, 1 };
+					rgb col_rgb = hsv2rgb(col_hsv);
+					cdraw::fill_rect(
+						th_param.GAME_X_OFFSET + p.x, th_param.GAME_Y_OFFSET + p.y,
+						s.x, s.y,
+						D3DCOLOR_ARGB(100,
+						(int)(col_rgb.r * 255), (int)(col_rgb.g * 255), (int)(col_rgb.b * 255))
+					);
+				}
+			}
+		}
+		// draw laser points
+		for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
+		{
+			cdraw::fill_rect(
+				th_param.GAME_X_OFFSET + i->p.x,
+				th_param.GAME_Y_OFFSET + i->p.y,
+				4, 4,
+				D3DCOLOR_ARGB(255, 0, 0, 255));
+		}
+		// dependant on hit circle vs hit box
 		if (!hit_circle) {
 			// bullet markers
 			for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
 			{
 				if ((*i).me)
 				{
-					cdraw::rect((*i).p.x - 7 + th_param::GAME_X_OFFSET, (*i).p.y - 7 + th_param::GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
+					cdraw::rect((*i).p.x - 7 + th_param.GAME_X_OFFSET, (*i).p.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
 				}
 				else {
-					cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param::GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param::GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+					cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param.GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
 				}
 				vec2 proj = (*i).p + (*i).v * 10;
 
-				cdraw::line((*i).p.x + th_param::GAME_X_OFFSET, (*i).p.y + th_param::GAME_Y_OFFSET,
-					proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+				cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
+					proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 			}
 
 			/*for(auto i = player->powerups.begin(); i != player->powerups.end(); ++i)
@@ -235,34 +297,34 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				cdraw::text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), i->p.x, i->p.y, 700, 700);
 			}*/
 
-			cdraw::line(th_param::GAME_X_OFFSET, plyr.p.y + th_param::GAME_Y_OFFSET,
-				th_param::GAME_WIDTH + th_param::GAME_X_OFFSET, plyr.p.y + th_param::GAME_Y_OFFSET,
+			cdraw::line(th_param.GAME_X_OFFSET, plyr.p.y + th_param.GAME_Y_OFFSET,
+				th_param.GAME_WIDTH + th_param.GAME_X_OFFSET, plyr.p.y + th_param.GAME_Y_OFFSET,
 				D3DCOLOR_ARGB(255, 0, 255, 0));
-			cdraw::line(plyr.p.x + th_param::GAME_X_OFFSET, th_param::GAME_Y_OFFSET,
-				plyr.p.x + th_param::GAME_X_OFFSET, th_param::GAME_HEIGHT + th_param::GAME_Y_OFFSET,
+			cdraw::line(plyr.p.x + th_param.GAME_X_OFFSET, th_param.GAME_Y_OFFSET,
+				plyr.p.x + th_param.GAME_X_OFFSET, th_param.GAME_HEIGHT + th_param.GAME_Y_OFFSET,
 				D3DCOLOR_ARGB(255, 0, 255, 0));
 
-			cdraw::fill_rect(plyr.p.x - 2 + th_param::GAME_X_OFFSET, plyr.p.y - 2 + th_param::GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
+			cdraw::fill_rect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
 		else
 		{
 			for (auto b = player->bullets.begin(); b != player->bullets.end(); ++b)
 			{
 				// note that bullets are actually circles
-				/*cdraw::circle(th_param::GAME_X_OFFSET + b->p.x,
-				th_param::GAME_Y_OFFSET + b->p.y, b->sz.x, 8, D3DCOLOR_ARGB(255, 0, 255, 0));*/
+				/*cdraw::circle(th_param.GAME_X_OFFSET + b->p.x,
+				th_param.GAME_Y_OFFSET + b->p.y, b->sz.x, 8, D3DCOLOR_ARGB(255, 0, 255, 0));*/
 				cdraw::rect(
-					th_param::GAME_X_OFFSET + b->p.x - b->sz.x,
-					th_param::GAME_Y_OFFSET + b->p.y - b->sz.y,
-					b->sz.x * 2, b->sz.y * 2, D3DCOLOR_ARGB(255, 0, 255, 0));
+					th_param.GAME_X_OFFSET + b->p.x - b->sz.x,
+					th_param.GAME_Y_OFFSET + b->p.y - b->sz.y,
+					b->sz.x * 2, b->sz.y * 2, D3DCOLOR_ARGB(255, 255, 0, 0));
 				vec2 proj = (*b).p + (*b).v * 10;
 
-				cdraw::line((*b).p.x + th_param::GAME_X_OFFSET, (*b).p.y + th_param::GAME_Y_OFFSET,
-					proj.x + th_param::GAME_X_OFFSET, proj.y + th_param::GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+				cdraw::line((*b).p.x + th_param.GAME_X_OFFSET, (*b).p.y + th_param.GAME_Y_OFFSET,
+					proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 			}
 			cdraw::fill_rect(
-				plyr.p.x - plyr.sz.x + th_param::GAME_X_OFFSET,
-				plyr.p.y - plyr.sz.y + th_param::GAME_Y_OFFSET, plyr.sz.x * 2, plyr.sz.y * 2,
+				plyr.p.x - plyr.sz.x + th_param.GAME_X_OFFSET,
+				plyr.p.y - plyr.sz.y + th_param.GAME_Y_OFFSET, plyr.sz.x * 2, plyr.sz.y * 2,
 				D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
 	}

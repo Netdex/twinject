@@ -14,7 +14,7 @@ PROCESS_INFORMATION pi;
 const char *ininame = "twinject.ini";
 
 #define DEBUGGER
-#define TH15_LOADER
+#define TH08_LOADER
 
 int main(const int argc, const char *argv[])
 {

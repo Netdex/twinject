@@ -1,6 +1,8 @@
 #pragma once
 #include "th_hook.h"
 #include "th_player.h"
+#include "ID3D9_Wrapper.h"
+#include "ID3D9Device_Wrapper.h"
 
 class th_di8_hook;
 
@@ -24,6 +26,8 @@ class th_d3d9_hook : th_hook
 {
 	static th_d3d9_hook *instance;
 public:
+	Direct3DDevice9Wrapper *d3ddev9_wrapper = nullptr;
+
 	explicit th_d3d9_hook(th_player *player) : th_hook(player) {}
 	virtual ~th_d3d9_hook() = default;
 
