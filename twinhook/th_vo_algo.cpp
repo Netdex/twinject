@@ -206,6 +206,97 @@ void th_vo_algo::calibration_init()
 	player_vel = 0;
 }
 
+float th_vo_algo::min_static_collide_tick(
+	const std::vector<entity> &bullets, 
+	const vec2 &p, const vec2 &s, 
+	std::vector<entity> &collided) const
+{
+	float minTick = FLT_MAX;
+	for (auto bullet = bullets.begin(); bullet != bullets.end(); ++bullet)
+	{
+		float colTick;
+		if (hit_circle) {
+			colTick = vec2::will_collide_aabb(
+				p, bullet->p - bullet->sz,
+				s, bullet->sz * 2,
+				vec2(), bullet->v
+			);
+		}
+		else
+		{
+			colTick = vec2::will_collide_aabb(
+				p, bullet->p - bullet->sz / 2,
+				s, bullet->sz,
+				vec2(), bullet->v
+			);
+		}
+		if (colTick >= 0) {
+			minTick = min(colTick, minTick);
+			collided.push_back(*bullet);
+		}
+		//// don't do more calculations if the density is saturated
+		//if (minTick != FLT_MAX && minTick / MAX_FRAMES_TILL_COLLISION > 1)
+		//	return minTick;
+	}
+	if (minTick != FLT_MAX && minTick >= 0)
+		return minTick;
+	return -1.f;
+};
+
+void th_vo_algo::viz_potential_quadtree(
+	const std::vector<entity> &bullets, 
+	vec2 p, vec2 s, 
+	float minRes) const
+{
+	/*cdraw::rect(
+		th_param.GAME_X_OFFSET + p.x, th_param.GAME_Y_OFFSET + p.y,
+		s.x, s.y,
+		D3DCOLOR_ARGB(80, 255, 255, 0)
+	);*/
+
+	// create four square regions of equal size which contain (p, s)
+	// they are square, since we want the final pixels to be square
+	vec2 center = p + s / 2.f;
+	float fSqsz = max(s.x, s.y) / 2;
+
+	// not necessary, just a safety net
+	if (fSqsz < minRes) {
+		return;
+	}
+	vec2 sqsz(fSqsz, fSqsz);
+
+	vec2 colDomains[] = {
+		center - sqsz,							// top-left
+		vec2(center.x, center.y - sqsz.y),		// top-right
+		vec2(center.x - sqsz.x, center.y),		// bottom-left
+		center									// bottom-right
+	};
+
+	for (int i = 0; i < 4; i++)
+	{
+		std::vector<entity> collided;
+		float colTick = min_static_collide_tick(bullets, colDomains[i], sqsz, collided);
+		if (colTick >= 0) {
+			if(fSqsz / 2 <= minRes)
+			{
+				hsv col_hsv = { colTick / MAX_FRAMES_TILL_COLLISION * 360, 1, 1 };
+				rgb col_rgb = hsv2rgb(col_hsv);
+				cdraw::fill_rect(
+					th_param.GAME_X_OFFSET + colDomains[i].x,
+					th_param.GAME_Y_OFFSET + colDomains[i].y,
+					sqsz.x, sqsz.y,
+					D3DCOLOR_ARGB(100,
+					(int)(col_rgb.r * 255), (int)(col_rgb.g * 255), (int)(col_rgb.b * 255))
+				);
+			}
+			else {
+				viz_potential_quadtree(collided, colDomains[i], sqsz, minRes);
+			}
+		}
+	}
+
+}
+
 void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 {
 	if (player->render)
@@ -213,56 +304,11 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 		entity plyr = player->get_plyr_cz();
 
 		// draw vector field (laggy)
-		// TODO use quadtree algorithm instead 
-		float sizeX = th_param.GAME_WIDTH / VEC_FIELD_RESOLUTION;
-		float sizeY = th_param.GAME_HEIGHT / VEC_FIELD_RESOLUTION;
-		vec2 s(VEC_FIELD_RESOLUTION, VEC_FIELD_RESOLUTION);
-		for (int y = 0; y < sizeY; y++)
-		{
-			for (int x = 0; x < sizeX; x++)
-			{
-				vec2 p(x * s.x, y * s.y);
-				// this code is duplicated
-				float minTick = FLT_MAX;
-				for (auto bullet = player->bullets.begin(); bullet != player->bullets.end(); ++bullet)
-				{
-					float colTick;
-					if (hit_circle) {
-						colTick = vec2::will_collide_aabb(
-							p, bullet->p - bullet->sz,
-							s, bullet->sz * 2,
-							vec2(), bullet->v
-						);
-					}
-					else
-					{
-						colTick = vec2::will_collide_aabb(
-							p, bullet->p - bullet->sz / 2,
-							s, bullet->sz,
-							vec2(), bullet->v
-						);
-					}
-					if (colTick >= 0) {
-						minTick = min(colTick, minTick);
-					}
-					// don't do more calculations if the density is saturated
-					if (minTick != FLT_MAX && minTick / MAX_FRAMES_TILL_COLLISION > 1)
-						goto saturated;
-				}
-			saturated:
-				if (minTick != FLT_MAX)
-				{
-					hsv col_hsv = { minTick / MAX_FRAMES_TILL_COLLISION * 360, 1, 1 };
-					rgb col_rgb = hsv2rgb(col_hsv);
-					cdraw::fill_rect(
-						th_param.GAME_X_OFFSET + p.x, th_param.GAME_Y_OFFSET + p.y,
-						s.x, s.y,
-						D3DCOLOR_ARGB(100,
-						(int)(col_rgb.r * 255), (int)(col_rgb.g * 255), (int)(col_rgb.b * 255))
-					);
-				}
-			}
-		}
+		viz_potential_quadtree(
+			player->bullets,
+			vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
+			VEC_FIELD_MIN_RESOLUTION);
+
 		// draw laser points
 		for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
 		{
@@ -296,13 +342,6 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				sprintf_s(buf, 16, "%d", i->me);
 				cdraw::text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), i->p.x, i->p.y, 700, 700);
 			}*/
-
-			cdraw::line(th_param.GAME_X_OFFSET, plyr.p.y + th_param.GAME_Y_OFFSET,
-				th_param.GAME_WIDTH + th_param.GAME_X_OFFSET, plyr.p.y + th_param.GAME_Y_OFFSET,
-				D3DCOLOR_ARGB(255, 0, 255, 0));
-			cdraw::line(plyr.p.x + th_param.GAME_X_OFFSET, th_param.GAME_Y_OFFSET,
-				plyr.p.x + th_param.GAME_X_OFFSET, th_param.GAME_HEIGHT + th_param.GAME_Y_OFFSET,
-				D3DCOLOR_ARGB(255, 0, 255, 0));
 
 			cdraw::fill_rect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
@@ -397,5 +436,8 @@ bool th_vo_algo::calibration_tick()
 	++cal_frames;
 	return false;
 }
+
+
+
 
 

@@ -3,7 +3,7 @@
 #include "th_player.h"
 
 /* Visualization Constants */
-static const float VEC_FIELD_RESOLUTION = 32.f;
+static const float VEC_FIELD_MIN_RESOLUTION = 8.f;
 static const float MAX_FRAMES_TILL_COLLISION = 200.f;	// used for coloring vector field
 
 /* Algorithmic Constants */
@@ -94,6 +94,29 @@ class th_vo_algo : public th_algorithm
 
 	/* Visualization Parameters*/
 
+	/**
+	 * \brief Find the minimum collision tick of a static AABB
+	 * \param bullets The bullets to check collision against
+	 * \param p Top-left corner of AABB to check
+	 * \param s Size of AABB to check
+	 * \param collided All bullets which collide with the AABB are added to this vector
+	 * \return The minimum collison tick
+	 */
+	float th_vo_algo::min_static_collide_tick(
+		const std::vector<entity> &bullets,
+		const vec2 &p, const vec2 &s,
+		std::vector<entity> &collided) const;
+	/**
+	 * \brief Draw collision potentials at a specified resolution
+	 * \param bullets The bullets to check collision against
+	 * \param p Position of AABB containing visualization boundary
+	 * \param s Size of AABB containing visualization boundary
+	 * \param minRes Minimum allowable resolution for visualization
+	 */
+	void th_vo_algo::viz_potential_quadtree(
+		const std::vector<entity> &bullets,
+		vec2 p, vec2 s,
+		float minRes) const;
 
 public:
 	th_vo_algo(th_player *player) : th_algorithm(player) {}

@@ -206,6 +206,13 @@ float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, co
 	if (is_collide_aabb(p1, p2, s1, s2))
 		return 0;
 
+	// check if they're moving away from each other
+	// actually, this code doesn't work
+	/*if (p1.x < p2.x && v2.x > v1.x || p1.x > p2.x && v2.x < v1.x)
+		return -1;
+	if (p1.y < p2.y && v2.y > v1.y || p1.y > p2.y && v2.y < v1.y)
+		return -1;*/
+
 	// check time required until collision for each side
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
@@ -257,7 +264,6 @@ float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 
 bool vec2::is_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2)
 {
-//	return (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y) <= (r1 + r2) * (r1 + r2);
 	return (p2 - p1).lensq() <= (r1 + r2) * (r1 + r2);
 }
 
@@ -267,11 +273,8 @@ float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float 
 	if (is_collide_circle(p1, p2, r1, r2))
 		return 0;
 
-	//float a = (v2.x - v1.x) * (v2.x - v1.x) + (v2.y - v1.y) * (v2.y - v1.y);
 	float a = (v2 - v1).lensq();
-	//float b = 2 * ((p2.x - p1.x)*(v2.x - v1.x) + (p2.y - p1.y)*(v2.y - v1.y));
 	float b = 2 * dot(p2 - p1, v2 - v1);
-	//float c = (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y) - (r1 + r2) * (r1 + r2);
 	float c = (p2 - p1).lensq() - (r1 + r2) * (r1 + r2);
 
 	float disc = b * b - 4 * a*c;

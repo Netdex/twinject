@@ -62,8 +62,8 @@ public:
 
 	/**
 	 * \brief Determine if AABB 1 is colliding with AABB 2
-	 * \param p1 Position of AABB 1
-	 * \param p2 Position of AABB 2
+	 * \param p1 Position of AABB 1 (top-left corner)
+	 * \param p2 Position of AABB 2 (top-left corner)
 	 * \param s1 Size (x=width, y=height) of AABB 1
 	 * \param s2 Size (x=width, y=height) of AABB 2
 	 * \return Whether AABB 1 is colliding with AABB 2
@@ -72,8 +72,8 @@ public:
 
 	/**
 	 * \brief Determine if AABB 2 is fully contained in AABB 1
-	 * \param p1 Position of AABB 1
-	 * \param p2 Position of AABB 2
+	 * \param p1 Position of AABB 1 (top-left corner)
+	 * \param p2 Position of AABB 2 (top-left corner)
 	 * \param s1 Size (x=width, y=height) of AABB 1
 	 * \param s2 Size (x=width, y=height) of AABB 2
 	 * \return Whether AABB 2 is fully contained in AABB 1
@@ -82,8 +82,8 @@ public:
 	
 	/**
 	 * \brief Determine if AABB 1 will collide with AABB 2 in the future
-	 * \param p1 Position of AABB 1
-	 * \param p2 Position of AABB 2
+	 * \param p1 Position of AABB 1 (top-left corner)
+	 * \param p2 Position of AABB 2 (top-left corner)
 	 * \param s1 Size (x=width, y=height) of AABB 1
 	 * \param s2 Size (x=width, y=height) of AABB 2
 	 * \param v1 Velocity of AABB 1 (pixels/frame)
@@ -97,8 +97,8 @@ public:
 	/**
 	 * \brief Determine if AABB 2 will exit AABB 1 in the future
 	 * "Exiting" is defined as having any part of AABB 2 outside the bounds of AABB 1
-	 * \param p1 Position of AABB 1
-	 * \param p2 Position of AABB 2
+	 * \param p1 Position of AABB 1 (top-left corner)
+	 * \param p2 Position of AABB 2 (top-left corner)
 	 * \param s1 Size (x=width, y=height) of AABB 1
 	 * \param s2 Size (x=width, y=height) of AABB 2
 	 * \param v1 Velocity of AABB 1 (pixels/frame)
