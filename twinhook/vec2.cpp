@@ -213,7 +213,7 @@ float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, co
 	if (p1.y < p2.y && v2.y > v1.y || p1.y > p2.y && v2.y < v1.y)
 		return -1;*/
 
-	// check time required until collision for each side
+		// check time required until collision for each side
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
@@ -282,16 +282,50 @@ float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float 
 	{
 		return -1;
 	}
-	
-	float minE = FLT_MAX;
-	float rt = (-b + sqrt(b*b - 4 * a*c)) / (2 * a);
-	if (rt >= 0)
-		rt = min(rt, minE);
-	rt = (-b - sqrt(b*b - 4 * a*c)) / (2 * a);
-	if (rt >= 0)
-		rt = min(rt, minE);
-	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
-		return minE;
-	return -1;
 
+	/*
+	 * Note, this solution is actually more nuanced than you think.
+	 * We want the minimal
+	 */
+	float x1, x2;
+	int rts = quadratic_solve(a, b, c, x1, x2);
+	if (rts == 0)
+		return -1;
+	if (rts == 1)
+		return x1;
+	return min(x1, x2);
+	//float rt = (-b - sqrt(b*b - 4 * a*c)) / (2 * a);
+	//if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
+	//	return rt;
+	//rt = (-b + sqrt(b*b - 4 * a*c)) / (2 * a);
+	//if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
+	//	return rt;
+	//return -1;
+
+}
+
+int vec2::quadratic_solve(float a, float b, float c, float& x1, float& x2)
+{
+	x1 = NAN;
+	x2 = NAN;
+	if (a == 0)
+	{
+		if (b == 0)
+			return 0;
+		x1 = -c / b;
+		return 1;
+	}
+	float d = b * b - 4 * a * c;
+	if (d < 0)
+	{
+		return 0;
+	}
+	if (d == 0)
+	{
+		x1 = -b / (2 * a);
+		return 1;
+	}
+	x1 = (-b - sqrt(d)) / (2 * a);
+	x2 = (-b + sqrt(d)) / (2 * a);
+	return 2;
 }

@@ -128,6 +128,18 @@ public:
 	 */
 	static float will_collide_circle(const vec2 &p1, const vec2 &p2, float r1, float r2,
 								const vec2 &v1, const vec2 &v2);
+
+	/**
+	 * \brief Solve the specified quadratic equation of the form 
+	 * ax^2 + bx + c
+	 * \param a Leading coefficient of x^2
+	 * \param b 2nd coefficient of x
+	 * \param c Constant term
+	 * \param x1 First root
+	 * \param x2 Second root
+	 * \return Number of solutions (0, 1, 2)
+	 */
+	static int quadratic_solve(float a, float b, float c, float &x1, float &x2);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);
