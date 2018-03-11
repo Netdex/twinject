@@ -12,6 +12,9 @@ Why did I do this? I thought it would be a neat challenge to apply my knowledge 
 So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for th07, th08 and th15.
 
 ### [Video Demonstration (Difficult)](https://youtu.be/9WElfhVE-Lk)
+### [1CC LoLK Normal](https://www.youtube.com/watch?v=9WElfhVE-Lk)
+Watch as it struggles to deathbomb through every laser it sees.
+
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
