@@ -282,13 +282,16 @@ float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float 
 	{
 		return -1;
 	}
-
+	
+	float minE = FLT_MAX;
 	float rt = (-b + sqrt(b*b - 4 * a*c)) / (2 * a);
-	if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
-		return rt;
+	if (rt >= 0)
+		rt = min(rt, minE);
 	rt = (-b - sqrt(b*b - 4 * a*c)) / (2 * a);
-	if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
-		return rt;
+	if (rt >= 0)
+		rt = min(rt, minE);
+	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
+		return minE;
 	return -1;
 
 }
