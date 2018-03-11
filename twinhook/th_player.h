@@ -5,12 +5,20 @@
 
 struct entity
 {
-	vec2 p;
-	vec2 v;
+	vec2 p;				// position
+	vec2 v;				// velocity
 	vec2 sz;			// bullet size
 	DWORD me;			// metadata
 };
 
+struct laser
+{
+	vec2 p;				// position
+	vec2 v;				// velocity
+	vec2 ex;			// laser extent
+	float rad;			// perpendicular radius
+	float ang;			// angle
+};
 
 /**
  * \brief Object representing a human player.
@@ -22,7 +30,7 @@ protected:
 public:
 	std::vector<entity> bullets;
 	std::vector<entity> powerups;
-	std::vector<entity> lasers;
+	std::vector<laser> lasers;
 
 	bool enabled = false;
 	bool render = false;

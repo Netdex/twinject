@@ -7,6 +7,7 @@
 #include <detours.h>
 #include <fstream>
 #include <cstdio>
+#include <cmath>
 //#include <cassert> // cassert doesn't work with dll injection
 
 #include <vector>
@@ -17,3 +18,7 @@
 #include <dinput.h>
 
 #include "logfs.h"
+
+const float M_PI = 3.14159265358979323846f;
+
+

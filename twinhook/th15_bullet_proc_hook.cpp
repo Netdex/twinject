@@ -76,33 +76,37 @@ int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 	// 16-byte aligned
 	__m128 a1;
 	__m128 a2;
+	float angle;
+	float rad;
+
 	__asm {
 		// stdcall styled prolog w/ user defined SSE
 		push ebp
 		mov ebp, esp
 		sub esp, __LOCAL_SIZE
 
-		movaps a1, xmm2
-		movaps a2, xmm3		
+		movss angle, xmm2
+		movss rad, xmm3
+		movups a1, xmm2
+		movups a2, xmm3
 	}
 	{
-		entity e = {
-			vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1]),
-			vec2(),
-			vec2(),
-			0
+		laser e = {
+			vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1]),			// position x y
+			vec2(), vec2(a4 * cos(angle), a4 * sin(angle)),
+			rad/2.f, angle
 		};
 		th15_bullet_proc_hook::inst()->player->lasers.push_back(e);
 	}
 	__asm {
 		// userpurge<eax>(float<xmm2>, float<xmm3>, float, float, int) 
 		// styled call to original function
-		movaps xmm2, a1
-		movaps xmm3, a2
+		movups xmm2, a1
+		movups xmm3, a2
 		push a5
 		push a4
 		push a3
-		//call sub_455E10_Original
+		call sub_455E10_Original
 
 		// stdcall styled epilog
 		mov esp, ebp

@@ -207,8 +207,8 @@ void th_vo_algo::calibration_init()
 }
 
 float th_vo_algo::min_static_collide_tick(
-	const std::vector<entity> &bullets, 
-	const vec2 &p, const vec2 &s, 
+	const std::vector<entity> &bullets,
+	const vec2 &p, const vec2 &s,
 	std::vector<entity> &collided) const
 {
 	float minTick = FLT_MAX;
@@ -244,8 +244,8 @@ float th_vo_algo::min_static_collide_tick(
 };
 
 void th_vo_algo::viz_potential_quadtree(
-	const std::vector<entity> &bullets, 
-	vec2 p, vec2 s, 
+	const std::vector<entity> &bullets,
+	vec2 p, vec2 s,
 	float minRes) const
 {
 	/*cdraw::rect(
@@ -277,7 +277,7 @@ void th_vo_algo::viz_potential_quadtree(
 		std::vector<entity> collided;
 		float colTick = min_static_collide_tick(bullets, colDomains[i], sqsz, collided);
 		if (colTick >= 0) {
-			if(fSqsz / 2 <= minRes)
+			if (fSqsz / 2 <= minRes)
 			{
 				hsv col_hsv = { colTick / MAX_FRAMES_TILL_COLLISION * 360, 1, 1 };
 				rgb col_rgb = hsv2rgb(col_hsv);
@@ -304,18 +304,35 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 		entity plyr = player->get_plyr_cz();
 
 		// draw vector field (laggy)
-		viz_potential_quadtree(
+		/*viz_potential_quadtree(
 			player->bullets,
 			vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
-			VEC_FIELD_MIN_RESOLUTION);
+			VEC_FIELD_MIN_RESOLUTION);*/
 
 		// draw laser points
 		for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
 		{
 			cdraw::fill_rect(
-				th_param.GAME_X_OFFSET + i->p.x,
-				th_param.GAME_Y_OFFSET + i->p.y,
-				4, 4,
+				th_param.GAME_X_OFFSET + i->p.x - 3,
+				th_param.GAME_Y_OFFSET + i->p.y - 3,
+				6, 6,
+				D3DCOLOR_ARGB(255, 0, 0, 255));
+
+			// voodoo witchcraft magic
+			
+			float rex = i->rad * cos(M_PI / 2 + i->ang);
+			float rey = i->rad * sin(M_PI / 2 + i->ang);
+			cdraw::line(
+				th_param.GAME_X_OFFSET + i->p.x				- rex,
+				th_param.GAME_Y_OFFSET + i->p.y				- rey,
+				th_param.GAME_X_OFFSET + i->p.x + i->ex.x	- rex,
+				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y	- rey,
+				D3DCOLOR_ARGB(255, 0, 0, 255));
+			cdraw::line(
+				th_param.GAME_X_OFFSET + i->p.x				+ rex,
+				th_param.GAME_Y_OFFSET + i->p.y				+ rey,
+				th_param.GAME_X_OFFSET + i->p.x + i->ex.x	+ rex,
+				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y	+ rey,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 		}
 		// dependant on hit circle vs hit box
