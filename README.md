@@ -5,16 +5,22 @@
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions.
 
-For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies. In the demonstration video, the fast moving projectiles are the obstacles which must be dodged - if the player hits any of these projectiles they die immediately. The player itself also fires projectiles, which damage enemies. The player is the little red sprite near the bottom of the screen. Props to ZUN for making games that people still play 20 years later.
+For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies. In the demonstration videos, the fast moving projectiles are the obstacles which must be dodged - if the player hits any of these projectiles they die immediately. The player itself also fires projectiles, which damage enemies. The player is the little red sprite near the bottom of the screen. Props to ZUN for making games that people still play 20 years later.
 
-Why did I do this? I thought it would be a neat challenge to apply my knowledge of reverse engineering, and low-level development. This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available. The dodging algorithm uses a mix of linear algebra and analytical optimization to quickly approximate good movements for the bot to make. This is explained in detail in the Technical Descriptions linked below.
+Why did I do this? I thought it would be a neat challenge to apply my knowledge of reverse engineering, and low-level development. This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available. The dodging algorithm uses a mix of linear algebra and numerical optimization to quickly approximate good movements for the bot to make. This is explained in detail in the Technical Descriptions linked below.
 
-So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for th07, th08 and th15.
+So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for th07, th08 and th15. Since all the necessary abstractions already exist, I also plan to utilize machine learning strategies as a possible solution.
 
-### [Video Demonstration (Difficult)](https://youtu.be/9WElfhVE-Lk)
-### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)
-Watch as it struggles to deathbomb through every laser it sees.
+## Demonstrations
 
+### Constrained Velocity Obstacle Algorithm
+Watch as it struggles to deathbomb through every laser it sees.  
+#### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)  
+#### [LoLK Stage 6](https://youtu.be/9WElfhVE-Lk)
+
+### Vector Dodging + Method of Virtual Potential Field Algorithm
+#### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)  
+#### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)  
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
@@ -28,7 +34,7 @@ Watch as it struggles to deathbomb through every laser it sees.
 
 ... and some other undocumented features.
 
-## Functionality
+## Documentation of Functionality
 Consists of two parts, **twinhook** and **twinject**.
 
 ### twinhook
@@ -41,6 +47,15 @@ This technical description is now a bit out of date, as radical changes were mad
 twinject loads twinhook into game with MS Detours.
 
 [Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinject_technical.md)
+
+### Code Structure
+Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
+
+An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are supported.
+
+The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm.
+
+Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
 
 ## Building
 ```
@@ -87,17 +102,5 @@ Also make sure that the correct game executable is set in twinject.ini (create t
 
 ### Extreme frame drop
 Disable the debug visualization if it is enabled.
-
-#### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)
-#### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)
-
-## Structure
-Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
-
-An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are supported.
-
-The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm.
-
-Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
 
 
