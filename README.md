@@ -59,9 +59,11 @@ Each game has a startup routine. This routine is responsible for intializing hoo
 
 ## Building
 ```
-Download and build in Visual Studio 2017, compile with Release (x86) target.
+1. Clone repository to disk
+2. Download dependencies archive, extract to dependencies/ (to be uploaded soon, you can bug me about it if I forgot)
+3. Build in Visual Studio 2017 with Release (x86) target.
 
-Put twinhook.dll and twinject.exe into the game directory.
+Put twinhook.dll, twinject.exe and twinject.ini into the game directory.
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
 and place into game directory if the game requires it.
 ```
