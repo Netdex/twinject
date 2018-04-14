@@ -51,21 +51,53 @@ twinject loads twinhook into game with MS Detours.
 ### Code Structure
 Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
 
-An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are supported.
+An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
+- Method of Velocity Vector and Virtual Potential Field
+- Method of Contrainted Vector Obstacle
+- Method of Artificial Neural Network
 
-The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm.
+The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm. This is required since every game requires different hooks, and may have some game-specific quirk that needs to be handled.
 
 Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
 
 ## Building
+Note: Twinject has many dependencies, including (not an exhaustive list):
+- boost
+- openblas
+- mlpack
+- armadillo
+- detours
+- directx 2010 sdk
+
+Since it is a massive pain to build all of these yourself from source, I have decided to package them with the repository.  
+In the near future, I will link an archive to all dependencies here (1.87 GB). You can bug be about it if I forget. 
+
+### Build Instructions
 ```
 1. Clone repository to disk
-2. Download dependencies archive, extract to dependencies/ (to be uploaded soon, you can bug me about it if I forgot)
+2. Download dependencies archive, extract to dependencies/
 3. Build in Visual Studio 2017 with Release (x86) target.
 
-Put twinhook.dll, twinject.exe and twinject.ini into the game directory.
+Place the following files into the game directory:
+twinject.exe
+twinhook.dll
+twinject.ini
+libgcc_s_sjlj-1.dll
+libgfortran-3.dll
+libopenblas.dll
+libquadmath-0.dll
+mlpack.dll
+
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
 and place into game directory if the game requires it.
+```
+
+### Configuration
+twinject.ini must be in the same folder as twinject.exe, and contains configuration options. Here's the default configuration:
+```
+[twinject]
+exename=th08.exe
+dllname=twinhook.dll
 ```
 
 ## Usage
