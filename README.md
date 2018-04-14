@@ -53,7 +53,7 @@ Hooks for different parts of games are created. Some hooks can be reused across 
 
 An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
 - Method of Velocity Vector and Virtual Potential Field
-- Method of Contrainted Vector Obstacle
+- Method of Constrained Vector Obstacle
 - Method of Artificial Neural Network
 
 The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm. This is required since every game requires different hooks, and may have some game-specific quirk that needs to be handled.
@@ -70,7 +70,7 @@ Note: Twinject has many dependencies, including (not an exhaustive list):
 - directx 2010 sdk
 
 Since it is a massive pain to build all of these yourself from source, I have decided to package them with the repository.  
-In the near future, I will link an archive to all dependencies here (1.87 GB). You can bug be about it if I forget. 
+In the near future, I will link an archive to all dependencies here (1.87 GB). You can bug me about it if I forget. 
 
 ### Build Instructions
 ```
