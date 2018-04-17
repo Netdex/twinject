@@ -230,6 +230,9 @@
     <ClInclude Include="th15_patch_autobomb.h">
       <Filter>Header Files\patch</Filter>
     </ClInclude>
+    <ClInclude Include="th_cmd_proc.h">
+      <Filter>Header Files\config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="twinhook.def">

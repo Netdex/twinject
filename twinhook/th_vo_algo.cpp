@@ -7,7 +7,6 @@
 #include "color.h"
 #include "th15_player.h"
 
-
 void th_vo_algo::on_begin()
 {
 	calibration_init();
@@ -42,8 +41,6 @@ void th_vo_algo::on_tick()
 	/*
 	 * Ticks until collision whilst moving in this direction
 	 * Uses same direction numbering schema
-	 *
-	 * TODO: include focus speeds
 	 */
 	float collisionTicks[n_dirs];
 	std::fill_n(collisionTicks, n_dirs, FLT_MAX);
@@ -75,7 +72,7 @@ void th_vo_algo::on_tick()
 				);
 			}
 			if (colTick >= 0) {
-				collisionTicks[dir] = min(colTick, collisionTicks[dir]);
+				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
 			}
 		}
 	}
@@ -120,14 +117,19 @@ void th_vo_algo::on_tick()
 					);
 				}
 				if (colTick >= 0) {
-					targetTicks[dir] = min(colTick, targetTicks[dir]);
+					targetTicks[dir] = std::min(colTick, targetTicks[dir]);
 				}
 			}
 		}
 	}
 
+	// whether direction i's closest obstacle is a wall
+	// we use this to assist with dodging obstacles with unknown velocities
+	bool boundedByWall[n_dirs];
+	std::fill_n(boundedByWall, n_dirs, false);
+	bool allBoundedByWall = true;
 	// Wall collision frame calculations
-	for (int dir = 0; dir < n_dirs; ++dir)
+	for (int dir = 1; dir < n_dirs; ++dir)
 	{
 		vec2 pvel = direction_vel[dir] * (focused_dir[dir] ? player_f_vel : player_vel);
 		float t;
@@ -148,8 +150,21 @@ void th_vo_algo::on_tick()
 			);
 		}
 
-		if (t >= 0)
-			collisionTicks[dir] = min(t, collisionTicks[dir]);
+		if (t >= 0) {
+			if (t < collisionTicks[dir])
+			{
+				boundedByWall[dir] = true;
+				collisionTicks[dir] = t;
+			}
+			else
+			{
+				allBoundedByWall = false;
+			}
+		}
+		else
+		{
+			allBoundedByWall = false;
+		}
 	}
 
 
@@ -165,16 +180,33 @@ void th_vo_algo::on_tick()
 	// check if we could find a targetable powerup
 	if (tarIdx == -1) {
 		// find direction with maximum frames until collision
-		int minIdx = 0;
-		for (int dir = 1; dir < n_dirs; ++dir)
+
+		/* TODO changed from 0 to 1 to disable hold position
+		 * note: there is a major problem with how we do things.
+		 * We do not know the velocities of all entities (e.g. enemies, lasers),
+		 * so we assume them to have zero velocity.
+		 * Therefore the hold position grace time may be overestimated significantly,
+		 * especially if the hazard is heading directly towards the player.
+		 * Thus, we disable the hold position. This would be fine, but causes the player
+		 * to constantly spaz because it cannot stay still. Then, the gameplay does not look
+		 * realistic.
+		 */
+		int maxIdx = 1;
+		/*if(allBoundedByWall)
 		{
-			if (collisionTicks[dir] != FLT_MAX &&
-				collisionTicks[dir] > collisionTicks[minIdx])
-			{
-				minIdx = dir;
-			}
+			maxIdx = 0;
 		}
-		tarIdx = minIdx;
+		else {*/
+			for (int dir = 1; dir < n_dirs; ++dir)
+			{
+				if (collisionTicks[dir] != FLT_MAX &&
+					collisionTicks[dir] > collisionTicks[maxIdx])
+				{
+					maxIdx = dir;
+				}
+			}
+		/*}*/
+		tarIdx = maxIdx;
 	}
 
 	/*
@@ -231,7 +263,7 @@ float th_vo_algo::min_static_collide_tick(
 			);
 		}
 		if (colTick >= 0) {
-			minTick = min(colTick, minTick);
+			minTick = std::min(colTick, minTick);
 			collided.push_back(*bullet);
 		}
 		//// don't do more calculations if the density is saturated
@@ -257,7 +289,7 @@ void th_vo_algo::viz_potential_quadtree(
 	// create four square regions of equal size which contain (p, s)
 	// they are square, since we want the final pixels to be square
 	vec2 center = p + s / 2.f;
-	float fSqsz = max(s.x, s.y) / 2;
+	float fSqsz = std::max(s.x, s.y) / 2;
 
 	// not necessary, just a safety net
 	if (fSqsz < minRes) {
@@ -309,7 +341,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 			vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
 			VEC_FIELD_MIN_RESOLUTION);*/
 
-		// draw laser points
+			// draw laser points
 		for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
 		{
 			cdraw::fill_rect(
@@ -319,20 +351,20 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 
 			// voodoo witchcraft magic
-			
-			float rex = i->rad * cos(M_PI / 2 + i->ang);
-			float rey = i->rad * sin(M_PI / 2 + i->ang);
+
+			float rex = i->rad * (float)cos(M_PI / 2 + i->ang);
+			float rey = i->rad * (float)sin(M_PI / 2 + i->ang);
 			cdraw::line(
-				th_param.GAME_X_OFFSET + i->p.x				- rex,
-				th_param.GAME_Y_OFFSET + i->p.y				- rey,
-				th_param.GAME_X_OFFSET + i->p.x + i->ex.x	- rex,
-				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y	- rey,
+				th_param.GAME_X_OFFSET + i->p.x - rex,
+				th_param.GAME_Y_OFFSET + i->p.y - rey,
+				th_param.GAME_X_OFFSET + i->p.x + i->ex.x - rex,
+				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y - rey,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 			cdraw::line(
-				th_param.GAME_X_OFFSET + i->p.x				+ rex,
-				th_param.GAME_Y_OFFSET + i->p.y				+ rey,
-				th_param.GAME_X_OFFSET + i->p.x + i->ex.x	+ rex,
-				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y	+ rey,
+				th_param.GAME_X_OFFSET + i->p.x + rex,
+				th_param.GAME_Y_OFFSET + i->p.y + rey,
+				th_param.GAME_X_OFFSET + i->p.x + i->ex.x + rex,
+				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y + rey,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 		}
 		// dependant on hit circle vs hit box

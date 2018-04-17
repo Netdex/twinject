@@ -18,6 +18,9 @@ const char *ininame = "twinject.ini";
 
 int main(const int argc, const char *argv[])
 {
+	printf("TWINJECT - Touhou Windows Injector (netdex)\n\
+===========================================\n\n");
+
 	// The following block of code defines debugging paths to the games I have in my debug environment.
 	// TODO use dynamic configuration based loading instead of hard coding everything
 #if defined(TH07_LOADER)
@@ -51,7 +54,11 @@ int main(const int argc, const char *argv[])
 	PathCombine(exepath, currentdir, config.exename);
 	PathCombine(dllpath, currentdir, config.dllname);
 #endif
-	
+	char twinjectDir[256];
+	GetModuleFileName(NULL, twinjectDir, 256);
+	SetDllDirectory(twinjectDir);
+	printf("SetDllDirectory(%s)\n", twinjectDir);
+
 	memset(&si, 0, sizeof(si));
 	memset(&pi, 0, sizeof(pi));
 	si.cb = sizeof(si);

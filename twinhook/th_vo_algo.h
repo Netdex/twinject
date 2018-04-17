@@ -8,6 +8,7 @@ static const float MAX_FRAMES_TILL_COLLISION = 200.f;	// used for coloring vecto
 
 /* Algorithmic Constants */
 static const float SQRT_2 = sqrt(2.f);
+
 /*
 * Unit velocity as a result of moving in specified direction
 * [0]: Hold, [1]: Up, [2]: Down, [3]: Left, [4]: Right,

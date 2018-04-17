@@ -9,7 +9,7 @@ static Direct3D9Hook d3d9_hook;
 
 void th_d3d9_hook::bind(th_player* player, bool twoStage)
 {
-	assert(("cannot multi-bind", !instance));
+	ASSERT(("cannot multi-bind", !instance));
 	instance = new th_d3d9_hook(player);
 
 	Direct3D9Hook hook;
@@ -29,7 +29,7 @@ void th_d3d9_hook::bind(th_player* player, bool twoStage)
 
 th_d3d9_hook* th_d3d9_hook::inst()
 {
-	assert(("cannot obtain unbounded instance", instance));
+	ASSERT(("cannot obtain unbounded instance", instance));
 	return instance;
 }
 
@@ -65,7 +65,7 @@ static IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 
 static void Hook_D3D9_Direct3DCreate9()
 {
-	assert(("d3d9 already created", !d3d9_created));
+	ASSERT(("d3d9 already created", !d3d9_created));
 
 	if (DetourFunction(&(PVOID&)Direct3DCreate9_Original, Direct3DCreate9_Hook))
 		LOG("Detours: Hooked Direct3DCreate9");
@@ -93,7 +93,7 @@ static HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
 
 static void Hook_Kernel32_LoadLibraryA()
 {
-	assert(("d3d9 already loaded", !HookedD3D));
+	ASSERT(("d3d9 already loaded", !HookedD3D));
 
 	LoadLibraryA_Original = LoadLibraryA;
 

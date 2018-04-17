@@ -34,6 +34,7 @@ public:
 
 	static float dot(const vec2 &a, const vec2 &b);
 	static vec2 proj(const vec2 &a, const vec2 &b);
+	static vec2 perp(const vec2 &a, const vec2 &b);
 
 	/**
 	 * \brief Determine the minimum component-wise vector
@@ -128,7 +129,19 @@ public:
 	 */
 	static float will_collide_circle(const vec2 &p1, const vec2 &p2, float r1, float r2,
 								const vec2 &v1, const vec2 &v2);
-
+	
+	/**
+	 * \brief Determine if a circle will collide with a line segment in the future
+	 * \param ct The center of the circle
+	 * \param v The velocity of the circle
+	 * \param r The radius of the circle
+	 * \param p1 An endpoint of the line segment
+	 * \param p2 The other endpoint of the line segment
+	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision
+	 */
+	static float will_collide_circle_line(const vec2 &ct, const vec2 &v, float r, 
+							const vec2 &p1, const vec2 &p2);
+	
 	/**
 	 * \brief Solve the specified quadratic equation of the form 
 	 * ax^2 + bx + c

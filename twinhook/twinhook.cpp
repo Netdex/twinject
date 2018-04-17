@@ -7,10 +7,8 @@
 #include "th08_bullet_proc_hook.h"
 #include "th07_player.h"
 #include "th07_bullet_proc_hook.h"
-#include "th_vector_algo.h"
 #include "th_vo_algo.h"
 #include "th15_player.h"
-#include "detour.h"
 #include "th15_bullet_proc_hook.h"
 
 void th07_init()
@@ -40,6 +38,7 @@ void th08_init()
 void th15_init()
 {
 	th15_player *player = new th15_player();
+	//th_vector_algo *algo = new th_vector_algo(player);
 	th_vo_algo *algo = new th_vo_algo(player, true);
 	player->bind_algorithm(algo);
 	th_d3d9_hook::bind(player, false);
@@ -62,6 +61,8 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 		CoInitialize(nullptr);
 		DisableThreadLibraryCalls(hModule);
 		LOG("DllMain: dll attached");
+		
+
 
 		size_t len;
 		char buf[256];

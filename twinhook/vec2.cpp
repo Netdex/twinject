@@ -164,14 +164,19 @@ vec2 vec2::proj(const vec2& a, const vec2& b)
 	return b * (dot(a, b) / b.lensq());
 }
 
+vec2 vec2::perp(const vec2& a, const vec2& b)
+{
+	return a - proj(a, b);
+}
+
 vec2 vec2::minv(const vec2& a, const vec2& b)
 {
-	return vec2(min(a.x, b.x), min(a.y, b.y));
+	return vec2(std::min(a.x, b.x), std::min(a.y, b.y));
 }
 
 vec2 vec2::maxv(const vec2& a, const vec2& b)
 {
-	return vec2(max(a.x, b.x), max(a.y, b.y));
+	return vec2(std::max(a.x, b.x), std::max(a.y, b.y));
 }
 
 bool vec2::in_aabb(const vec2 &p, const vec2 &a, const vec2 &b)
@@ -217,16 +222,16 @@ float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, co
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 	t = (p1.x - p2.x + s1.x) / (v2.x - v1.x);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 	t = (p1.y - p2.y - s2.y) / (v2.y - v1.y);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 	t = (p1.y - p2.y + s1.y) / (v2.y - v1.y);
 	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 
 	// check if finite collision time exists
 	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
@@ -245,16 +250,16 @@ float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 	float minE = FLT_MAX;
 	float t = (p1.x + s1.x - p2.x - s2.x) / (v2.x - v1.x);
 	if (t >= 0)
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 	t = (p1.x - p2.x) / (v2.x - v1.x);
 	if (t >= 0)
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 	t = (p1.y - p2.y) / (v2.y - v1.y);
 	if (t >= 0)
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 	t = (p1.y + s1.y - p2.y - s2.y) / (v2.y - v1.y);
 	if (t >= 0)
-		minE = min(minE, t);
+		minE = std::min(minE, t);
 
 	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
 		return minE;
@@ -283,25 +288,33 @@ float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float 
 		return -1;
 	}
 
-	/*
-	 * Note, this solution is actually more nuanced than you think.
-	 * We want the minimal
-	 */
+	// WARNING: there is no imposed limit on x1, x2
 	float x1, x2;
 	int rts = quadratic_solve(a, b, c, x1, x2);
 	if (rts == 0)
 		return -1;
 	if (rts == 1)
 		return x1;
-	return min(x1, x2);
-	//float rt = (-b - sqrt(b*b - 4 * a*c)) / (2 * a);
-	//if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
-	//	return rt;
-	//rt = (-b + sqrt(b*b - 4 * a*c)) / (2 * a);
-	//if (rt >= 0 && rt < 6000 /* imposed limit of 100 seconds */)
-	//	return rt;
-	//return -1;
+	return std::min(x1, x2);
+}
 
+float vec2::will_collide_circle_line(const vec2& ct, const vec2& v, float r, 
+									const vec2& p1, const vec2& p2)
+{
+	// TODO this is not correct
+	float a = p1.y - p2.y;
+	float b = p2.x - p1.x;
+	float c = (p1.x - p2.x)*p1.y + (p2.y - p1.y)*p1.x;
+
+	float bn = a * a + 2 * a*b + b * b;
+	float d = sqrt(
+		a*a*a*a*r*r + 2 * a*a*a*b*r*r + 2 * a*a*b*b*r*r + 2 * a*b*b*b*r*r + b * b*b*b*r*r);
+	float sh = a * b*ct.x - a * b*ct.y - a * c - b * b*ct.y - b * c;
+
+	float t1 = (-a * a*ct.x - d - sh) / bn;
+	float t2 = (-a * a*ct.x + d - sh) / bn;
+
+	return std::min(t1, t2);
 }
 
 int vec2::quadratic_solve(float a, float b, float c, float& x1, float& x2)
@@ -325,7 +338,8 @@ int vec2::quadratic_solve(float a, float b, float c, float& x1, float& x2)
 		x1 = -b / (2 * a);
 		return 1;
 	}
-	x1 = (-b - sqrt(d)) / (2 * a);
-	x2 = (-b + sqrt(d)) / (2 * a);
+	float rtd = sqrt(d);
+	x1 = (-b - rtd) / (2 * a);
+	x2 = (-b + rtd) / (2 * a);
 	return 2;
 }

@@ -87,7 +87,7 @@ namespace cdraw
 	{
 		if (!CDrawFlagInit) return;
 
-		sides = min(127, sides);
+		sides = std::min(127, sides);
 		D3DXVECTOR2 line[128];
 		float step = (float)M_PI * 2.0f / sides;
 		for (int s = 0; s <= sides; s++)

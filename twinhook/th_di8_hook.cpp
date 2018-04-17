@@ -8,7 +8,7 @@ th_di8_hook* th_di8_hook::instance = nullptr;
 
 void th_di8_hook::bind(th_player* player)
 {
-	assert(("cannot multi-bind", !instance));
+	ASSERT(("cannot multi-bind", !instance));
 	instance = new th_di8_hook(player);
 
 	DirectInput8Hook di8_hk;
@@ -18,7 +18,7 @@ void th_di8_hook::bind(th_player* player)
 
 th_di8_hook* th_di8_hook::inst()
 {
-	assert(("cannot obtain unbounded instance", instance));
+	ASSERT(("cannot obtain unbounded instance", instance));
 	return instance;
 }
 

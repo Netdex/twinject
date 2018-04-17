@@ -46,13 +46,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(IncludePath);$(SolutionDir)\dependencies\directx_2010\Include;$(SolutionDir)\dependencies\detours\include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)\dependencies\directx_2010\Lib\x86;$(SolutionDir)\dependencies\detours\lib.X86</LibraryPath>
+    <IncludePath>$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VSInstallDir)\VC\Auxiliary\VS\UnitTest\include;$(IncludePath);$(SolutionDir)\dependencies\directx_2010\Include;$(SolutionDir)\dependencies\detours\include</IncludePath>
-    <LibraryPath>$(VSInstallDir)\VC\Auxiliary\VS\UnitTest\lib;$(LibraryPath);$(SolutionDir)\dependencies\directx_2010\Lib\x86;$(SolutionDir)\dependencies\detours\lib.X86</LibraryPath>
+    <IncludePath>$(IncludePath);$(VSInstallDir)VC\Auxiliary\VS\UnitTest\include;$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(VSInstallDir)VC\Auxiliary\VS\UnitTest\lib;$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -79,6 +79,12 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,6 +114,12 @@
       <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cdraw.cpp" />
@@ -157,6 +169,7 @@
     <ClInclude Include="th15_bullet_proc_hook.h" />
     <ClInclude Include="th15_patch_autobomb.h" />
     <ClInclude Include="th15_player.h" />
+    <ClInclude Include="th_cmd_proc.h" />
     <ClInclude Include="th_config.h" />
     <ClInclude Include="th08_patch_autobomb.h" />
     <ClInclude Include="th08_player.h" />

@@ -8,7 +8,7 @@ th15_bullet_proc_hook* th15_bullet_proc_hook::instance = nullptr;
 
 void th15_bullet_proc_hook::bind(th15_player* player)
 {
-	assert(("cannot multi-bind", !instance));
+	ASSERT(("cannot multi-bind", !instance));
 	instance = new th15_bullet_proc_hook(player);
 	hook_th15_sub_455D00();
 	hook_th15_sub_455E10();
@@ -16,7 +16,7 @@ void th15_bullet_proc_hook::bind(th15_player* player)
 
 th15_bullet_proc_hook* th15_bullet_proc_hook::inst()
 {
-	assert(("cannot obtain unbounded instance", instance));
+	ASSERT(("cannot obtain unbounded instance", instance));
 	return instance;
 }
 
@@ -78,13 +78,14 @@ int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 	__m128 a2;
 	float angle;
 	float rad;
-
+	char *this_;
 	__asm {
 		// stdcall styled prolog w/ user defined SSE
 		push ebp
 		mov ebp, esp
 		sub esp, __LOCAL_SIZE
 
+		mov this_, esi		// it's a miracle that nothing touches esi before this function
 		movss angle, xmm2
 		movss rad, xmm3
 		movups a1, xmm2
@@ -94,7 +95,8 @@ int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 		laser e = {
 			vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1]),			// position x y
 			vec2(), vec2(a4 * cos(angle), a4 * sin(angle)),
-			rad/2.f, angle
+			rad/2.f, angle,
+			/*vec2(*(float*)(this_+0x54), *(float*)(this_+0x58))*/
 		};
 		th15_bullet_proc_hook::inst()->player->lasers.push_back(e);
 	}

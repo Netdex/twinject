@@ -26,7 +26,7 @@ void th15_player::on_init()
 	}
 	else
 	{
-		assert("fatal, d3ddev9_wrapper inaccessible");
+		ASSERT("fatal, d3ddev9_wrapper inaccessible");
 	}
 }
 

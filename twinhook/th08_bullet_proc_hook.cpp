@@ -7,14 +7,14 @@ th08_bullet_proc_hook* th08_bullet_proc_hook::instance = nullptr;
 
 void th08_bullet_proc_hook::bind(th08_player* player)
 {
-	assert(("cannot multi-bind", !instance));
+	ASSERT(("cannot multi-bind", !instance));
 	instance = new th08_bullet_proc_hook(player);
 	Hook_TH08_sub_410A70();
 }
 
 th08_bullet_proc_hook* th08_bullet_proc_hook::inst()
 {
-	assert(("cannot obtain unbounded instance", instance));
+	ASSERT(("cannot obtain unbounded instance", instance));
 	return instance;
 }
 
@@ -64,7 +64,7 @@ void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int 
 {
 	// HACK this might cause performance problems, also are we guaranteed a th08_player?
 	th_player *player =inst()->player;
-	assert(("wrong player type bound to hook", player));
+	ASSERT(("wrong player type bound to hook", player));
 	std::vector<entity> &TH08_Bullets = player->bullets;
 	std::vector<entity> &TH08_Powerups = player->powerups;
 
