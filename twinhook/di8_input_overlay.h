@@ -1,5 +1,7 @@
 #pragma once
 
+union th_kbd_state;
+
 /**
  * \brief Information regarding key press visualization
  */
@@ -20,47 +22,47 @@ const float InputOverlayUnitSize = 15.f;
 /* key visualization display information */
 const key_graphic kg_MonitoredKeys[] = {
 	{
-		DIK_LEFT,
+		5,
 		0.f, 1.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 	{
-		DIK_RIGHT,
+		7,
 		2.f, 1.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 	{
-		DIK_UP,
+		4,
 		1.f, 0.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 	{
-		DIK_DOWN,
+		6,
 		1.f, 1.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 	{
-		DIK_Z,
+		0,
 		4.f, 0.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 	{
-		DIK_X,
+		1,
 		4.f, 1.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 	{
-		DIK_LSHIFT,
+		2,
 		5.f, 1.f, 1.f, 1.f,
 		D3DCOLOR_ARGB(255, 0, 255, 0),
 		D3DCOLOR_ARGB(40, 255, 255, 255)
 	},
 };
 
-void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev);
+void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev, th_kbd_state state);

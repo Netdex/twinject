@@ -13,4 +13,5 @@ public:
 	virtual void on_begin() {};
 	virtual void on_tick() = 0;
 	virtual void visualize(IDirect3DDevice9* d3dDev){}
+	virtual void handle_input(const BYTE diKeys[256], const BYTE press[256]) {}
 };

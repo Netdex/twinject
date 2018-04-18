@@ -2,6 +2,7 @@
 #include "th_ann_algo.h"
 #include "th_player.h"
 #include "th_di8_hook.h"
+#include "cdraw.h"
 
 void th_ann_algo::on_begin()
 {
@@ -10,19 +11,7 @@ void th_ann_algo::on_begin()
 void th_ann_algo::on_tick()
 {
 	auto di8 = th_di8_hook::inst();
-
-	if (!player->enabled) {
-		di8->reset_vk_state(DIK_LEFT);
-		di8->reset_vk_state(DIK_RIGHT);
-		di8->reset_vk_state(DIK_UP);
-		di8->reset_vk_state(DIK_DOWN);
-		di8->reset_vk_state(DIK_Z);
-		di8->reset_vk_state(DIK_LSHIFT);
-		di8->reset_vk_state(DIK_LCONTROL);
-		return;
-	}
-
-	entity plyr = player->get_plyr_cz();
+	entity plyr = player->get_plyr_ent();
 
 	if (this->is_sampling)
 	{
@@ -37,12 +26,13 @@ void th_ann_algo::on_tick()
 			partsort.begin(), partsort.end(), comp);
 
 		sample samp;
-		for (auto i = partsort.begin(); i != partsort.end(); ++i)
+		samp.keys = player->get_kbd_state();
+		for (int i = 0; i < SAMPLE_SIZE; ++i)
 		{
 			vec2 crit;
 			if (hit_circle)
 			{
-				crit = vec2::closest_point_on_circle(i->p, i->sz.x, plyr.p);
+				crit = vec2::closest_point_on_circle(partsort[i].p, partsort[i].sz.x, plyr.p);
 			}
 			else
 			{
@@ -50,32 +40,90 @@ void th_ann_algo::on_tick()
 			}
 
 			vec2 rel = crit - plyr.p;
-			
-
+			samp.critpt[i] = rel;
+			samp.ptvel[i] = partsort[i].v;
 		}
+		samples.push_back(samp);
 	}
-	if (!player->enabled)
+	if (!player->enabled) {
+		di8->reset_vk_state(DIK_LEFT);
+		di8->reset_vk_state(DIK_RIGHT);
+		di8->reset_vk_state(DIK_UP);
+		di8->reset_vk_state(DIK_DOWN);
+		di8->reset_vk_state(DIK_Z);
+		di8->reset_vk_state(DIK_LSHIFT);
+		di8->reset_vk_state(DIK_LCONTROL);
 		return;
+	}
+
 }
 
 void th_ann_algo::visualize(IDirect3DDevice9* d3dDev)
 {
+	char buf[256];
+	sprintf_s(buf, 256, "samples: %d", samples.size());
+	cdraw::text(buf, D3DCOLOR_ARGB(255,0,255,0),
+		10, 10,
+		(int)th_param.WINDOW_WIDTH, (int)th_param.WINDOW_HEIGHT);
 }
 
-void th_ann_algo::start_sampling()
+void th_ann_algo::handle_input(const BYTE diKeys[256], const BYTE press[256])
 {
-	samples.clear();
+	if(press[DIK_T])
+		set_sampling(!is_sampling);
+	if(press[DIK_Y])
+		save_samples(SAMPLE_FILE);
+	if (press[DIK_U])
+		load_samples(SAMPLE_FILE);
 }
 
-void th_ann_algo::stop_sampling()
+void th_ann_algo::set_sampling(bool sampling)
 {
-	save_samples(SAMPLE_FILE);
+	is_sampling = sampling;
+	if(sampling)
+	{
+		LOG("sampling started");
+		samples.clear();
+		is_sampling = true;
+	}
+	else
+	{
+		LOG("sampling stopped");
+		is_sampling = false;
+	}
 }
 
 bool th_ann_algo::save_samples(std::string filename)
 {
+	LOG("saving samples to %s", filename.c_str());
+	std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+	if (ofs.fail())
+		return false;
+	for(auto i = samples.begin(); i != samples.end(); ++i)
+	{
+		// Yes, struct padding and unused inputs cause a lot of 
+		// wasted space and incompatibility issues, but I'd rather 
+		// make the save/load operations as fast as possible than have the 
+		// sample file as small as possible, since you can compress it 
+		// for sharing anyways
+		ofs.write((char*)&*i, sizeof(sample));	// this may be the most disgusting looking cast
+	}
+	ofs.close();
+	LOG("samples saved");
+	return true;
 }
 
 bool th_ann_algo::load_samples(std::string filename)
 {
+	LOG("loading samples from %s", filename.c_str());
+	std::ifstream ifs(filename, std::ios::in | std::ios::binary);
+	if (ifs.fail())
+		return false;
+	samples.clear();
+	sample samp;
+	while(ifs.read((char*)&samp, sizeof(sample)))	// this is also disgusting
+	{
+		samples.push_back(samp);
+	}
+	return true;
 }

@@ -22,7 +22,7 @@ void th_vector_algo::on_tick()
 	di8->set_vk_state(DIK_Z, DIK_KEY_DOWN);			// fire continuously
 	di8->set_vk_state(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
 
-	entity plyr = player->get_plyr_cz();
+	entity plyr = player->get_plyr_ent();
 	vec2 guide, threat;
 	net_vector(plyr.p, vec2(), guide, threat);
 	vec2 net = guide + threat;
@@ -74,7 +74,7 @@ void th_vector_algo::on_tick()
 
 void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 {
-	entity plyr = player->get_plyr_cz();
+	entity plyr = player->get_plyr_ent();
 	//vec2 boss = player->get_boss_loc();
 	if (player->render) {
 		// bullet markers

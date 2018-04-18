@@ -16,6 +16,6 @@ public:
 	void on_after_tick() override;
 	void draw(IDirect3DDevice9* d3dDev) override;
 
-	void handle_input(BYTE diKeys[256]) override;
+	void handle_input(const BYTE diKeys[256], const BYTE press[256]) override;
 	void on_enable_changed(bool enable) override;
 };

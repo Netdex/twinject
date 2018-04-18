@@ -36,7 +36,7 @@ void th_vo_algo::on_tick()
 		return;
 	}
 
-	entity plyr = player->get_plyr_cz();
+	entity plyr = player->get_plyr_ent();
 
 	/*
 	 * Ticks until collision whilst moving in this direction
@@ -333,7 +333,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 {
 	if (player->render)
 	{
-		entity plyr = player->get_plyr_cz();
+		entity plyr = player->get_plyr_ent();
 
 		// draw vector field (laggy)
 		/*viz_potential_quadtree(
@@ -422,7 +422,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 
 bool th_vo_algo::calibration_tick()
 {
-	entity plyr = player->get_plyr_cz();
+	entity plyr = player->get_plyr_ent();
 
 	switch (cal_frames)
 	{

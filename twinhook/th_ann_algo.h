@@ -1,7 +1,11 @@
 #pragma once
 #include "th_algorithm.h"
-#include "tiny_dnn/tiny_dnn.h"
 #include "vec2.h"
+#include "th_player.h"
+
+#pragma warning(push, 0)        
+#include "tiny_dnn/tiny_dnn.h"
+#pragma warning(pop)
 
 const int SAMPLE_SIZE = 64;
 const std::string SAMPLE_FILE = "nn_response.samp";
@@ -10,14 +14,14 @@ class th_ann_algo : public th_algorithm
 {
 	bool hit_circle = false;
 public:
-	class sample
+	struct sample
 	{
 		// relative locations to players of critical points
 		vec2 critpt[SAMPLE_SIZE];
-
-		// key presses in order:
-		// UP, DOWN, LEFT, RIGHT, Z, X, SHIFT
-		bool keys[6];
+		// velocities of critical points
+		vec2 ptvel[SAMPLE_SIZE];
+		// key presses
+		th_kbd_state keys;
 	};
 
 	// Q: Why don't you use proper encapsulation?
@@ -45,10 +49,10 @@ public:
 	void on_begin() override;
 	void on_tick() override;
 	void visualize(IDirect3DDevice9 *d3dDev) override;
+	void handle_input(const BYTE diKeys[256], const BYTE press[256]) override;
 
 	// sampling
-	void start_sampling();
-	void stop_sampling();
+	void set_sampling(bool sampling);
 
 	bool save_samples(std::string filename);
 	bool load_samples(std::string filename);

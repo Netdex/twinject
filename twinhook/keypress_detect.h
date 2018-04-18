@@ -5,7 +5,7 @@
  */
 class keypress_detect
 {
-	BYTE last_state[256];
+	BYTE last_state[256] = {0};
 	
 public:
 	keypress_detect() {}
@@ -15,5 +15,5 @@ public:
 	 * \param state State of keyboard
 	 * \return Vector of key presses by virtual key code
 	 */
-	std::vector<BYTE> tick(BYTE state[256]);
+	void tick(const BYTE state[256], BYTE pressed[256]);
 };

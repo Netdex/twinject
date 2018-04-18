@@ -3,6 +3,7 @@
 #include "vec2.h"
 #include "th_algorithm.h"
 #include "th_config.h"
+#include "keypress_detect.h"
 
 /*
  * Representing an entity. This struct has two interpretations depending on
@@ -46,16 +47,19 @@ struct gs_addr
 	uint8_t *kbd_state;
 };
 
-struct game_kbd_state
+union th_kbd_state
 {
-	bool shot;
-	bool bomb;
-	bool slow;
-	bool skip;
-	bool up;
-	bool left;
-	bool down;
-	bool right;
+	struct {
+		bool shot;		// 0
+		bool bomb;		// 1
+		bool slow;		// 2
+		bool skip;		// 3
+		bool up;		// 4
+		bool left;		// 5
+		bool down;		// 6
+		bool right;		// 7
+	};
+	bool keys[8];
 };
 
 /**
@@ -65,6 +69,9 @@ class th_player
 {
 protected:
 	th_algorithm * algorithm = nullptr;
+	keypress_detect kpd;
+
+	// game specific pointers
 	gs_addr gs_ptr;
 public:
 	std::vector<entity> bullets;
@@ -107,7 +114,7 @@ public:
 	 * \brief Process raw input from game
 	 * \param diKeys Key state
 	 */
-	virtual void handle_input(BYTE diKeys[256]) {}
+	virtual void handle_input(const BYTE diKeys[256], const BYTE press[256]) {}
 
 	/**
 	 * \brief Called when the bot's enable state is changed
@@ -133,9 +140,9 @@ public:
 	 * \brief Get player characteristics
 	 * \return An entity struct populated with player characteristics
 	 */
-	virtual entity get_plyr_cz()
+	virtual entity get_plyr_ent()
 	{
-		PBYTE PlayerPtrAddr = (PBYTE)0x017D6110;
+		PBYTE PlayerPtrAddr = (PBYTE)this->gs_ptr.plyr_pos;
 		entity plyr = {
 			vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET, 
 				*(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
@@ -151,18 +158,18 @@ public:
 	 * https://www.shrinemaiden.org/forum/index.php?topic=16024.0
 	 * Thank you!
 	 */
-	game_kbd_state get_game_kbd_state() const
+	th_kbd_state get_kbd_state() const
 	{
 		uint8_t *ptr_gkbd_st = gs_ptr.kbd_state;
-		game_kbd_state s = {
-			ptr_gkbd_st[0] == 25 && ptr_gkbd_st[1] == 0,
-			ptr_gkbd_st[0] == 50 && ptr_gkbd_st[1] == 0,
-			ptr_gkbd_st[0] == 0 && ptr_gkbd_st[1] == 0,
-			ptr_gkbd_st[0] == 0 && ptr_gkbd_st[1] == 25,
-			ptr_gkbd_st[0] == 125 && ptr_gkbd_st[1] == 0,
-			ptr_gkbd_st[0] == 100 && ptr_gkbd_st[1] == 25,
-			ptr_gkbd_st[0] == 125 && ptr_gkbd_st[1] == 25,
-			ptr_gkbd_st[0] == 150 && ptr_gkbd_st[1] == 25,
+		th_kbd_state s = {
+			(bool)(ptr_gkbd_st[0] & 1),
+			(bool)(ptr_gkbd_st[0] & 2),
+			(bool)(ptr_gkbd_st[0] & 8),
+			(bool)(ptr_gkbd_st[1] & 2),
+			(bool)(ptr_gkbd_st[0] & 16),
+			(bool)(ptr_gkbd_st[0] & 64),
+			(bool)(ptr_gkbd_st[0] & 32),
+			(bool)(ptr_gkbd_st[0] & 128),
 		};
 		return s;
 	}

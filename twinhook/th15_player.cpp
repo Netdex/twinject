@@ -37,7 +37,9 @@ void th15_player::on_tick()
 	if (di8->DirectInput8) {
 		if (di8->DirectInput8->DirectInputDevice8->GetDeviceState(256, diKeys) == DI_OK)
 		{
-			this->handle_input(diKeys);
+			BYTE press[256];
+			kpd.tick(diKeys, press);
+			this->handle_input(diKeys, press);
 		}
 	}
 	if (algorithm)
@@ -95,10 +97,10 @@ void th15_player::draw(IDirect3DDevice9* d3dDev)
 	if (algorithm)
 		algorithm->visualize(d3dDev);
 
-	DI8_Overlay_RenderInput(d3dDev);
+	DI8_Overlay_RenderInput(d3dDev, this->get_kbd_state());
 }
 
-void th15_player::handle_input(BYTE diKeys[256])
+void th15_player::handle_input(const BYTE diKeys[256], const BYTE press[256])
 {
 	if (diKeys[DIK_G])
 		set_enable(true);
@@ -108,6 +110,8 @@ void th15_player::handle_input(BYTE diKeys[256])
 		render = true;
 	if (diKeys[DIK_N])
 		render = false;
+
+	algorithm->handle_input(diKeys, press);
 }
 
 void th15_player::on_enable_changed(bool enable)
@@ -125,7 +129,7 @@ void th15_player::on_enable_changed(bool enable)
 	}
 }
 
-entity th15_player::get_plyr_cz()
+entity th15_player::get_plyr_ent()
 {
 	PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos; // this should be illegal
 	if (*PlayerPtrAddr) {

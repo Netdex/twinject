@@ -5,7 +5,7 @@
 #include "th_di8_hook.h"
 #include "th_config.h"
 
-void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev)
+void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev, th_kbd_state state)
 {
 	for (int i = 0; i < sizeof kg_MonitoredKeys / sizeof key_graphic; i++)
 	{
@@ -14,7 +14,7 @@ void DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev)
 		float y = th_param.WINDOW_HEIGHT - (480 - 430) + kg.y * InputOverlayUnitSize;
 		float w = kg.w * InputOverlayUnitSize;
 		float h = kg.h * InputOverlayUnitSize;
-		D3DCOLOR c = th_di8_hook::inst()->get_vk_state(kg.vkCode) ? kg.active_color : kg.default_color;
+		D3DCOLOR c = state.keys[kg.vkCode] ? kg.active_color : kg.default_color;
 		cdraw::fill_rect(x, y, w, h, c);
 	}
 }

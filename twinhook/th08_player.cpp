@@ -50,7 +50,7 @@ void th08_player::on_tick()
 	if (di8->DirectInput8) {
 		if (di8->DirectInput8->DirectInputDevice8->GetDeviceState(256, diKeys) == DI_OK)
 		{
-			this->handle_input(diKeys);
+			this->handle_input(diKeys, NULL);
 		}
 	}
 	if (algorithm)
@@ -106,10 +106,10 @@ void th08_player::draw(IDirect3DDevice9* d3dDev)
 	if (algorithm)
 		algorithm->visualize(d3dDev);
 
-	DI8_Overlay_RenderInput(d3dDev);
+	DI8_Overlay_RenderInput(d3dDev, this->get_kbd_state());
 }
 
-void th08_player::handle_input(BYTE diKeys[256])
+void th08_player::handle_input(const BYTE diKeys[256], const BYTE press[256])
 {
 	if (diKeys[DIK_G])
 		set_enable(true);
