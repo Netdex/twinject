@@ -6,7 +6,7 @@ class th07_player : public th_player
 {
 public:
 
-	th07_player() {}
+	th07_player() : th_player(gs_addr{ (uint8_t*)0x4BDCA0, (uint8_t*)0x4B9E50 }) {}
 	~th07_player() {}
 
 	void on_init() override;
@@ -17,7 +17,4 @@ public:
 
 	void handle_input(BYTE diKeys[256]) override;
 	void on_enable_changed(bool enable) override;
-
-private:
-	entity get_plyr_cz() override;
 };

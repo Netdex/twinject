@@ -317,6 +317,11 @@ float vec2::will_collide_circle_line(const vec2& ct, const vec2& v, float r,
 	return std::min(t1, t2);
 }
 
+vec2 vec2::closest_point_on_circle(const vec2& ct, float r, const vec2& o)
+{
+	return ct + r * (o - ct).unit();
+}
+
 int vec2::quadratic_solve(float a, float b, float c, float& x1, float& x2)
 {
 	x1 = NAN;

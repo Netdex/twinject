@@ -135,18 +135,3 @@ void th08_player::on_enable_changed(bool enable)
 	}
 }
 
-
-static PBYTE PlayerPtrAddr = (PBYTE)0x017D6110;
-static PBYTE BossPosAddr = (PBYTE)0x004CE7EC;
-
-entity th08_player::get_plyr_cz()
-{
-	entity plyr = {
-		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET, *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
-		vec2(),
-		vec2(6,6),		// hard-coded player size
-		0
-	};
-	return plyr;
-}
-

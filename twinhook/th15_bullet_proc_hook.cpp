@@ -95,7 +95,7 @@ int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 		laser e = {
 			vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1]),			// position x y
 			vec2(), vec2(a4 * cos(angle), a4 * sin(angle)),
-			rad/2.f, angle,
+			a4, rad/2.f, angle,
 			/*vec2(*(float*)(this_+0x54), *(float*)(this_+0x58))*/
 		};
 		th15_bullet_proc_hook::inst()->player->lasers.push_back(e);

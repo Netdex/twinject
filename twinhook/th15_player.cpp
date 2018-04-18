@@ -125,10 +125,9 @@ void th15_player::on_enable_changed(bool enable)
 	}
 }
 
-static PBYTE *PlayerPtrAddr = (PBYTE*)0x004E9BB8;
-
 entity th15_player::get_plyr_cz()
 {
+	PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos; // this should be illegal
 	if (*PlayerPtrAddr) {
 		PBYTE plyrAddr = *PlayerPtrAddr;
 

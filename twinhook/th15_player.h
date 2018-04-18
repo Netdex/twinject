@@ -7,7 +7,7 @@
 class th15_player : public th_player
 {
 public:
-	th15_player() {}
+	th15_player() : th_player(gs_addr{ (uint8_t*)0x004E9BB8,(uint8_t*)0x4E6F28 }) {}
 	~th15_player() = default;
 
 	void on_init() override;

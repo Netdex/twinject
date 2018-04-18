@@ -64,6 +64,12 @@
     <Filter Include="Source Files\config">
       <UniqueIdentifier>{ea3113b7-b79a-43dd-9d27-4a962cd59f46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\info">
+      <UniqueIdentifier>{276f78fb-7f09-4d4f-a6e1-18cfe2b15458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\info">
+      <UniqueIdentifier>{96cfff83-baeb-438d-879e-de8a7509477b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
@@ -143,6 +149,12 @@
     </ClCompile>
     <ClCompile Include="th_config.cpp">
       <Filter>Source Files\config</Filter>
+    </ClCompile>
+    <ClCompile Include="th_ann_algo.cpp">
+      <Filter>Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="keypress_detect.cpp">
+      <Filter>Source Files\info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,8 +242,11 @@
     <ClInclude Include="th15_patch_autobomb.h">
       <Filter>Header Files\patch</Filter>
     </ClInclude>
-    <ClInclude Include="th_cmd_proc.h">
-      <Filter>Header Files\config</Filter>
+    <ClInclude Include="th_ann_algo.h">
+      <Filter>Header Files\algo</Filter>
+    </ClInclude>
+    <ClInclude Include="keypress_detect.h">
+      <Filter>Header Files\info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

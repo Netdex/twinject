@@ -110,15 +110,3 @@ void th07_player::draw(IDirect3DDevice9* d3dDev)
 	DI8_Overlay_RenderInput(d3dDev);
 }
 
-
-static PBYTE PlayerPtrAddr = (PBYTE)0x004BDCA0;
-entity th07_player::get_plyr_cz()
-{
-	entity plyr = {
-		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET, *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
-		vec2(),
-		vec2(6,6),		// hard-coded player size
-		0
-	};
-	return plyr;
-}

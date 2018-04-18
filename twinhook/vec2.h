@@ -143,6 +143,14 @@ public:
 							const vec2 &p1, const vec2 &p2);
 	
 	/**
+	 * \brief Find the point on a circle that is the closest to some point
+	 * \param ct The center of the circle
+	 * \param r The radius of the circle
+	 * \param o A point outside or inside the circle
+	 * \return The point on the circle that is the closest to point o
+	 */
+	static vec2 closest_point_on_circle(const vec2 &ct, float r, const vec2 &o);
+	/**
 	 * \brief Solve the specified quadratic equation of the form 
 	 * ax^2 + bx + c
 	 * \param a Leading coefficient of x^2
