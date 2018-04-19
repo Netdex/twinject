@@ -81,7 +81,7 @@ public:
 	bool enabled = false;
 	bool render = false;
 
-	th_player(gs_addr gsa) : gs_ptr(gsa){}
+	th_player(gs_addr gsa) : gs_ptr(gsa) {}
 	virtual ~th_player() = default;
 
 	/**
@@ -144,7 +144,7 @@ public:
 	{
 		PBYTE PlayerPtrAddr = (PBYTE)this->gs_ptr.plyr_pos;
 		entity plyr = {
-			vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET, 
+			vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET,
 				*(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
 			vec2(),
 			vec2(6,6),		// hard-coded player size
@@ -153,7 +153,7 @@ public:
 		return plyr;
 	}
 
-	/* 
+	/*
 	 * Memory addresses and values borrowed from
 	 * https://www.shrinemaiden.org/forum/index.php?topic=16024.0
 	 * Thank you!
