@@ -38,7 +38,7 @@ Watch as it struggles to deathbomb through every laser it sees.
 Consists of two parts, **twinhook** and **twinject**.
 
 ### twinhook
-twinhook is a DLL, injected during runtime into a game. It uses MS Detours to trampoline functions.  
+twinhook is a DLL, injected before runtime into a Touhou game. It uses MS Detours to trampoline functions.  
 This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
 
 [Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinhook_technical.md)
@@ -61,32 +61,17 @@ The automated player is a game-specific wrapper for each game that twinject supp
 Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
 
 ## Building
-Note: Twinject has many dependencies, including (not an exhaustive list):
-- boost
-- openblas
-- mlpack
-- armadillo
-- detours
-- directx 2010 sdk
-
-Since it is a massive pain to build all of these yourself from source, I have decided to package them with the repository.  
-In the near future, I will link an archive to all dependencies here (1.87 GB). You can bug me about it if I forget. 
+The dependencies are included in the repository, and are referenced by relative path.
 
 ### Build Instructions
 ```
 1. Clone repository to disk
-2. Download dependencies archive, extract to dependencies/
-3. Build in Visual Studio 2017 with Release (x86) target.
+2. Build in Visual Studio 2017 with Release (x86) target.
 
 Place the following files into the game directory:
 twinject.exe
 twinhook.dll
-twinject.ini
-libgcc_s_sjlj-1.dll
-libgfortran-3.dll
-libopenblas.dll
-libquadmath-0.dll
-mlpack.dll
+twinject.ini (you may need to create this yourself, specified below)
 
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
 and place into game directory if the game requires it.
@@ -115,8 +100,8 @@ B - Disable bot
 H - Display debug graphics
 N - Hide debug graphics 
 
-To close the bot, close the console window and the game will close after.
-Closing the game first may not close the console window properly.
+To close the bot, close the debug console window and the game will close after.
+Closing the game first may cause cleanup to not occur.
 
 Make sure DirectInput is not disabled.
 ```
