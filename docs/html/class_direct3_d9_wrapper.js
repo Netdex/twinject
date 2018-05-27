@@ -1,0 +1,25 @@
+var class_direct3_d9_wrapper =
+[
+    [ "Direct3D9Wrapper", "class_direct3_d9_wrapper.html#a2d0a26627787c1bf98d600a26bb44ab3", null ],
+    [ "~Direct3D9Wrapper", "class_direct3_d9_wrapper.html#a8f3120c55acf690bd71c036b0e0bf123", null ],
+    [ "CheckDepthStencilMatch", "class_direct3_d9_wrapper.html#a228399b8bd38249ccabeb91dff492226", null ],
+    [ "CheckDeviceFormat", "class_direct3_d9_wrapper.html#a2a3f7f7a502ef45b6e2c20192a87de8c", null ],
+    [ "CheckDeviceFormatConversion", "class_direct3_d9_wrapper.html#ad14d61cfface884cf394be53975dd725", null ],
+    [ "CheckDeviceMultiSampleType", "class_direct3_d9_wrapper.html#a4d912ec0f61890831c827b72676e424d", null ],
+    [ "CheckDeviceType", "class_direct3_d9_wrapper.html#a6d4e5cedbe0904daeb7367a59aaefa83", null ],
+    [ "CreateDevice", "class_direct3_d9_wrapper.html#a6c9a35ace187c1f24dcb3a3e0331f8ae", null ],
+    [ "EnumAdapterModes", "class_direct3_d9_wrapper.html#a6fbe11368ba3b1786094fe2e44f1ae21", null ],
+    [ "GetAdapterDisplayMode", "class_direct3_d9_wrapper.html#aa637d2ae49386efc5bae88f04c7d78f6", null ],
+    [ "GetAdapterIdentifier", "class_direct3_d9_wrapper.html#a383211a7967a6e2d78dc9a01b843e117", null ],
+    [ "GetDeviceCaps", "class_direct3_d9_wrapper.html#abee1b05c2d9c3b1d933ec91403855f31", null ],
+    [ "QueryInterface", "class_direct3_d9_wrapper.html#abd10c23768498b0ff2bcff59d90d3467", null ],
+    [ "RegisterSoftwareDevice", "class_direct3_d9_wrapper.html#a7e4ac381ae6efc2c1156679b4d6dd107", null ],
+    [ "STDMETHOD_", "class_direct3_d9_wrapper.html#a36b4e53908e5099c5e706f877bf87398", null ],
+    [ "STDMETHOD_", "class_direct3_d9_wrapper.html#aa3167aceea0f75029b5e04607b48b2db", null ],
+    [ "STDMETHOD_", "class_direct3_d9_wrapper.html#aa026d7c4ba202ecb9b35e96be460eefd", null ],
+    [ "STDMETHOD_", "class_direct3_d9_wrapper.html#a0b7de51870e3b14bd363c91bf1911566", null ],
+    [ "STDMETHOD_", "class_direct3_d9_wrapper.html#a53cf8b26326510630da6d5e67944690e", null ],
+    [ "Direct3D9", "class_direct3_d9_wrapper.html#a68eb4f08bc71f2f69ac6d4b3fd9b5d72", null ],
+    [ "Format", "class_direct3_d9_wrapper.html#aa7c07f726ca2d5c2d888e643fed89d78", null ],
+    [ "Hook", "class_direct3_d9_wrapper.html#aaef0d2387153edb657e89d36b6b9386d", null ]
+];

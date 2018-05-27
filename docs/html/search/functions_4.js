@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['d3d9_5fbegin_5fhook',['d3d9_begin_hook',['../classth__d3d9__hook.html#a7a3ef49c2610c96073639c99b11d0918',1,'th_d3d9_hook']]],
+  ['d3d9_5fend_5fhook',['d3d9_end_hook',['../classth__d3d9__hook.html#ab71e55d70638f0617b0d090e2c33ea43',1,'th_d3d9_hook']]],
+  ['d3d9_5finit_5fhook',['d3d9_init_hook',['../classth__d3d9__hook.html#aa6af27d7581fa5868012a1205015063a',1,'th_d3d9_hook']]],
+  ['deletepatch',['DeletePatch',['../class_direct3_d_device9_wrapper.html#a6171db16adc295cfffa246b8fdebfad8',1,'Direct3DDevice9Wrapper']]],
+  ['detourfunction',['DetourFunction',['../detour_8cpp.html#af2f884b66b2be0c557e2572c5319b1d7',1,'DetourFunction(PVOID *ppPointer, PVOID pDetour):&#160;detour.cpp'],['../detour_8h.html#af2f884b66b2be0c557e2572c5319b1d7',1,'DetourFunction(PVOID *ppPointer, PVOID pDetour):&#160;detour.cpp']]],
+  ['di8_5fget_5fdevice_5fstate_5fhook',['di8_get_device_state_hook',['../classth__di8__hook.html#a8948d04885dedd3a2d53cb8fe6a99c7e',1,'th_di8_hook']]],
+  ['di8_5foverlay_5frenderinput',['DI8_Overlay_RenderInput',['../di8__input__overlay_8cpp.html#af756cd87ef6e833b961075d63f0184b2',1,'DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev, th_kbd_state state):&#160;di8_input_overlay.cpp'],['../di8__input__overlay_8h.html#af756cd87ef6e833b961075d63f0184b2',1,'DI8_Overlay_RenderInput(IDirect3DDevice9 *d3dDev, th_kbd_state state):&#160;di8_input_overlay.cpp']]],
+  ['direct3d9wrapper',['Direct3D9Wrapper',['../class_direct3_d9_wrapper.html#a2d0a26627787c1bf98d600a26bb44ab3',1,'Direct3D9Wrapper']]],
+  ['direct3dcreate9_5fhook',['Direct3DCreate9_Hook',['../th__d3d9__hook_8h.html#a2c703bd51c763af81b78569b52e0e5b9',1,'th_d3d9_hook.h']]],
+  ['direct3ddevice9wrapper',['Direct3DDevice9Wrapper',['../class_direct3_d_device9_wrapper.html#aaa71172ce7b8422f738ff1c9dfd2ba2e',1,'Direct3DDevice9Wrapper']]],
+  ['directinput8create_5fhook',['DirectInput8Create_Hook',['../th__di8__hook_8h.html#a0755bc5174abee8c3c3ecc4c3e3da8b8',1,'th_di8_hook.h']]],
+  ['directinput8wrapper',['DirectInput8Wrapper',['../class_direct_input8_wrapper.html#a3da58057e7a9d80ecc7b0e8d3ea5c08f',1,'DirectInput8Wrapper']]],
+  ['directinputdevice8wrapper',['DirectInputDevice8Wrapper',['../class_direct_input_device8_wrapper.html#a7bda1834146a936f8ee7524ce4422be1',1,'DirectInputDevice8Wrapper']]],
+  ['dllmain',['DllMain',['../twinhook_8cpp.html#a4710933b43c9b808d1498c96891cde4f',1,'twinhook.cpp']]],
+  ['dot',['dot',['../classvec2.html#a433abcd473f4ce39831f0b8cac2643d6',1,'vec2']]],
+  ['draw',['draw',['../classth07__player.html#a5a29d5dda7d68e2a726f7f238d376223',1,'th07_player::draw()'],['../classth08__player.html#af526fc0dc945982a282703925a6a98de',1,'th08_player::draw()'],['../classth10__player.html#ac62ea500060d23b527a250f631be73a8',1,'th10_player::draw()'],['../classth15__player.html#ab1653b33104348fff94336344c5871b1',1,'th15_player::draw()'],['../classth__player.html#a525a99ad8a8d8e5feb8b5873163ea4c6',1,'th_player::draw()']]],
+  ['drawindexedprimitive',['DrawIndexedPrimitive',['../class_direct3_d_device9_wrapper.html#a45648a9dab410ca27566671b9501cccf',1,'Direct3DDevice9Wrapper']]],
+  ['drawindexedprimitiveup',['DrawIndexedPrimitiveUP',['../class_direct3_d_device9_wrapper.html#a0ce0d8f2f4bf55f069029c8337a906b1',1,'Direct3DDevice9Wrapper']]],
+  ['drawprimitive',['DrawPrimitive',['../class_direct3_d_device9_wrapper.html#af9b8ded2602cc0dbb8f7f099a8bd1a7d',1,'Direct3DDevice9Wrapper']]],
+  ['drawprimitiveup',['DrawPrimitiveUP',['../class_direct3_d_device9_wrapper.html#ac5fd86d7183c0a3270beef9ada3651eb',1,'Direct3DDevice9Wrapper']]],
+  ['drawrectpatch',['DrawRectPatch',['../class_direct3_d_device9_wrapper.html#a1bfb054e5de8d99e2353751a729a8ccb',1,'Direct3DDevice9Wrapper']]],
+  ['drawtripatch',['DrawTriPatch',['../class_direct3_d_device9_wrapper.html#aa084c15afbf52aace219bd20e82fd1a3',1,'Direct3DDevice9Wrapper']]]
+];

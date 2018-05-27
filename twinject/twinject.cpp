@@ -13,8 +13,8 @@ PROCESS_INFORMATION pi;
 
 const char *ininame = "twinject.ini";
 
-#define DEBUGGER
-#define TH15_LOADER
+#define DEBUGGER				// If you use an external debugger, this line must be commented out. Debugging messages will not be received.
+#define TH15_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
 
 int main(const int argc, const char *argv[])
 {
@@ -33,6 +33,11 @@ int main(const int argc, const char *argv[])
 	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";
 	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th08";
+#elif defined(TH10_LOADER)
+	_putenv("th=th10");
+	char *exepath = "D:\\Programming\\Multi\\th10\\th10.exe";
+	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
+	char *currentdir = "D:\\Programming\\Multi\\th10";
 #elif defined(TH15_LOADER)
 	_putenv("th=th15");
 	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";

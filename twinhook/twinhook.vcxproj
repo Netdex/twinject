@@ -46,18 +46,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(solutiondir)dependencies\xtl\include;$(solutiondir)dependencies\xsimd\include;$(solutiondir)dependencies\tiny-dnn</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(solutiondir)dependencies\xtl\include;$(solutiondir)dependencies\xsimd\include;$(solutiondir)dependencies\tiny-dnn</IncludePath>
     <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath);$(VSInstallDir)VC\Auxiliary\VS\UnitTest\include;$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(solutiondir)dependencies\xtl\include;$(solutiondir)dependencies\xsimd\include;$(solutiondir)dependencies\tiny-dnn</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath);$(VSInstallDir)VC\Auxiliary\VS\UnitTest\include;$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(solutiondir)dependencies\xtl\include;$(solutiondir)dependencies\xsimd\include;$(solutiondir)dependencies\tiny-dnn</IncludePath>
     <LibraryPath>$(LibraryPath);$(VSInstallDir)VC\Auxiliary\VS\UnitTest\lib;$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -70,6 +70,8 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DiagnosticsFormat>Caret</DiagnosticsFormat>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +91,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -104,6 +106,8 @@
       <FloatingPointExceptions>true</FloatingPointExceptions>
       <DiagnosticsFormat>Caret</DiagnosticsFormat>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,69 +126,71 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cdraw.cpp" />
-    <ClCompile Include="color.cpp" />
-    <ClCompile Include="detour.cpp" />
-    <ClCompile Include="ID3D9_Wrapper.cpp" />
-    <ClCompile Include="ID3D9Device_Wrapper.cpp" />
-    <ClCompile Include="IDI8ADevice_Wrapper.cpp" />
-    <ClCompile Include="IDI8A_Wrapper.cpp" />
-    <ClCompile Include="keypress_detect.cpp" />
-    <ClCompile Include="th07_bullet_proc_hook.cpp" />
-    <ClCompile Include="th07_player.cpp" />
-    <ClCompile Include="di8_input_overlay.cpp" />
-    <ClCompile Include="logfs.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    <ClCompile Include="util\cdraw.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="th08_bullet_proc_hook.cpp" />
-    <ClCompile Include="th08_patch_autobomb.cpp" />
-    <ClCompile Include="th08_player.cpp" />
-    <ClCompile Include="th15_bullet_proc_hook.cpp" />
-    <ClCompile Include="th15_patch_autobomb.cpp" />
-    <ClCompile Include="th15_player.cpp" />
-    <ClCompile Include="th_ann_algo.cpp" />
-    <ClCompile Include="th_config.cpp" />
-    <ClCompile Include="th_d3d9_hook.cpp" />
-    <ClCompile Include="th_di8_hook.cpp" />
-    <ClCompile Include="th_vector_algo.cpp" />
-    <ClCompile Include="th_vo_algo.cpp" />
+    <ClCompile Include="util\color.cpp" />
+    <ClCompile Include="util\detour.cpp" />
+    <ClCompile Include="directx\ID3D9_Wrapper.cpp" />
+    <ClCompile Include="directx\ID3D9Device_Wrapper.cpp" />
+    <ClCompile Include="directx\IDI8ADevice_Wrapper.cpp" />
+    <ClCompile Include="directx\IDI8A_Wrapper.cpp" />
+    <ClCompile Include="info\keypress_detect.cpp" />
+    <ClCompile Include="hook\th07_bullet_proc_hook.cpp" />
+    <ClCompile Include="control\th07_player.cpp" />
+    <ClCompile Include="gfx\di8_input_overlay.cpp" />
+    <ClCompile Include="util\logfs.cpp" />
+    <ClCompile Include="hook\th08_bullet_proc_hook.cpp" />
+    <ClCompile Include="patch\th08_patch_autobomb.cpp" />
+    <ClCompile Include="control\th08_player.cpp" />
+    <ClCompile Include="hook\th10_bullet_proc_hook.cpp" />
+    <ClCompile Include="control\th10_player.cpp" />
+    <ClCompile Include="hook\th15_bullet_proc_hook.cpp" />
+    <ClCompile Include="patch\th15_patch_autobomb.cpp" />
+    <ClCompile Include="control\th15_player.cpp" />
+    <ClCompile Include="algo\th_ann_algo.cpp" />
+    <ClCompile Include="config\th_config.cpp" />
+    <ClCompile Include="hook\th_d3d9_hook.cpp" />
+    <ClCompile Include="hook\th_di8_hook.cpp" />
+    <ClCompile Include="algo\th_vector_algo.cpp" />
+    <ClCompile Include="algo\th_vo_algo.cpp" />
     <ClCompile Include="twinhook.cpp" />
-    <ClCompile Include="vec2.cpp" />
-    <ClCompile Include="vec2_test.cpp" />
+    <ClCompile Include="util\vec2.cpp" />
+    <ClCompile Include="test\vec2_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cdraw.h" />
-    <ClInclude Include="color.h" />
-    <ClInclude Include="detour.h" />
-    <ClInclude Include="ID3D9_Wrapper.h" />
-    <ClInclude Include="ID3D9Device_Wrapper.h" />
-    <ClInclude Include="IDI8ADevice_Wrapper.h" />
-    <ClInclude Include="IDI8A_Wrapper.h" />
-    <ClInclude Include="keypress_detect.h" />
-    <ClInclude Include="th07_bullet_proc_hook.h" />
-    <ClInclude Include="th07_player.h" />
-    <ClInclude Include="di8_input_overlay.h" />
-    <ClInclude Include="logfs.h" />
+    <ClInclude Include="util\cdraw.h" />
+    <ClInclude Include="util\color.h" />
+    <ClInclude Include="util\detour.h" />
+    <ClInclude Include="directx\ID3D9_Wrapper.h" />
+    <ClInclude Include="directx\ID3D9Device_Wrapper.h" />
+    <ClInclude Include="directx\IDI8ADevice_Wrapper.h" />
+    <ClInclude Include="directx\IDI8A_Wrapper.h" />
+    <ClInclude Include="info\keypress_detect.h" />
+    <ClInclude Include="hook\th07_bullet_proc_hook.h" />
+    <ClInclude Include="control\th07_player.h" />
+    <ClInclude Include="gfx\di8_input_overlay.h" />
+    <ClInclude Include="util\logfs.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="th08_bullet_proc_hook.h" />
-    <ClInclude Include="th15_bullet_proc_hook.h" />
-    <ClInclude Include="th15_patch_autobomb.h" />
-    <ClInclude Include="th15_player.h" />
-    <ClInclude Include="th_ann_algo.h" />
-    <ClInclude Include="th_config.h" />
-    <ClInclude Include="th08_patch_autobomb.h" />
-    <ClInclude Include="th08_player.h" />
-    <ClInclude Include="th_algorithm.h" />
-    <ClInclude Include="th_d3d9_hook.h" />
-    <ClInclude Include="th_di8_hook.h" />
-    <ClInclude Include="th_hook.h" />
-    <ClInclude Include="th_patch.h" />
-    <ClInclude Include="th_player.h" />
-    <ClInclude Include="th_vector_algo.h" />
-    <ClInclude Include="th_vo_algo.h" />
-    <ClInclude Include="vec2.h" />
+    <ClInclude Include="hook\th08_bullet_proc_hook.h" />
+    <ClInclude Include="hook\th10_bullet_proc_hook.h" />
+    <ClInclude Include="control\th10_player.h" />
+    <ClInclude Include="hook\th15_bullet_proc_hook.h" />
+    <ClInclude Include="patch\th15_patch_autobomb.h" />
+    <ClInclude Include="control\th15_player.h" />
+    <ClInclude Include="algo\th_ann_algo.h" />
+    <ClInclude Include="config\th_config.h" />
+    <ClInclude Include="patch\th08_patch_autobomb.h" />
+    <ClInclude Include="control\th08_player.h" />
+    <ClInclude Include="algo\th_algorithm.h" />
+    <ClInclude Include="hook\th_d3d9_hook.h" />
+    <ClInclude Include="hook\th_di8_hook.h" />
+    <ClInclude Include="hook\th_hook.h" />
+    <ClInclude Include="patch\th_patch.h" />
+    <ClInclude Include="control\th_player.h" />
+    <ClInclude Include="algo\th_vector_algo.h" />
+    <ClInclude Include="algo\th_vo_algo.h" />
+    <ClInclude Include="util\vec2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="twinhook.def" />
