@@ -41,14 +41,16 @@ Consists of two parts, **twinhook** and **twinject**.
 twinhook is a DLL, injected before runtime into a Touhou game. It uses MS Detours to trampoline functions.  
 This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
 
-[Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinhook_technical.md)
+[Technical Description](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
 
 ### twinject
 twinject loads twinhook into game with MS Detours.
 
-[Technical Description](https://github.com/Netdex/twinject/blob/master/docs/twinject_technical.md)
+[Technical Description](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
 
 ### Code Structure
+#### [Doxygen](https://rawgit.com/Netdex/twinject/master/docs/html/index.html) (mostly undocumented)
+
 Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
 
 An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
