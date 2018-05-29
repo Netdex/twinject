@@ -13,9 +13,9 @@ void th_d3d9_hook::bind(th_player* player, bool twoStage)
 	instance = new th_d3d9_hook(player);
 
 	Direct3D9Hook hook;
-	hook.CreateDeviceHook = d3d9_init_hook;
-	hook.BeginSceneHook = d3d9_begin_hook;
-	hook.EndSceneHook = d3d9_end_hook;
+	hook.CreateDeviceHook = d3d9InitHook;
+	hook.BeginSceneHook = d3d9BeginHook;
+	hook.EndSceneHook = d3d9EndHook;
 	d3d9_hook = hook;
 
 	if (twoStage) {
@@ -33,22 +33,22 @@ th_d3d9_hook* th_d3d9_hook::inst()
 	return instance;
 }
 
-void th_d3d9_hook::d3d9_init_hook(IDirect3DDevice9 *d3dDev)
+void th_d3d9_hook::d3d9InitHook(IDirect3DDevice9 *d3dDev)
 {
 	cdraw::init(d3dDev);
-	inst()->player->on_init();
+	inst()->player->onInit();
 }
 
-void th_d3d9_hook::d3d9_begin_hook(IDirect3DDevice9 *d3dDev)
+void th_d3d9_hook::d3d9BeginHook(IDirect3DDevice9 *d3dDev)
 {
-	inst()->player->on_begin_tick();
+	inst()->player->onBeginTick();
 }
 
-void th_d3d9_hook::d3d9_end_hook(IDirect3DDevice9 *d3dDev)
+void th_d3d9_hook::d3d9EndHook(IDirect3DDevice9 *d3dDev)
 {
-	inst()->player->on_tick();
+	inst()->player->onTick();
 	inst()->player->draw(d3dDev);
-	inst()->player->on_after_tick();
+	inst()->player->onAfterTick();
 }
 
 static Direct3DCreate9_t Direct3DCreate9_Original = Direct3DCreate9;

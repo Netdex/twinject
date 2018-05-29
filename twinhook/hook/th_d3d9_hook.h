@@ -33,7 +33,7 @@ public:
 	static void bind(th_player *player, bool twoStage);
 	static th_d3d9_hook* inst();
 
-	static void d3d9_init_hook(IDirect3DDevice9 *d3dDev);
-	static void d3d9_begin_hook(IDirect3DDevice9 *d3dDev);
-	static void d3d9_end_hook(IDirect3DDevice9 *d3dDev);
+	static void d3d9InitHook(IDirect3DDevice9 *d3dDev);
+	static void d3d9BeginHook(IDirect3DDevice9 *d3dDev);
+	static void d3d9EndHook(IDirect3DDevice9 *d3dDev);
 };

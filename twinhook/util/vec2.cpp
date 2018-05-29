@@ -179,14 +179,14 @@ vec2 vec2::maxv(const vec2& a, const vec2& b)
 	return vec2(std::max(a.x, b.x), std::max(a.y, b.y));
 }
 
-bool vec2::in_aabb(const vec2 &p, const vec2 &a, const vec2 &b)
+bool vec2::inAABB(const vec2 &p, const vec2 &a, const vec2 &b)
 {
 	vec2 topleft = minv(a, b);
 	vec2 botright = maxv(a, b);
 	return p.x >= topleft.x && p.x <= botright.x && p.y >= topleft.y && p.y <= botright.y;
 }
 
-bool vec2::is_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2)
+bool vec2::isCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2)
 {
 	return p1.x <= p2.x + s2.x
 		&& p1.x + s1.x >= p2.x
@@ -194,7 +194,7 @@ bool vec2::is_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const
 		&& s1.y + p1.y >= p2.y;
 }
 
-bool vec2::is_contain_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2)
+bool vec2::isContainAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2)
 {
 	return p2.x >= p1.x
 		&& p2.x + s2.x <= p1.x + s1.x
@@ -202,13 +202,13 @@ bool vec2::is_contain_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 		&& p2.y + s2.y <= p1.y + s1.y;
 }
 
-float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
+float vec2::willCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
 	const vec2 &v1, const vec2 &v2)
 {
 	// BUG this implementation is way too inefficient
 
 	// check if they're already colliding
-	if (is_collide_aabb(p1, p2, s1, s2))
+	if (isCollideAABB(p1, p2, s1, s2))
 		return 0;
 
 	// check if they're moving away from each other
@@ -221,16 +221,16 @@ float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, co
 		// check time required until collision for each side
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
-	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = std::min(minE, t);
 	t = (p1.x - p2.x + s1.x) / (v2.x - v1.x);
-	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = std::min(minE, t);
 	t = (p1.y - p2.y - s2.y) / (v2.y - v1.y);
-	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = std::min(minE, t);
 	t = (p1.y - p2.y + s1.y) / (v2.y - v1.y);
-	if (t >= 0 && is_collide_aabb(p1 + t * v1, p2 + t * v2, s1, s2))
+	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
 		minE = std::min(minE, t);
 
 	// check if finite collision time exists
@@ -239,10 +239,10 @@ float vec2::will_collide_aabb(const vec2 &p1, const vec2 &p2, const vec2 &s1, co
 	return -1;
 }
 
-float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2, const vec2& v1, const vec2& v2)
+float vec2::willExitAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2, const vec2& v1, const vec2& v2)
 {
 	// check if they're already exited
-	if (!is_contain_aabb(p1, p2, s1, s2))
+	if (!isContainAABB(p1, p2, s1, s2))
 		return 0;
 
 	// check time required for each side to exit
@@ -267,15 +267,15 @@ float vec2::will_exit_aabb(const vec2& p1, const vec2& p2, const vec2& s1, const
 	return -1;
 }
 
-bool vec2::is_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2)
+bool vec2::isCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2)
 {
 	return (p2 - p1).lensq() <= (r1 + r2) * (r1 + r2);
 }
 
-float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float r2,
+float vec2::willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2,
 	const vec2 &v1, const vec2 &v2)
 {
-	if (is_collide_circle(p1, p2, r1, r2))
+	if (isCollideCircle(p1, p2, r1, r2))
 		return 0;
 
 	float a = (v2 - v1).lensq();
@@ -290,7 +290,7 @@ float vec2::will_collide_circle(const vec2& p1, const vec2& p2, float r1, float 
 
 	// WARNING: there is no imposed limit on x1, x2
 	float x1, x2;
-	int rts = quadratic_solve(a, b, c, x1, x2);
+	int rts = quadraticSolve(a, b, c, x1, x2);
 	if (rts == 0)
 		return -1;
 	if (rts == 1)
@@ -317,12 +317,12 @@ float vec2::will_collide_circle_line(const vec2& ct, const vec2& v, float r,
 	return std::min(t1, t2);
 }
 
-vec2 vec2::closest_point_on_circle(const vec2& ct, float r, const vec2& o)
+vec2 vec2::closestPointOnCircle(const vec2& ct, float r, const vec2& o)
 {
 	return ct + r * (o - ct).unit();
 }
 
-int vec2::quadratic_solve(float a, float b, float c, float& x1, float& x2)
+int vec2::quadraticSolve(float a, float b, float c, float& x1, float& x2)
 {
 	x1 = NAN;
 	x2 = NAN;

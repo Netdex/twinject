@@ -12,7 +12,7 @@ void th_di8_hook::bind(th_player* player)
 	instance = new th_di8_hook(player);
 
 	DirectInput8Hook di8_hk;
-	di8_hk.GetDeviceStateHook = di8_get_device_state_hook;
+	di8_hk.GetDeviceStateHook = di8GetDeviceStateHook;
 	Hook_DInput8_DirectInput8Create(di8_hk);
 }
 
@@ -33,27 +33,27 @@ void th_di8_hook::set_vk_data(BYTE *pData, BYTE *pActual)
 	}
 }
 
-HRESULT th_di8_hook::di8_get_device_state_hook(DirectInputDevice8Wrapper* lpDirectInput, DWORD cbData, LPVOID lpvData)
+HRESULT th_di8_hook::di8GetDeviceStateHook(DirectInputDevice8Wrapper* lpDirectInput, DWORD cbData, LPVOID lpvData)
 {
 	HRESULT result = lpDirectInput->DirectInputDevice8->GetDeviceState(cbData, inst()->di8_last_keys);
 	inst()->set_vk_data(inst()->di8_last_keys, (BYTE*)lpvData);
 	return result;
 }
 
-BYTE th_di8_hook::get_vk_state(BYTE vk)
+BYTE th_di8_hook::getVkState(BYTE vk)
 {
 	if (di8_key_mask[vk])
 		return di8_proxy_keys[vk];
 	return di8_last_keys[vk];
 }
 
-void th_di8_hook::set_vk_state(BYTE vk, BYTE state)
+void th_di8_hook::setVkState(BYTE vk, BYTE state)
 {
 	di8_proxy_keys[vk] = state;
 	di8_key_mask[vk] = true;
 }
 
-void th_di8_hook::reset_vk_state(BYTE vk)
+void th_di8_hook::resetVkState(BYTE vk)
 {
 	di8_proxy_keys[vk] = 0;
 	di8_key_mask[vk] = false;

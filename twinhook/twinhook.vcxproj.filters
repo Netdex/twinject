@@ -129,9 +129,6 @@
     <ClCompile Include="hook\th08_bullet_proc_hook.cpp">
       <Filter>Source Files\hook</Filter>
     </ClCompile>
-    <ClCompile Include="hook\th10_bullet_proc_hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
     <ClCompile Include="hook\th15_bullet_proc_hook.cpp">
       <Filter>Source Files\hook</Filter>
     </ClCompile>
@@ -158,6 +155,12 @@
     </ClCompile>
     <ClCompile Include="test\vec2_test.cpp">
       <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx\th_info_overlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control\th_player.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +227,6 @@
     <ClInclude Include="hook\th08_bullet_proc_hook.h">
       <Filter>Header Files\hook</Filter>
     </ClInclude>
-    <ClInclude Include="hook\th10_bullet_proc_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
     <ClInclude Include="hook\th15_bullet_proc_hook.h">
       <Filter>Header Files\hook</Filter>
     </ClInclude>
@@ -256,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="util\vec2.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx\th_info_overlay.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

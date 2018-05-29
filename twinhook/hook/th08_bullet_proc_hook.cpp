@@ -39,7 +39,7 @@ __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 	unsigned int addr;
 	__asm mov addr, eax
 
-	th08_bullet_proc_hook::vector_update_hook(addr, a1, a2, a3);
+	th08_bullet_proc_hook::vectorUpdateHook(addr, a1, a2, a3);
 
 	// return original value
 	int retval;
@@ -60,7 +60,7 @@ static void Hook_TH08_sub_410A70()
 		LOG("Detours: Failed to hook sub_410A70");
 }
 
-void th08_bullet_proc_hook::vector_update_hook(int retaddr, int a1, int a2, int a3)
+void th08_bullet_proc_hook::vectorUpdateHook(int retaddr, int a1, int a2, int a3)
 {
 	// HACK this might cause performance problems, also are we guaranteed a th08_player?
 	th_player *player =inst()->player;

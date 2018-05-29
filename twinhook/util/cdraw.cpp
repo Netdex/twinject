@@ -29,7 +29,7 @@ namespace cdraw
 		LOG("CDraw: initialized graphics primitives");
 	}
 
-	void fill_rect(float x, float y, float w, float h, D3DCOLOR Color)
+	void fillRect(float x, float y, float w, float h, D3DCOLOR Color)
 	{
 		if (!CDrawFlagInit) return;
 

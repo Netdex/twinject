@@ -37,9 +37,9 @@ public:
 	static void bind(th_player *player);
 	static th_di8_hook* inst();
 
-	BYTE get_vk_state(BYTE vk);
-	void set_vk_state(BYTE vk, BYTE state);
-	void reset_vk_state(BYTE vk);
+	BYTE getVkState(BYTE vk);
+	void setVkState(BYTE vk, BYTE state);
+	void resetVkState(BYTE vk);
 
-	static HRESULT di8_get_device_state_hook(DirectInputDevice8Wrapper *lpDirectInput, DWORD cbData, LPVOID lpvData);
+	static HRESULT di8GetDeviceStateHook(DirectInputDevice8Wrapper *lpDirectInput, DWORD cbData, LPVOID lpvData);
 };

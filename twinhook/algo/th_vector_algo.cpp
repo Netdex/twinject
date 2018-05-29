@@ -5,24 +5,24 @@
 #include "../util/cdraw.h"
 #include "../util/color.h"
 
-void th_vector_algo::on_tick()
+void th_vector_algo::onTick()
 {
 	th_di8_hook* di8 = th_di8_hook::inst();
 	if (!player->enabled) {
-		di8->reset_vk_state(DIK_LEFT);
-		di8->reset_vk_state(DIK_RIGHT);
-		di8->reset_vk_state(DIK_UP);
-		di8->reset_vk_state(DIK_DOWN);
-		di8->reset_vk_state(DIK_Z);
-		di8->reset_vk_state(DIK_LSHIFT);
-		di8->reset_vk_state(DIK_LCONTROL);
+		di8->resetVkState(DIK_LEFT);
+		di8->resetVkState(DIK_RIGHT);
+		di8->resetVkState(DIK_UP);
+		di8->resetVkState(DIK_DOWN);
+		di8->resetVkState(DIK_Z);
+		di8->resetVkState(DIK_LSHIFT);
+		di8->resetVkState(DIK_LCONTROL);
 		return;
 	}
 
-	di8->set_vk_state(DIK_Z, DIK_KEY_DOWN);			// fire continuously
-	di8->set_vk_state(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
+	di8->setVkState(DIK_Z, DIK_KEY_DOWN);			// fire continuously
+	di8->setVkState(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
 
-	entity plyr = player->get_plyr_ent();
+	entity plyr = player->getPlayerEntity();
 	vec2 guide, threat;
 	net_vector(plyr.p, vec2(), guide, threat);
 	vec2 net = guide + threat;
@@ -30,51 +30,51 @@ void th_vector_algo::on_tick()
 	if (abs(net.x) > BOT_ACTION_THRESHOLD)
 	{
 		if (net.x > 0) {
-			di8->set_vk_state(DIK_LEFT, DIK_KEY_DOWN);
-			di8->set_vk_state(DIK_RIGHT, DIK_KEY_UP);
+			di8->setVkState(DIK_LEFT, DIK_KEY_DOWN);
+			di8->setVkState(DIK_RIGHT, DIK_KEY_UP);
 		}
 		else
 		{
-			di8->set_vk_state(DIK_RIGHT, DIK_KEY_DOWN);
-			di8->set_vk_state(DIK_LEFT, DIK_KEY_UP);
+			di8->setVkState(DIK_RIGHT, DIK_KEY_DOWN);
+			di8->setVkState(DIK_LEFT, DIK_KEY_UP);
 		}
 	}
 	else
 	{
-		di8->set_vk_state(DIK_RIGHT, DIK_KEY_UP);
-		di8->set_vk_state(DIK_LEFT, DIK_KEY_UP);
+		di8->setVkState(DIK_RIGHT, DIK_KEY_UP);
+		di8->setVkState(DIK_LEFT, DIK_KEY_UP);
 	}
 	if (abs(net.y) > BOT_ACTION_THRESHOLD)
 	{
 		if (net.y > 0) {
-			di8->set_vk_state(DIK_UP, DIK_KEY_DOWN);
-			di8->set_vk_state(DIK_DOWN, DIK_KEY_UP);
+			di8->setVkState(DIK_UP, DIK_KEY_DOWN);
+			di8->setVkState(DIK_DOWN, DIK_KEY_UP);
 		}
 		else
 		{
-			di8->set_vk_state(DIK_DOWN, DIK_KEY_DOWN);
-			di8->set_vk_state(DIK_UP, DIK_KEY_UP);
+			di8->setVkState(DIK_DOWN, DIK_KEY_DOWN);
+			di8->setVkState(DIK_UP, DIK_KEY_UP);
 		}
 	}
 	else
 	{
-		di8->set_vk_state(DIK_DOWN, DIK_KEY_UP);
-		di8->set_vk_state(DIK_UP, DIK_KEY_UP);
+		di8->setVkState(DIK_DOWN, DIK_KEY_UP);
+		di8->setVkState(DIK_UP, DIK_KEY_UP);
 	}
 	if (abs(threat.x) > FOCUS_FORCE_THRESHOLD || abs(threat.y) > FOCUS_FORCE_THRESHOLD ||
 		(abs(threat.x) < ZERO_EPSILON && abs(threat.y) < ZERO_EPSILON))
 	{
-		di8->set_vk_state(DIK_LSHIFT, DIK_KEY_UP);
+		di8->setVkState(DIK_LSHIFT, DIK_KEY_UP);
 	}
 	else
 	{
-		di8->set_vk_state(DIK_LSHIFT, DIK_KEY_DOWN);
+		di8->setVkState(DIK_LSHIFT, DIK_KEY_DOWN);
 	}
 }
 
 void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 {
-	entity plyr = player->get_plyr_ent();
+	entity plyr = player->getPlayerEntity();
 	//vec2 boss = player->get_boss_loc();
 	if (player->render) {
 		// bullet markers
@@ -105,7 +105,7 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 
 		// player area
 
-		cdraw::fill_rect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
+		cdraw::fillRect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
 
 		//CDraw_Line(boss.x + th08_param::GAME_X_OFFSET, 0, boss.x + th08_param::GAME_X_OFFSET, (float)th08_param::WINDOW_HEIGHT, D3DCOLOR_ARGB(255, 255, 0, 0));
 	}
@@ -137,7 +137,7 @@ void th_vector_algo::net_vector(vec2 c, vec2 bs, vec2& guide, vec2& threat) cons
 		{
 			threat -= BOT_BULLET_PRIORITY * ac.unit() / ac.lensq();
 		}
-		else if (vec2::in_aabb(d, a, b))
+		else if (vec2::inAABB(d, a, b))
 		{
 			if (cd.zero())
 			{

@@ -30,19 +30,32 @@ const float BOT_POWERUP_MINY = 70;
 const float FOCUS_FORCE_THRESHOLD = 0.5f;			// default: 0.05
 
 /**
- * \brief Player algorithm using reactive vector dodging
+ * \brief Player algorithm using vector based reactive dodging, and virtual potential fields
  */
 class th_vector_algo : public th_algorithm
 {
 	
 
+	/**
+	 * \brief Determine the net force vector the player should head towards
+	 * \param c Position of center of player
+	 * \param bs Position of center of boss/target enemy
+	 * \param guide Returned guidance vector (attraction)
+	 * \param threat Returned threat vector (repulsion)
+	 */
 	void net_vector(vec2 c, vec2 bs, vec2& guide, vec2& threat) const;
+
+	/**
+	 * \brief Projection transformation for velocity prediction
+	 * \param x Component to transform
+	 * \return Component after transformation
+	 */
 	static float proj_transform(float x);
 
 public:
 	th_vector_algo(th_player *player) : th_algorithm(player) {}
 	~th_vector_algo() = default;
 
-	void on_tick() override;
+	void onTick() override;
 	void visualize(IDirect3DDevice9 *d3dDev) override;
 };

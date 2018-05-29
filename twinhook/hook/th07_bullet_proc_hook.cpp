@@ -7,7 +7,7 @@ th07_bullet_proc_hook *th07_bullet_proc_hook::instance = nullptr;
 sub_424290_t sub_424290_Original = (sub_424290_t)0x00424290;
 int __fastcall sub_424290_Hook(void *ecx)
 {
-	th07_bullet_proc_hook::vector_update_hook(ecx);
+	th07_bullet_proc_hook::vectorUpdateHook(ecx);
 	return sub_424290_Original(ecx);
 }
 
@@ -33,7 +33,7 @@ th07_bullet_proc_hook* th07_bullet_proc_hook::inst()
 	return instance;
 }
 
-void th07_bullet_proc_hook::vector_update_hook(void *ecx)
+void th07_bullet_proc_hook::vectorUpdateHook(void *ecx)
 {
 	th07_player *player = dynamic_cast<th07_player*>(inst()->player);
 	ASSERT(("wrong player type bound to hook", player));

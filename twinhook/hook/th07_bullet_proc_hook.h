@@ -15,5 +15,5 @@ public:
 	static void bind(th07_player *player);
 	static th07_bullet_proc_hook *inst();
 
-	static void vector_update_hook(void *ecx);
+	static void vectorUpdateHook(void *ecx);
 };
