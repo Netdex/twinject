@@ -50,9 +50,9 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 {
 	_B();
 	_D(D3DCOLOR_ARGB(255, 0, 255, 255), "TWINJECT [netdex]");
-	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "BULLET_COUNT: %d", bullets.size());
-	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "   BOT_STATE: %s", enabled ? "ENABLED" : "DISABLED");
-	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "         VIZ: %s", render ? "DETAILED" : "NONE");
+	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "  b p l #: %d %d %d", bullets.size(), powerups.size(), lasers.size());
+	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "bot state: %s", enabled ? "ENABLED" : "DISABLED");
+	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "viz state: %s", render ? "DETAILED" : "NONE");
 
 	if (algorithm)
 		algorithm->visualize(d3dDev);

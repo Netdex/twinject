@@ -93,10 +93,10 @@ void th_vo_algo::onTick()
 	float targetTicks[NUM_DIRS];
 	std::fill_n(targetTicks, NUM_DIRS, FLT_MAX);
 
-	for (auto powerup = player->powerups.begin(); powerup != player->powerups.end(); ++powerup)
+	for (auto p = player->powerups.begin(); p != player->powerups.end(); ++p)
 	{
 		// filter out unwanted powerups
-		if (powerup->me == 0 && powerup->p.y > 200) {
+		if (p->me == 0 && p->p.y > 200) {
 			for (int dir = 0; dir < NUM_DIRS; ++dir)
 			{
 				vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
@@ -104,21 +104,21 @@ void th_vo_algo::onTick()
 				if (hitCircle)
 				{
 					colTick = vec2::willCollideCircle(
-						plyr.p, powerup->p,
-						plyr.sz.x, powerup->sz.x,
+						plyr.p, p->p,
+						plyr.sz.x, p->sz.x,
 						pvel,
-						powerup->v
+						p->v
 					);
 				}
 				else
 				{
 					colTick = vec2::willCollideAABB(
 						plyr.p - plyr.sz / 2,
-						powerup->p - powerup->sz / 2,
+						p->p - p->sz / 2,
 						plyr.sz,
-						powerup->sz,
+						p->sz,
 						pvel,
-						powerup->v
+						p->v
 					);
 				}
 				if (colTick >= 0) {
@@ -390,6 +390,17 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				sprintf_s(buf, 16, "%d", i->me);
 				cdraw::text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), i->p.x, i->p.y, 700, 700);
 			}*/
+			for (auto b : player->powerups)
+			{
+				cdraw::rect(
+					th_param.GAME_X_OFFSET + b.p.x - b.sz.x / 2,
+					th_param.GAME_Y_OFFSET + b.p.y - b.sz.y / 2,
+					b.sz.x, b.sz.y, D3DCOLOR_ARGB(255, 255, 0, 0));
+				vec2 proj = b.p + b.v * 10;
+
+				cdraw::line(b.p.x + th_param.GAME_X_OFFSET, b.p.y + th_param.GAME_Y_OFFSET,
+					proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+			}
 
 			cdraw::fillRect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
@@ -414,6 +425,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				plyr.p.y - plyr.sz.y + th_param.GAME_Y_OFFSET, plyr.sz.x * 2, plyr.sz.y * 2,
 				D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
+		
 	}
 
 
@@ -446,7 +458,8 @@ bool th_vo_algo::calibTick()
 		th_di8_hook::inst()->resetVkState(DIK_DOWN);
 
 		// BUG why does LoLK do this differently
-		if (dynamic_cast<th15_player*>(player))
+		if (dynamic_cast<th15_player*>(player) 
+			|| dynamic_cast<th10_player*>(player) )
 			playerVel = plyr.p.x - calibStartX;
 		else
 			playerVel = calibStartX - plyr.p.x;

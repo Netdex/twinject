@@ -24,6 +24,7 @@ void th10_player::onBeginTick()
 {
 	this->doBulletPoll();
 	this->doEnemyPoll();
+	this->doPowerupPoll();
 }
 
 void th10_player::onAfterTick()
@@ -125,6 +126,37 @@ void th10_player::doEnemyPoll()
 			}
 			objBase = objNext;
 		} while (objNext);
+	}
+}
+
+void th10_player::doPowerupPoll()
+{
+	// Code adapted from TH10_Collision_Points by binvec 
+	// https://github.com/binvec/TH10_Collision_Points
+	// Thanks!
+
+	int base = *(int*)0x00477818;
+	if (!base) return;
+	int esi = base + 0x14;
+	int ebp = esi + 0x3b0;
+
+	for (int i = 0; i < 2000; i++)
+	{
+		int eax = *(int*)(ebp + 0x2c);
+		if (eax)
+		{
+			float x = *(float*)(ebp - 0x4);
+			float y = *(float*)ebp;
+			float dx = *(float*)(ebp - 0x4 + 0xc);
+			float dy = *(float*)(ebp + 0xc);
+			powerups.push_back({
+				vec2(x + th_param.GAME_WIDTH / 2, y),
+				vec2(dx, dy),
+				vec2(6, 6),
+				0
+			});
+		}
+		ebp += 0x3f0;
 	}
 }
 

@@ -20,6 +20,7 @@ public:
 private:
 	void doBulletPoll();
 	void doEnemyPoll();
+	void doPowerupPoll();
 
 	entity getPlayerEntity() override;
 };
