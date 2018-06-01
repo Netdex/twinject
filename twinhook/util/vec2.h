@@ -30,11 +30,15 @@ public:
 	float len() const;
 	bool zero() const;
 	bool nan() const;
+	vec2 rotate(float rad) const;
 	vec2 transform(float(*t)(float)) const;
 
+	static void aabbVert(const vec2 &p, const vec2 &s, std::vector<vec2> &vertices);
+	
 	static float dot(const vec2 &a, const vec2 &b);
 	static vec2 proj(const vec2 &a, const vec2 &b);
 	static vec2 perp(const vec2 &a, const vec2 &b);
+	
 
 	/**
 	 * \brief Determine the minimum component-wise vector
@@ -43,6 +47,7 @@ public:
 	 * \return The minimum component-wise vector
 	 */
 	static vec2 minv(const vec2 &a, const vec2 &b);
+	static vec2 minv(const std::vector<vec2> &vs);
 
 	/**
 	* \brief Determine the maximum component-wise vector
@@ -51,6 +56,7 @@ public:
 	* \return the minimum component-wise vector
 	*/
 	static vec2 maxv(const vec2 &a, const vec2 &b);
+	static vec2 maxv(const std::vector<vec2> &vs);
 
 	/**
 	 * \brief Determine if p is inside an AABB defined by a and b
@@ -139,7 +145,7 @@ public:
 	 * \param p2 The other endpoint of the line segment
 	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision
 	 */
-	static float will_collide_circle_line(const vec2 &ct, const vec2 &v, float r, 
+	static float willCollideCircleLine(const vec2 &ct, const vec2 &v, float r, 
 							const vec2 &p1, const vec2 &p2);
 	
 	/**
@@ -161,6 +167,15 @@ public:
 	 * \return Number of solutions (0, 1, 2)
 	 */
 	static int quadraticSolve(float a, float b, float c, float &x1, float &x2);
+
+	/**
+	 * \brief Check if the convex polygons defined by two point clouds collide via SAT. 
+	 * Behaviour is undefined if either polygon A or B are not strictly convex.
+	 * \param a Point cloud of convex polygon A
+	 * \param b Point cloud of convex polygon B
+	 * \return Whether convex polygons A and B collide
+	 */
+	static bool isCollideConvexPolygon(const std::vector<vec2> &a, const std::vector<vec2> &b);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);

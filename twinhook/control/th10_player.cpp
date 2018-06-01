@@ -1,13 +1,7 @@
 #include "stdafx.h"
 #include "th10_player.h"
-#include "directx/IDI8ADevice_Wrapper.h"
 #include "config/th_config.h"
 #include "hook/th_di8_hook.h"
-#include "util/cdraw.h"
-#include "gfx/di8_input_overlay.h"
-#include "algo/th_algorithm.h"
-#include "hook/th_d3d9_hook.h"
-#include "gfx/th_info_overlay.h"
 
 
 void th10_player::onInit()
@@ -20,11 +14,26 @@ void th10_player::onTick()
 	th_player::onTick();
 }
 
+float arcRad = 0;
 void th10_player::onBeginTick()
 {
 	this->doBulletPoll();
 	this->doEnemyPoll();
 	this->doPowerupPoll();
+	laser l = {
+		vec2(200, 200),
+		vec2(),
+		vec2(),
+		100,
+		5,
+		arcRad
+	};
+	l.ex = vec2(l.length, 0).rotate(l.ang);
+	arcRad += 0.01;
+	lasers.push_back(l);
+	// hack that expands OBB lasers into AABBs, which I 
+	// have already written functional collision predictor code for
+	tle.expand(lasers, bullets);
 }
 
 void th10_player::onAfterTick()

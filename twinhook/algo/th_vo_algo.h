@@ -1,5 +1,5 @@
 #pragma once
-#include "../control/th_player.h"
+#include "control/th_player.h"
 
 /* Visualization Constants */
 static const float VEC_FIELD_MIN_RESOLUTION = 8.f;

@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "keypress_detect.h"
 
 void keypress_detect::tick(const BYTE state[256], BYTE pressed[256])

@@ -2,7 +2,6 @@
 
 #include "../util/vec2.h"
 #include "../algo/th_algorithm.h"
-#include "../config/th_config.h"
 #include "../info/keypress_detect.h"
 
 /*
@@ -38,6 +37,18 @@ struct laser
 	float length;
 	float rad;			// perpendicular radius
 	float ang;			// angle
+
+	void laser::getVertices(std::vector<vec2>& vertices) const
+	{
+		vec2 points[] = {
+			vec2(0, rad), vec2(0, -rad),
+			vec2(length, rad), vec2(length, -rad)
+		};
+		for (int i = 0; i < 4; ++i)
+		{
+			vertices.push_back(points[i].rotate(ang) + p);
+		}
+	}
 };
 
 // game-specific addresses for common behaviour

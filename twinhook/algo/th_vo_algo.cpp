@@ -1,11 +1,11 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "th_vo_algo.h"
-#include "../control/th_player.h"
-#include "../hook/th_di8_hook.h"
-#include "../config/th_config.h"
-#include "../util/cdraw.h"
-#include "../util/color.h"
-#include "../control/th15_player.h"
+#include "control/th_player.h"
+#include "hook/th_di8_hook.h"
+#include "config/th_config.h"
+#include "util/cdraw.h"
+#include "util/color.h"
+#include "control/th15_player.h"
 #include "control/th10_player.h"
 
 void th_vo_algo::onBegin()
@@ -54,7 +54,7 @@ void th_vo_algo::onTick()
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
 			vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
-			float colTick;
+			float colTick; 
 			// TODO this hitCircle stuff is painful, replace with interfaces and impl
 			if (hitCircle) {
 				colTick = vec2::willCollideCircle(
@@ -221,8 +221,8 @@ void th_vo_algo::onTick()
 		if (DIR_KEYS[tarIdx][i])
 			di8->setVkState(DIR_KEYS[tarIdx][i], DIK_KEY_DOWN);
 
-	// deathbomb
-	// if the bot is going to die in the next frame, then bomb
+	// deathbomb if the bot is going to die in the next frame
+	// this is very dependant on the collision predictor being very accurate
 	if (collisionTicks[tarIdx] <= 1)
 	{
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
@@ -348,7 +348,26 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				th_param.GAME_Y_OFFSET + i->p.y - 3,
 				6, 6,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
+			std::vector<vec2> verts;
+			i->getVertices(verts);
+			for(auto j : verts)
+			{
+				cdraw::fillRect(
+					th_param.GAME_X_OFFSET + j.x - 2,
+					th_param.GAME_Y_OFFSET + j.y - 2,
+					4, 4,
+					D3DCOLOR_ARGB(255, 255, 0, 0)
+				);
+			}
 
+			vec2 lmin = vec2::minv(verts);
+			vec2 lmax = vec2::maxv(verts);
+			cdraw::rect(
+				th_param.GAME_X_OFFSET + lmin.x,
+				th_param.GAME_Y_OFFSET + lmin.y,
+				lmax.x - lmin.x, lmax.y - lmin.y,
+				D3DCOLOR_ARGB(255, 255, 0, 0)
+			);
 			// voodoo witchcraft magic
 
 			float rex = i->rad * (float)cos(M_PI / 2 + i->ang);
@@ -376,7 +395,10 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 					cdraw::rect((*i).p.x - 7 + th_param.GAME_X_OFFSET, (*i).p.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
 				}
 				else {
-					cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param.GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+					cdraw::rect(
+						(*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET, 
+						(*i).p.y - (*i).sz.y / 2 + th_param.GAME_Y_OFFSET, 
+						(*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
 				}
 				vec2 proj = (*i).p + (*i).v * 10;
 

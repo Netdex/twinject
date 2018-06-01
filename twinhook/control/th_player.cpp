@@ -5,6 +5,7 @@
 #include "hook/th_di8_hook.h"
 #include "directx/IDI8ADevice_Wrapper.h"
 #include "hook/th_d3d9_hook.h"
+#include "config/th_config.h"
 
 void th_player::onInit()
 {

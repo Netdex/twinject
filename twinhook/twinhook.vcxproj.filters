@@ -162,6 +162,9 @@
     <ClCompile Include="control\th_player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="strategy\th_laser_expander.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -258,6 +261,9 @@
       <Filter>Header Files\util</Filter>
     </ClInclude>
     <ClInclude Include="gfx\th_info_overlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="strategy\th_laser_expander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

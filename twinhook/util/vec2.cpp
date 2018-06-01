@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "vec2.h"
 
 vec2::vec2() : x(0), y(0)
@@ -149,9 +149,25 @@ bool vec2::nan() const
 	return isnan(x) || isnan(y);
 }
 
+vec2 vec2::rotate(float rad) const
+{
+	return vec2(
+		x * cos(rad) - y * sin(rad),
+		x * sin(rad) + y * cos(rad)
+	);
+}
+
 vec2 vec2::transform(float(*t)(float)) const
 {
 	return vec2(t(x), t(y));
+}
+
+void vec2::aabbVert(const vec2& p, const vec2& s, std::vector<vec2>& vertices)
+{
+	vertices.push_back(p);
+	vertices.push_back(vec2(p.x + s.x, p.y));
+	vertices.push_back(vec2(p.x, p.y + s.y));
+	vertices.push_back(vec2(p.x + s.x, p.y + s.y));
 }
 
 float vec2::dot(const vec2& a, const vec2& b)
@@ -174,9 +190,25 @@ vec2 vec2::minv(const vec2& a, const vec2& b)
 	return vec2(std::min(a.x, b.x), std::min(a.y, b.y));
 }
 
+vec2 vec2::minv(const std::vector<vec2>& vs)
+{
+	vec2 minvt(FLT_MAX, FLT_MAX);
+	for(vec2 v : vs)
+		minvt = minv(minvt, v);
+	return minvt;
+}
+
 vec2 vec2::maxv(const vec2& a, const vec2& b)
 {
 	return vec2(std::max(a.x, b.x), std::max(a.y, b.y));
+}
+
+vec2 vec2::maxv(const std::vector<vec2>& vs)
+{
+	vec2 maxvt(FLT_MIN, FLT_MIN);
+	for (vec2 v : vs)
+		maxvt = maxv(maxvt, v);
+	return maxvt;
 }
 
 bool vec2::inAABB(const vec2 &p, const vec2 &a, const vec2 &b)
@@ -298,7 +330,7 @@ float vec2::willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2
 	return std::min(x1, x2);
 }
 
-float vec2::will_collide_circle_line(const vec2& ct, const vec2& v, float r, 
+float vec2::willCollideCircleLine(const vec2& ct, const vec2& v, float r, 
 									const vec2& p1, const vec2& p2)
 {
 	// TODO this is not correct
@@ -347,4 +379,44 @@ int vec2::quadraticSolve(float a, float b, float c, float& x1, float& x2)
 	x1 = (-b - rtd) / (2 * a);
 	x2 = (-b + rtd) / (2 * a);
 	return 2;
+}
+
+bool vec2::isCollideConvexPolygon(const std::vector<vec2>& a, const std::vector<vec2>& b)
+{
+	std::vector<vec2> normals;
+	int sizeA = a.size();
+	int sizeB = b.size();
+
+	// calculate normals
+	for(int i = 0; i < sizeA; ++i)
+		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal());
+	for (int i = 0; i < sizeB; ++i)
+		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal());
+
+	// check for separating axis
+	for(vec2 n : normals)
+	{
+		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
+		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
+
+		// determine extents of projections onto axis
+		for(vec2 pa : a)
+		{
+			float pj = dot(pa, n);
+			minProjA = std::min(minProjA, pj);
+			maxProjA = std::max(maxProjA, pj);
+		}
+		for(vec2 pb : b)
+		{
+			float pj = dot(pb, n);
+			minProjB = std::min(minProjB, pj);
+			maxProjB = std::max(maxProjB, pj);
+		}
+
+		// determine if projection extents overlap
+		if (minProjB < minProjA && maxProjB < minProjA 
+		 || minProjB > maxProjA && maxProjB > maxProjA)
+			return false;
+	}
+	return true;
 }

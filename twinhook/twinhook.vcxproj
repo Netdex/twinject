@@ -72,6 +72,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,6 +109,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="control\th_player.cpp" />
     <ClCompile Include="gfx\th_info_overlay.cpp" />
+    <ClCompile Include="strategy\th_laser_expander.cpp" />
     <ClCompile Include="util\cdraw.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -161,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gfx\th_info_overlay.h" />
+    <ClInclude Include="strategy\th_laser_expander.h" />
     <ClInclude Include="util\cdraw.h" />
     <ClInclude Include="util\color.h" />
     <ClInclude Include="util\detour.h" />
