@@ -179,9 +179,11 @@ void th10_player::doLaserPoll()
 			float arc = *(float*)(esi + 0x3c);
 			float h = *(float*)(esi + 0x40);
 			float w = *(float*)(esi + 0x44);
+			float dx = *(float*)(esi + 0x24 + 0xc);
+			float dy = *(float*)(esi + 0x28 + 0xc);
 			lasers.push_back({
 				vec2(x + th_param.GAME_WIDTH / 2,y),
-				vec2(),
+				vec2(dx, dy),
 				vec2(h, 0).rotate(arc),
 				h, w / 4, arc
 			});

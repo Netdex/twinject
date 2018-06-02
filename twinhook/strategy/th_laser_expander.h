@@ -4,13 +4,16 @@
 
 class th_laser_expander
 {
-	float maxDimensionSize;
+	float minSz;
+	float maxSz;
+	float maxSplits;
 public:
-	th_laser_expander(float maxDimensionSize) : maxDimensionSize(maxDimensionSize) {}
+	th_laser_expander(float minDimensionSize, float maxDimensionSize, float maxSplits) 
+		: minSz(minDimensionSize), maxSz(maxDimensionSize), maxSplits(maxSplits) {}
 
 	void expand(const std::vector<laser> &lasers, std::vector<entity> &bullets) const;
 
 private:
-	void quadtreeDivide(const std::vector<vec2> &laserVertices, 
-		const vec2 &p, const vec2 &s, std::vector<entity> &bullets) const;
+	void quadtreeDivide(const laser &laser, const std::vector<vec2> &laserVertices,
+		const vec2 &p, const vec2 &s, std::vector<entity> &bullets, int splits) const;
 };

@@ -6,7 +6,7 @@ class th10_player : public th_player
 {
 	th_laser_expander tle;
 public:
-	th10_player() : th_player(gs_addr{ (uint8_t*)0x477834,(uint8_t*)0x474E5C }), tle(30) {}
+	th10_player() : th_player(gs_addr{ (uint8_t*)0x477834,(uint8_t*)0x474E5C }), tle(10, 30, 6) {}
 	~th10_player() = default;
 
 	void onInit() override;

@@ -329,6 +329,10 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				6, 6,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 
+			vec2 proj = (*i).p + (*i).v * 10;
+			cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
+				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 255, 0, 0));
+			
 			// voodoo witchcraft magic
 
 			float rex = i->rad * (float)cos(M_PI / 2 + i->ang);
