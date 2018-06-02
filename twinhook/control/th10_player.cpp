@@ -115,11 +115,12 @@ void th10_player::doEnemyPoll()
 					float y = *(float*)(objAddr + 0x30);
 					float w = *(float*)(objAddr + 0xb8);
 					float h = *(float*)(objAddr + 0xbc);
-
+					float dx = *(float*)(objAddr + 0x2c + 0xc);
+					float dy = *(float*)(objAddr + 0x30 + 0xc);
 					bullets.push_back({
-						vec2(x + th_param.GAME_WIDTH / 2,y),
-						vec2(),
-						vec2(w,h),
+						vec2(x + th_param.GAME_WIDTH / 2, y),
+						vec2(dx, dy),
+						vec2(w, h),
 						0
 					});
 				}
@@ -182,7 +183,7 @@ void th10_player::doLaserPoll()
 			float dx = *(float*)(esi + 0x24 + 0xc);
 			float dy = *(float*)(esi + 0x28 + 0xc);
 			lasers.push_back({
-				vec2(x + th_param.GAME_WIDTH / 2,y),
+				vec2(x + th_param.GAME_WIDTH / 2, y),
 				vec2(dx, dy),
 				vec2(h, 0).rotate(arc),
 				h, w / 4, arc
