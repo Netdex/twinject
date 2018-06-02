@@ -23,7 +23,7 @@ void th15_player::onTick()
 
 void th15_player::onBeginTick()
 {
-
+	tle.expand(lasers, bullets);
 }
 
 void th15_player::onAfterTick()
@@ -77,7 +77,7 @@ entity th15_player::getPlayerEntity()
 				*(float*)(plyrAddr + 0x618) + th_param.GAME_WIDTH / 2,
 				*(float*)(plyrAddr + 0x61C)),
 			vec2(),
-			size,
+			size * 2,
 			0
 		};
 		return e;

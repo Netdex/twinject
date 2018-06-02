@@ -21,7 +21,7 @@ void th_laser_expander::quadtreeDivide(const std::vector<vec2>& laserVertices,
 	if (!vec2::isCollideConvexPolygon(laserVertices, vertices))
 		return;
 
-	if (std::max(s.x, s.y) <= maxDimensionSize) {
+	if (std::min(s.x, s.y) <= maxDimensionSize) {
 		entity newEntity = {
 			p + s / 2, vec2(), s, 0
 		};

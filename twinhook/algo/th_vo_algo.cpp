@@ -54,12 +54,12 @@ void th_vo_algo::onTick()
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
 			vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
-			float colTick; 
+			float colTick;
 			// TODO this hitCircle stuff is painful, replace with interfaces and impl
 			if (hitCircle) {
 				colTick = vec2::willCollideCircle(
 					plyr.p, bullet->p,
-					plyr.sz.x, bullet->sz.y,
+					plyr.sz.x / 2, bullet->sz.x / 2,
 					pvel,
 					bullet->v
 				);
@@ -105,7 +105,7 @@ void th_vo_algo::onTick()
 				{
 					colTick = vec2::willCollideCircle(
 						plyr.p, p->p,
-						plyr.sz.x, p->sz.x,
+						plyr.sz.x / 2, p->sz.x / 2,
 						pvel,
 						p->v
 					);
@@ -132,23 +132,12 @@ void th_vo_algo::onTick()
 	for (int dir = 1; dir < NUM_DIRS; ++dir)
 	{
 		vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
-		float t;
-		if (hitCircle)
-		{
-			t = vec2::willExitAABB(
-				vec2(0, 0), plyr.p - plyr.sz,
-				vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), plyr.sz * 2,
-				vec2(), pvel
-			);
-		}
-		else
-		{
-			t = vec2::willExitAABB(
-				vec2(0, 0), plyr.p - plyr.sz / 2,
-				vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), plyr.sz,
-				vec2(), pvel
-			);
-		}
+		float t = vec2::willExitAABB(
+			vec2(0, 0), plyr.p - plyr.sz / 2,
+			vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), plyr.sz,
+			vec2(), pvel
+		);
+
 
 		if (t >= 0) {
 			if (t < collisionTicks[dir])
@@ -246,21 +235,12 @@ float th_vo_algo::minStaticCollideTick(
 	for (auto bullet = bullets.begin(); bullet != bullets.end(); ++bullet)
 	{
 		float colTick;
-		if (hitCircle) {
-			colTick = vec2::willCollideAABB(
-				p, bullet->p - bullet->sz,
-				s, bullet->sz * 2,
-				vec2(), bullet->v
-			);
-		}
-		else
-		{
-			colTick = vec2::willCollideAABB(
-				p, bullet->p - bullet->sz / 2,
-				s, bullet->sz,
-				vec2(), bullet->v
-			);
-		}
+		colTick = vec2::willCollideAABB(
+			p, bullet->p - bullet->sz / 2,
+			s, bullet->sz,
+			vec2(), bullet->v
+		);
+
 		if (colTick >= 0) {
 			minTick = std::min(colTick, minTick);
 			collided.push_back(*bullet);
@@ -348,26 +328,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				th_param.GAME_Y_OFFSET + i->p.y - 3,
 				6, 6,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
-			std::vector<vec2> verts;
-			i->getVertices(verts);
-			for(auto j : verts)
-			{
-				cdraw::fillRect(
-					th_param.GAME_X_OFFSET + j.x - 2,
-					th_param.GAME_Y_OFFSET + j.y - 2,
-					4, 4,
-					D3DCOLOR_ARGB(255, 255, 0, 0)
-				);
-			}
 
-			vec2 lmin = vec2::minv(verts);
-			vec2 lmax = vec2::maxv(verts);
-			cdraw::rect(
-				th_param.GAME_X_OFFSET + lmin.x,
-				th_param.GAME_Y_OFFSET + lmin.y,
-				lmax.x - lmin.x, lmax.y - lmin.y,
-				D3DCOLOR_ARGB(255, 255, 0, 0)
-			);
 			// voodoo witchcraft magic
 
 			float rex = i->rad * (float)cos(M_PI / 2 + i->ang);
@@ -385,69 +346,41 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y + rey,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 		}
-		// dependant on hit circle vs hit box
-		if (!hitCircle) {
-			// bullet markers
-			for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
-			{
-				if ((*i).me)
-				{
-					cdraw::rect((*i).p.x - 7 + th_param.GAME_X_OFFSET, (*i).p.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
-				}
-				else {
-					cdraw::rect(
-						(*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET, 
-						(*i).p.y - (*i).sz.y / 2 + th_param.GAME_Y_OFFSET, 
-						(*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
-				}
-				vec2 proj = (*i).p + (*i).v * 10;
 
-				cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
-					proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-			}
-
-			/*for(auto i = player->powerups.begin(); i != player->powerups.end(); ++i)
-			{
-				char buf[16];
-				sprintf_s(buf, 16, "%d", i->me);
-				cdraw::text(buf, D3DCOLOR_ARGB(255, 255, 255, 255), i->p.x, i->p.y, 700, 700);
-			}*/
-			for (auto b : player->powerups)
-			{
-				cdraw::rect(
-					th_param.GAME_X_OFFSET + b.p.x - b.sz.x / 2,
-					th_param.GAME_Y_OFFSET + b.p.y - b.sz.y / 2,
-					b.sz.x, b.sz.y, D3DCOLOR_ARGB(255, 255, 0, 0));
-				vec2 proj = b.p + b.v * 10;
-
-				cdraw::line(b.p.x + th_param.GAME_X_OFFSET, b.p.y + th_param.GAME_Y_OFFSET,
-					proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-			}
-
-			cdraw::fillRect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 4, 4, D3DCOLOR_ARGB(255, 0, 255, 0));
-		}
-		else
+		// bullet markers
+		for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
 		{
-			for (auto b = player->bullets.begin(); b != player->bullets.end(); ++b)
+			if ((*i).me)
 			{
-				// note that bullets are actually circles
-				/*cdraw::circle(th_param.GAME_X_OFFSET + b->p.x,
-				th_param.GAME_Y_OFFSET + b->p.y, b->sz.x, 8, D3DCOLOR_ARGB(255, 0, 255, 0));*/
-				cdraw::rect(
-					th_param.GAME_X_OFFSET + b->p.x - b->sz.x,
-					th_param.GAME_Y_OFFSET + b->p.y - b->sz.y,
-					b->sz.x * 2, b->sz.y * 2, D3DCOLOR_ARGB(255, 255, 0, 0));
-				vec2 proj = (*b).p + (*b).v * 10;
-
-				cdraw::line((*b).p.x + th_param.GAME_X_OFFSET, (*b).p.y + th_param.GAME_Y_OFFSET,
-					proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+				cdraw::rect((*i).p.x - 7 + th_param.GAME_X_OFFSET, (*i).p.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
 			}
-			cdraw::fillRect(
-				plyr.p.x - plyr.sz.x + th_param.GAME_X_OFFSET,
-				plyr.p.y - plyr.sz.y + th_param.GAME_Y_OFFSET, plyr.sz.x * 2, plyr.sz.y * 2,
-				D3DCOLOR_ARGB(255, 0, 255, 0));
+			else {
+				cdraw::rect(
+					(*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET,
+					(*i).p.y - (*i).sz.y / 2 + th_param.GAME_Y_OFFSET,
+					(*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+			}
+			vec2 proj = (*i).p + (*i).v * 10;
+
+			cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
+				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
-		
+
+		for (auto b : player->powerups)
+		{
+			cdraw::rect(
+				th_param.GAME_X_OFFSET + b.p.x - b.sz.x / 2,
+				th_param.GAME_Y_OFFSET + b.p.y - b.sz.y / 2,
+				b.sz.x, b.sz.y, D3DCOLOR_ARGB(255, 255, 0, 0));
+			vec2 proj = b.p + b.v * 10;
+
+			cdraw::line(b.p.x + th_param.GAME_X_OFFSET, b.p.y + th_param.GAME_Y_OFFSET,
+				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
+		}
+		cdraw::fillRect(
+			plyr.p.x - plyr.sz.x / 2 + th_param.GAME_X_OFFSET,
+			plyr.p.y - plyr.sz.y / 2 + th_param.GAME_Y_OFFSET,
+			plyr.sz.x, plyr.sz.y, D3DCOLOR_ARGB(255, 0, 255, 0));
 	}
 
 
@@ -480,8 +413,8 @@ bool th_vo_algo::calibTick()
 		th_di8_hook::inst()->resetVkState(DIK_DOWN);
 
 		// BUG why does LoLK do this differently
-		if (dynamic_cast<th15_player*>(player) 
-			|| dynamic_cast<th10_player*>(player) )
+		if (dynamic_cast<th15_player*>(player)
+			|| dynamic_cast<th10_player*>(player))
 			playerVel = plyr.p.x - calibStartX;
 		else
 			playerVel = calibStartX - plyr.p.x;

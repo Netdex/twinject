@@ -42,7 +42,7 @@ int __declspec(naked) __stdcall sub_455D00_hook(int pPos, int a3)
 			// such that the middle of the screen is 0
 			vec2(*(float*)pPos + th_param.GAME_WIDTH / 2, *(float*)(pPos + 4)),
 			vec2(*(float*)(pPos + (3140 - 3128)), *(float*)(pPos + (3144 - 3128))),
-			vec2(fRadius, fRadius),
+			vec2(fRadius * 2, fRadius * 2),
 			0
 		};
 		th15_bullet_proc_hook::inst()->player->bullets.push_back(e);

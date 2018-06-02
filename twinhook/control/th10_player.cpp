@@ -20,17 +20,8 @@ void th10_player::onBeginTick()
 	this->doBulletPoll();
 	this->doEnemyPoll();
 	this->doPowerupPoll();
-	laser l = {
-		vec2(200, 200),
-		vec2(),
-		vec2(),
-		100,
-		5,
-		arcRad
-	};
-	l.ex = vec2(l.length, 0).rotate(l.ang);
-	arcRad += 0.01;
-	lasers.push_back(l);
+	this->doLaserPoll();
+
 	// hack that expands OBB lasers into AABBs, which I 
 	// have already written functional collision predictor code for
 	tle.expand(lasers, bullets);
@@ -166,6 +157,36 @@ void th10_player::doPowerupPoll()
 			});
 		}
 		ebp += 0x3f0;
+	}
+}
+
+void th10_player::doLaserPoll()
+{
+	// Code adapted from TH10_Collision_Points by binvec 
+	// https://github.com/binvec/TH10_Collision_Points
+	// Thanks!
+
+	int base = *(int*)0x0047781C;
+	if (!base) return;
+	int ebx;
+	int esi = *(int*)(base + 0x18);
+	if (esi)
+	{
+		do{
+			ebx = *(int*)(esi + 0x8);
+			float x = *(float*)(esi + 0x24);
+			float y = *(float*)(esi + 0x28);
+			float arc = *(float*)(esi + 0x3c);
+			float h = *(float*)(esi + 0x40);
+			float w = *(float*)(esi + 0x44);
+			lasers.push_back({
+				vec2(x + th_param.GAME_WIDTH / 2,y),
+				vec2(),
+				vec2(h, 0).rotate(arc),
+				h, w / 4, arc
+			});
+			esi = ebx;
+		}while(ebx);
 	}
 }
 
