@@ -144,7 +144,7 @@ void th10_player::doPowerupPoll()
 	for (int i = 0; i < 2000; i++)
 	{
 		int eax = *(int*)(ebp + 0x2c);
-		if (eax)
+		if (eax == 1)
 		{
 			float x = *(float*)(ebp - 0x4);
 			float y = *(float*)ebp;
