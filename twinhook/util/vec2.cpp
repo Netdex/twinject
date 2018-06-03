@@ -420,7 +420,8 @@ bool vec2::isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b)
 	return true;
 }
 
-float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va, const std::vector<vec2>& b, vec2 vb)
+float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va, 
+	const std::vector<vec2>& b, vec2 vb)
 {
 	std::vector<vec2> normals;
 	int sizeA = a.size();
@@ -439,9 +440,9 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va, const std::vecto
 	{
 		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
 		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
-
-		float vAxisA = dot(va, n);
-		float vAxisB = dot(vb, n);
+		vec2 normn = n.unit();
+		float vAxisA = dot(va, normn);
+		float vAxisB = dot(vb, normn);
 
 		// determine extents of projections onto axis
 		for (vec2 pa : a)

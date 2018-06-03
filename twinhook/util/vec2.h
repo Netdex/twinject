@@ -32,13 +32,12 @@ public:
 	bool nan() const;
 	vec2 rotate(float rad) const;
 	vec2 transform(float(*t)(float)) const;
-
-	static void aabbVert(const vec2 &p, const vec2 &s, std::vector<vec2> &vertices);
 	
 	static float dot(const vec2 &a, const vec2 &b);
 	static vec2 proj(const vec2 &a, const vec2 &b);
 	static vec2 perp(const vec2 &a, const vec2 &b);
 	
+	static void aabbVert(const vec2 &p, const vec2 &s, std::vector<vec2> &vertices);
 
 	/**
 	 * \brief Determine the minimum component-wise vector
