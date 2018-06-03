@@ -20,7 +20,7 @@ void th_laser_expander::quadtreeDivide(const laser &laser, const std::vector<vec
 
 	std::vector<vec2> vertices;
 	vec2::aabbVert(p, s, vertices);
-	if (!vec2::isCollideConvexPolygon(laserVertices, vertices))
+	if (!vec2::isCollideSAT(laserVertices, vertices))
 		return;
 
 	if (std::max(s.x, s.y) <= maxSz || std::min(s.x, s.y) <= minSz) {

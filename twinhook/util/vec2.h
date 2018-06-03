@@ -175,7 +175,24 @@ public:
 	 * \param b Point cloud of convex polygon B
 	 * \return Whether convex polygons A and B collide
 	 */
-	static bool isCollideConvexPolygon(const std::vector<vec2> &a, const std::vector<vec2> &b);
+	static bool isCollideSAT(const std::vector<vec2> &a, const std::vector<vec2> &b);
+
+	/**
+	 * \brief Check if the convex polygons defined by two point clouds will collide via 
+	 * modified SAT.
+	 * \param a Point cloud of convex polygon A
+	 * \param va Velocity of polygon A
+	 * \param b Point cloud of convex polygon B
+	 * \param vb Velocity of polygon B
+	 * \return 0 if already collided, <0 if will never collide, otherwise the number 
+	 * of frames until collision.
+	 */
+	static float willCollideSAT(const std::vector<vec2> &a, vec2 va,
+		const std::vector<vec2> &b, vec2 vb);
+
+	static bool isOverlapInterval(float minA, float maxA, float minB, float maxB);
+	static float willOverlapInterval(float minA, float maxA, float va,
+		float minB, float maxB, float vb);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);

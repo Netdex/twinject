@@ -12,13 +12,13 @@ vec2::vec2(float x, float y) : x(x), y(y)
 
 vec2::vec2(const vec2& other)
 	: x(other.x),
-	y(other.y)
+	  y(other.y)
 {
 }
 
 vec2::vec2(vec2&& other) noexcept
 	: x(other.x),
-	y(other.y)
+	  y(other.y)
 {
 }
 
@@ -157,7 +157,7 @@ vec2 vec2::rotate(float rad) const
 	);
 }
 
-vec2 vec2::transform(float(*t)(float)) const
+vec2 vec2::transform(float (*t)(float)) const
 {
 	return vec2(t(x), t(y));
 }
@@ -193,7 +193,7 @@ vec2 vec2::minv(const vec2& a, const vec2& b)
 vec2 vec2::minv(const std::vector<vec2>& vs)
 {
 	vec2 minvt(FLT_MAX, FLT_MAX);
-	for(vec2 v : vs)
+	for (vec2 v : vs)
 		minvt = minv(minvt, v);
 	return minvt;
 }
@@ -211,14 +211,14 @@ vec2 vec2::maxv(const std::vector<vec2>& vs)
 	return maxvt;
 }
 
-bool vec2::inAABB(const vec2 &p, const vec2 &a, const vec2 &b)
+bool vec2::inAABB(const vec2& p, const vec2& a, const vec2& b)
 {
 	vec2 topleft = minv(a, b);
 	vec2 botright = maxv(a, b);
 	return p.x >= topleft.x && p.x <= botright.x && p.y >= topleft.y && p.y <= botright.y;
 }
 
-bool vec2::isCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2)
+bool vec2::isCollideAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2)
 {
 	return p1.x <= p2.x + s2.x
 		&& p1.x + s1.x >= p2.x
@@ -234,8 +234,8 @@ bool vec2::isContainAABB(const vec2& p1, const vec2& p2, const vec2& s1, const v
 		&& p2.y + s2.y <= p1.y + s1.y;
 }
 
-float vec2::willCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
-	const vec2 &v1, const vec2 &v2)
+float vec2::willCollideAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2,
+                            const vec2& v1, const vec2& v2)
 {
 	// BUG this implementation is way too inefficient
 
@@ -250,7 +250,7 @@ float vec2::willCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, cons
 	if (p1.y < p2.y && v2.y > v1.y || p1.y > p2.y && v2.y < v1.y)
 		return -1;*/
 
-		// check time required until collision for each side
+	// check time required until collision for each side
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
 	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
@@ -305,7 +305,7 @@ bool vec2::isCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2)
 }
 
 float vec2::willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2,
-	const vec2 &v1, const vec2 &v2)
+                              const vec2& v1, const vec2& v2)
 {
 	if (isCollideCircle(p1, p2, r1, r2))
 		return 0;
@@ -314,7 +314,7 @@ float vec2::willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2
 	float b = 2 * dot(p2 - p1, v2 - v1);
 	float c = (p2 - p1).lensq() - (r1 + r2) * (r1 + r2);
 
-	float disc = b * b - 4 * a*c;
+	float disc = b * b - 4 * a * c;
 	if (disc < 0)
 	{
 		return -1;
@@ -330,21 +330,21 @@ float vec2::willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2
 	return std::min(x1, x2);
 }
 
-float vec2::willCollideCircleLine(const vec2& ct, const vec2& v, float r, 
-									const vec2& p1, const vec2& p2)
+float vec2::willCollideCircleLine(const vec2& ct, const vec2& v, float r,
+                                  const vec2& p1, const vec2& p2)
 {
 	// TODO this is not correct
 	float a = p1.y - p2.y;
 	float b = p2.x - p1.x;
-	float c = (p1.x - p2.x)*p1.y + (p2.y - p1.y)*p1.x;
+	float c = (p1.x - p2.x) * p1.y + (p2.y - p1.y) * p1.x;
 
-	float bn = a * a + 2 * a*b + b * b;
+	float bn = a * a + 2 * a * b + b * b;
 	float d = sqrt(
-		a*a*a*a*r*r + 2 * a*a*a*b*r*r + 2 * a*a*b*b*r*r + 2 * a*b*b*b*r*r + b * b*b*b*r*r);
-	float sh = a * b*ct.x - a * b*ct.y - a * c - b * b*ct.y - b * c;
+		a * a * a * a * r * r + 2 * a * a * a * b * r * r + 2 * a * a * b * b * r * r + 2 * a * b * b * b * r * r + b * b * b * b * r * r);
+	float sh = a * b * ct.x - a * b * ct.y - a * c - b * b * ct.y - b * c;
 
-	float t1 = (-a * a*ct.x - d - sh) / bn;
-	float t2 = (-a * a*ct.x + d - sh) / bn;
+	float t1 = (-a * a * ct.x - d - sh) / bn;
+	float t2 = (-a * a * ct.x + d - sh) / bn;
 
 	return std::min(t1, t2);
 }
@@ -381,32 +381,32 @@ int vec2::quadraticSolve(float a, float b, float c, float& x1, float& x2)
 	return 2;
 }
 
-bool vec2::isCollideConvexPolygon(const std::vector<vec2>& a, const std::vector<vec2>& b)
+bool vec2::isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b)
 {
 	std::vector<vec2> normals;
 	int sizeA = a.size();
 	int sizeB = b.size();
 
 	// calculate normals
-	for(int i = 0; i < sizeA; ++i)
+	for (int i = 0; i < sizeA; ++i)
 		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal());
 	for (int i = 0; i < sizeB; ++i)
 		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal());
 
 	// check for separating axis
-	for(vec2 n : normals)
+	for (vec2 n : normals)
 	{
 		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
 		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
 
 		// determine extents of projections onto axis
-		for(vec2 pa : a)
+		for (vec2 pa : a)
 		{
 			float pj = dot(pa, n);
 			minProjA = std::min(minProjA, pj);
 			maxProjA = std::max(maxProjA, pj);
 		}
-		for(vec2 pb : b)
+		for (vec2 pb : b)
 		{
 			float pj = dot(pb, n);
 			minProjB = std::min(minProjB, pj);
@@ -414,9 +414,98 @@ bool vec2::isCollideConvexPolygon(const std::vector<vec2>& a, const std::vector<
 		}
 
 		// determine if projection extents overlap
-		if (minProjB < minProjA && maxProjB < minProjA 
-		 || minProjB > maxProjA && maxProjB > maxProjA)
+		if (!isOverlapInterval(minProjA, maxProjA, minProjB, maxProjB))
 			return false;
 	}
 	return true;
+}
+
+float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va, const std::vector<vec2>& b, vec2 vb)
+{
+	std::vector<vec2> normals;
+	int sizeA = a.size();
+	int sizeB = b.size();
+
+	// calculate normals
+	for (int i = 0; i < sizeA; ++i)
+		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal());
+	for (int i = 0; i < sizeB; ++i)
+		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal());
+
+	float maxTicks = FLT_MIN;
+
+	// check for separating axis
+	for (vec2 n : normals)
+	{
+		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
+		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
+
+		float vAxisA = dot(va, n);
+		float vAxisB = dot(vb, n);
+
+		// determine extents of projections onto axis
+		for (vec2 pa : a)
+		{
+			float pj = dot(pa, n);
+			minProjA = std::min(minProjA, pj);
+			maxProjA = std::max(maxProjA, pj);
+		}
+		for (vec2 pb : b)
+		{
+			float pj = dot(pb, n);
+			minProjB = std::min(minProjB, pj);
+			maxProjB = std::max(maxProjB, pj);
+		}
+
+		float colTicks = willOverlapInterval(minProjA, maxProjA, vAxisA, minProjB, maxProjB, vAxisB);
+		maxTicks = std::max(maxTicks, colTicks);
+	}
+	return maxTicks;
+}
+
+bool vec2::isOverlapInterval(float minA, float maxA, float minB, float maxB)
+{
+	return !(minB < minA && maxB < minA || minB > maxA && maxB > maxA);
+}
+
+float vec2::willOverlapInterval(float minA, float maxA, float va, float minB, float maxB, float vb)
+{
+	// TODO code requires verification
+
+	// check if already colliding
+	if (isOverlapInterval(minA, maxA, minB, maxB))
+		return 0;
+	// check if at least one interval is not moving
+	if (va == 0 || vb == 0)
+		return -1;
+
+	/*
+	 * Now, it is guaranteed that interval A and B are disjoint and moving. 
+	 * We take the right edge of the leftmost interval and the left edge of the 
+	 * rightmost interval and check when they collide.
+	 * 
+	 * |== L ==| --->     <- |==== R ====|
+	 */
+	float maxL, minR;
+	float vl, vr;
+	if (minA < minB)
+	{
+		// A is left interval
+		maxL = maxA;
+		minR = minB;
+		vl = va;
+		vr = vb;
+	}
+	else
+	{
+		// B is left interval
+		maxL = maxB;
+		minR = minA;
+		vl = vb;
+		vr = va;
+	}
+
+	// assume left interval is static, and right interval is moving
+	float relv = vl - vr;
+	return (minR - maxL) / relv;
 }
