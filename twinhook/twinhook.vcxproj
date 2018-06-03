@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="control\th_player.cpp" />
     <ClCompile Include="gfx\th_info_overlay.cpp" />
+    <ClCompile Include="patch\th10_patch_autobomb.cpp" />
     <ClCompile Include="strategy\th_laser_expander.cpp" />
     <ClCompile Include="util\cdraw.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gfx\th_info_overlay.h" />
+    <ClInclude Include="patch\th10_patch_autobomb.h" />
     <ClInclude Include="strategy\th_laser_expander.h" />
     <ClInclude Include="util\cdraw.h" />
     <ClInclude Include="util\color.h" />

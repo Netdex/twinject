@@ -162,6 +162,9 @@
     <ClCompile Include="strategy\th_laser_expander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="patch\th10_patch_autobomb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -258,6 +261,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="strategy\th_laser_expander.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="patch\th10_patch_autobomb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
