@@ -81,9 +81,6 @@
     <ClCompile Include="info\keypress_detect.cpp">
       <Filter>Source Files\info</Filter>
     </ClCompile>
-    <ClCompile Include="algo\th_ann_algo.cpp">
-      <Filter>Source Files\algo</Filter>
-    </ClCompile>
     <ClCompile Include="algo\th_vector_algo.cpp">
       <Filter>Source Files\algo</Filter>
     </ClCompile>
@@ -175,9 +172,6 @@
     </ClInclude>
     <ClInclude Include="info\keypress_detect.h">
       <Filter>Header Files\info</Filter>
-    </ClInclude>
-    <ClInclude Include="algo\th_ann_algo.h">
-      <Filter>Header Files\algo</Filter>
     </ClInclude>
     <ClInclude Include="algo\th_vector_algo.h">
       <Filter>Header Files\algo</Filter>

@@ -10,7 +10,6 @@
 #include "algo/th_vo_algo.h"
 #include "control/th15_player.h"
 #include "hook/th15_bullet_proc_hook.h"
-#include "algo/th_ann_algo.h"
 #include "control/th10_player.h"
 
 /**

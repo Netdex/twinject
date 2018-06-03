@@ -10,12 +10,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject", "twinject\twinje
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinhook", "twinhook\twinhook.vcxproj", "{A47B2FB1-6209-46DC-AA46-17F03164F7D8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject-train", "twinject-train\twinject-train.vcxproj", "{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject-sample-verify", "twinject-sample-verify\twinject-sample-verify.vcxproj", "{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject-train-linux", "twinject-train-linux\twinject-train-linux.vcxproj", "{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -42,34 +36,6 @@ Global
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8}.Release|x64.ActiveCfg = Release|Win32
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8}.Release|x86.ActiveCfg = Release|Win32
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8}.Release|x86.Build.0 = Release|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Debug|ARM.ActiveCfg = Debug|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Debug|x64.ActiveCfg = Debug|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Debug|x86.ActiveCfg = Debug|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Debug|x86.Build.0 = Debug|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Release|ARM.ActiveCfg = Release|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Release|x64.ActiveCfg = Release|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Release|x86.ActiveCfg = Release|Win32
-		{C9D239C3-17F6-4FA7-8306-18C41DD62F4E}.Release|x86.Build.0 = Release|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Debug|ARM.ActiveCfg = Debug|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Debug|x64.ActiveCfg = Debug|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Debug|x86.ActiveCfg = Debug|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Debug|x86.Build.0 = Debug|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Release|ARM.ActiveCfg = Release|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Release|x64.ActiveCfg = Release|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Release|x86.ActiveCfg = Release|Win32
-		{90E0390A-2AB4-416B-A1BA-34E41DC9FFA2}.Release|x86.Build.0 = Release|Win32
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Debug|ARM.ActiveCfg = Debug|ARM
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Debug|ARM.Build.0 = Debug|ARM
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Debug|x64.ActiveCfg = Debug|x64
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Debug|x64.Build.0 = Debug|x64
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Debug|x86.ActiveCfg = Debug|x86
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Debug|x86.Build.0 = Debug|x86
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Release|ARM.ActiveCfg = Release|ARM
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Release|ARM.Build.0 = Release|ARM
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Release|x64.ActiveCfg = Release|x64
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Release|x64.Build.0 = Release|x64
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Release|x86.ActiveCfg = Release|x86
-		{6FD3DDB7-4B5F-45FE-8201-F6F84AD15AA1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
