@@ -205,7 +205,8 @@ entity th10_player::getPlayerEntity()
 				*(float*)(plyrAddr + 0x3C0) + th_param.GAME_WIDTH / 2,
 				*(float*)(plyrAddr + 0x3C4)),
 			vec2(),
-			vec2(5,5),		// TODO assume 5x5 size
+			// TODO assume 5x5 size, can probably adapt th15 code to find dimensions
+			vec2(5,5),
 			0
 		};
 		return e;
