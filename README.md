@@ -24,13 +24,13 @@ Watch as it struggles to deathbomb through every laser it sees.
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
-|Feature               |th07 |th08 |th15 |
-|----------------------|-----|-----|-----|
-|Dodge Bullet          |✔️   |✔️  |✔️  |
-|Dodge Enemy           |❌   |❌  |✔️  |
-|Dodge Laser           |❌   |❌  |❌  |
-|Collect Powerups      |❌   |✔️  |❌  |
-|Target Enemies        |❌   |❌  |❌  |
+|Feature               |th07 |th08 |th10 |th15 |
+|----------------------|-----|-----|-----|-----|
+|Dodge Bullet          |✔️   |✔️  |✔️  |✔️  |
+|Dodge Enemy           |❌   |❌  |✔️  |✔️  |
+|Dodge Laser           |❌   |❌  |✔️  |✔️  |
+|Collect Powerups      |❌   |✔️  |✔️  |❌  |
+|Target Enemies        |❌   |❌  |❌  |❌  |
 
 ... and some other undocumented features.
 
