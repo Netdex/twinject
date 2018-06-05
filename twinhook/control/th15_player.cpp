@@ -23,7 +23,7 @@ void th15_player::onTick()
 
 void th15_player::onBeginTick()
 {
-	tle.expand(lasers, bullets);
+	//tle.expand(lasers, bullets);
 }
 
 void th15_player::onAfterTick()
