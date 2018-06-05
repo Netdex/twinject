@@ -24,7 +24,7 @@ void th10_player::onBeginTick()
 
 	// hack that expands OBB lasers into AABBs, which I 
 	// have already written functional collision predictor code for
-	tle.expand(lasers, bullets);
+	//tle.expand(lasers, bullets);
 }
 
 void th10_player::onAfterTick()

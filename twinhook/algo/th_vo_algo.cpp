@@ -49,7 +49,7 @@ void th_vo_algo::onTick()
 	bool bounded = true;
 
 	// Bullet collision frame calculations
-	for (auto bullet = player->bullets.begin(); bullet != player->bullets.end(); ++bullet)
+	for (auto b = player->bullets.begin(); b != player->bullets.end(); ++b)
 	{
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
@@ -58,22 +58,50 @@ void th_vo_algo::onTick()
 			// TODO this hitCircle stuff is painful, replace with interfaces and impl
 			if (hitCircle) {
 				colTick = vec2::willCollideCircle(
-					plyr.p, bullet->p,
-					plyr.sz.x / 2, bullet->sz.x / 2,
+					plyr.p, b->p,
+					plyr.sz.x / 2, b->sz.x / 2,
 					pvel,
-					bullet->v
+					b->v
 				);
 			}
 			else
 			{
 				colTick = vec2::willCollideAABB(
 					plyr.p - plyr.sz / 2,
-					bullet->p - bullet->sz / 2,
+					b->p - b->sz / 2,
 					plyr.sz,
-					bullet->sz,
+					b->sz,
 					pvel,
-					bullet->v
+					b->v
 				);
+			}
+			if (colTick >= 0) {
+				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
+				bounded = false;
+			}
+		}
+	}
+
+	for(laser l : player->lasers)
+	{
+		for(int dir = 0; dir < NUM_DIRS; ++dir)
+		{
+			vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
+			float colTick;
+			if(hitCircle)
+			{
+				// TODO I have not written the SAT predictor code for circles yet, 
+				// so this part won't work for circles.
+				colTick = -1;
+			}
+			else
+			{
+				std::vector<vec2> playerVert;
+				std::vector<vec2> laserVert;
+				vec2::aabbVert(plyr.p - plyr.sz / 2, plyr.sz, playerVert);
+				l.getVertices(laserVert);
+
+				colTick = vec2::willCollideSAT(playerVert, pvel, laserVert, l.v);
 			}
 			if (colTick >= 0) {
 				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
@@ -190,8 +218,7 @@ void th_vo_algo::onTick()
 		tarIdx = maxIdx;
 	}
 
-	/*
-	LOG("C[%d] | H:%.0f U:%.0f D:%.0f L:%.0f R:%.0f UL:%.0f UR:%.0f DL:%.0f DR:%.0f",
+	/*LOG("C[%d] | H:%.0f U:%.0f D:%.0f L:%.0f R:%.0f UL:%.0f UR:%.0f DL:%.0f DR:%.0f",
 		tarIdx,
 		collisionTicks[0] == FLT_MAX ? -1 : collisionTicks[0], collisionTicks[1],
 		collisionTicks[2], collisionTicks[3], collisionTicks[4],

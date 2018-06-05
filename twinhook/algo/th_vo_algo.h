@@ -10,10 +10,11 @@ static const float SQRT_2 = sqrt(2.f);
 
 /*
 * Unit velocity as a result of moving in specified direction
-* [0]: Hold, [1]: Up, [2]: Down, [3]: Left, [4]: Right,
-* [5]: Top-left, [6]: Top-right, [7]: Bottom-left, [8]: Bottom-right,
-* [9]: F Up, [10]: F Down, [11]: F Left, [12]: F Right, [13]: F Top-left,
-* [14]: F top-right, [15]: F bottom-left, [16]: F bottom-right
+* [0]: Hold,			[1]: Up,				[2]: Down,				[3]: Left, 
+* [4]: Right,			[5]: Top-left,			[6]: Top-right,			[7]: Bottom-left,	
+* [8]: Bottom-right,	[9]: F Up,				[10]: F Down,			[11]: F Left,	
+* [12]: F Right,		[13]: F Top-left,		[14]: F top-right,		[15]: F bottom-left,
+* [16]: F bottom-right
 */
 static const vec2 DIRECTION_VEL[] =
 {
@@ -27,11 +28,13 @@ static const vec2 DIRECTION_VEL[] =
 
 static const int NUM_DIRS = sizeof DIRECTION_VEL / sizeof vec2;
 
+// Whether the direction index is at focused velocity
 static const bool FOCUSED_DIR[] = {
 	false,false,false,false,false,false,false,false,false,
 	true,true,true,true,true,true,true,true
 };
 
+// Keys to press in order to move in a certain direction
 static const BYTE DIR_KEYS[][3] = {
 	{ DIK_LSHIFT,	NULL,			NULL },	// focus by default
 	{ DIK_UP,		NULL,			NULL },
@@ -52,15 +55,36 @@ static const BYTE DIR_KEYS[][3] = {
 	{ DIK_DOWN,		DIK_RIGHT,		DIK_LSHIFT }
 };
 
+// Key presses which should be reset each frame
 static const BYTE CONTROL_KEYS[] = { DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT, DIK_LSHIFT, DIK_X };
 
 /**
  * \brief Implementation of velocity obstacle based algorithm
  *
  * Overview:
- * The player has 5 possible velocity states excluding combination states,
- * UP, DOWN, LEFT, RIGHT, HOLD
+ * Implementation of constrained linear velocity obstacle algorithm 
+ * using a linear approximation of bullet trajectories.
+ * 
+ * Uses an AABB predictor for bullet hitboxes, OBB SAT predictor for lasers, 
+ * and circle predictor for hitcircles. Ideally we want to use a predictor that 
+ * corresponds to the collision algorithm used by the games, but some of them 
+ * cannot be projected easily.
+ * 
+ * This algorithm performs quite well for just dodging obstacles, since most 
+ * bullets are linear in nature. Problems arise with obstacles that are non-linear, 
+ * or bullet patterns that require memorization to pass. This algorithm usually bombs 
+ * through these parts.
+ * 
+ * Note that targeting is also difficult, since there is no simple way to weight 
+ * targets and obstacles in a reasonable way. Currently the algorithm only targets 
+ * powerups will be no obstacles blocking the way which should work in theory, 
+ * but causes the bot to collide with obstacles more often.
+ * 
+ * This algorithm implements near perfect deathbombing by detecting if it will collide 
+ * with an obstacle very soon, and has no recourse for avoidance. However, this is 
+ * dependant on the linear approximation and the accuracy of the collision predictors. 
  *
+ * High-Level Function:
  * First we must calibrate the algorithm by determining the player velocity, by
  * frame division.
  *
