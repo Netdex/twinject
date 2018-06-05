@@ -429,43 +429,46 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va,
 
 	// calculate normals
 	for (int i = 0; i < sizeA; ++i)
-		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal());
+		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal().unit());
 	for (int i = 0; i < sizeB; ++i)
-		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal());
+		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal().unit());
 
-	float maxTicks = FLT_MIN;
+	float maxTicks = 0;
 
 	// check for separating axis
 	for (vec2 n : normals)
 	{
 		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
 		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
-		vec2 normn = n.unit();
 
-		float vAxisA = dot(va, normn);
-		float vAxisB = dot(vb, normn);
+		float vAxisA = dot(va, n);
+		float vAxisB = dot(vb, n);
 
 		// determine extents of projections onto axis
 		for (vec2 pa : a)
 		{
-			float pj = dot(pa, normn);
+			float pj = dot(pa, n);
 			minProjA = std::min(minProjA, pj);
 			maxProjA = std::max(maxProjA, pj);
 		}
 		for (vec2 pb : b)
 		{
-			float pj = dot(pb, normn);
+			float pj = dot(pb, n);
 			minProjB = std::min(minProjB, pj);
 			maxProjB = std::max(maxProjB, pj);
 		}
 
 		float colTicks = willOverlapInterval(minProjA, maxProjA, vAxisA, minProjB, maxProjB, vAxisB);
+		
+		// i.e. there exists an axis that is always separating
+		if (colTicks < 0)
+			return -1;
 		if (colTicks > 0) {
 			maxTicks = std::max(maxTicks, colTicks);
 		}
 	}
 
-	if(maxTicks != FLT_MIN && maxTicks < 6000)
+	if(maxTicks < 6000)
 		return maxTicks;
 
 	return -1;

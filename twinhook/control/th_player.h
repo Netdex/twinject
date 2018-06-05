@@ -40,9 +40,10 @@ struct laser
 
 	void laser::getVertices(std::vector<vec2>& vertices) const
 	{
+		// note: these vertices must be in VERTEX ORDER
 		vec2 points[] = {
 			vec2(0, rad), vec2(0, -rad),
-			vec2(length, rad), vec2(length, -rad)
+			vec2(length, -rad), vec2(length, rad)
 		};
 		for (int i = 0; i < 4; ++i)
 		{
