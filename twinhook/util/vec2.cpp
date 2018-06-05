@@ -441,27 +441,34 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va,
 		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
 		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
 		vec2 normn = n.unit();
+
 		float vAxisA = dot(va, normn);
 		float vAxisB = dot(vb, normn);
 
 		// determine extents of projections onto axis
 		for (vec2 pa : a)
 		{
-			float pj = dot(pa, n);
+			float pj = dot(pa, normn);
 			minProjA = std::min(minProjA, pj);
 			maxProjA = std::max(maxProjA, pj);
 		}
 		for (vec2 pb : b)
 		{
-			float pj = dot(pb, n);
+			float pj = dot(pb, normn);
 			minProjB = std::min(minProjB, pj);
 			maxProjB = std::max(maxProjB, pj);
 		}
 
 		float colTicks = willOverlapInterval(minProjA, maxProjA, vAxisA, minProjB, maxProjB, vAxisB);
-		maxTicks = std::max(maxTicks, colTicks);
+		if (colTicks > 0) {
+			maxTicks = std::max(maxTicks, colTicks);
+		}
 	}
-	return maxTicks;
+
+	if(maxTicks != FLT_MIN && maxTicks < 6000)
+		return maxTicks;
+
+	return -1;
 }
 
 bool vec2::isOverlapInterval(float minA, float maxA, float minB, float maxB)
@@ -476,8 +483,8 @@ float vec2::willOverlapInterval(float minA, float maxA, float va, float minB, fl
 	// check if already colliding
 	if (isOverlapInterval(minA, maxA, minB, maxB))
 		return 0;
-	// check if at least one interval is not moving
-	if (va == 0 || vb == 0)
+	// check if both intervals are not moving
+	if (va == 0 && vb == 0)
 		return -1;
 
 	/*

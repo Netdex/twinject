@@ -66,6 +66,11 @@ public:
 	 */
 	static bool inAABB(const vec2 &p, const vec2 &a, const vec2 &b);
 
+	/*
+	 *  TODO move all the code after this point out of vec2, because it doesn't really have 
+	 *  anything to do with vec2
+	 */
+
 	/**
 	 * \brief Determine if AABB 1 is colliding with AABB 2
 	 * \param p1 Position of AABB 1 (top-left corner)

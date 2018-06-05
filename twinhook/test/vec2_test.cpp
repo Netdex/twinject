@@ -307,7 +307,7 @@ public:
 			L"two stationary intervals", LINE_INFO());
 		va = 1, vb = 2;
 		Assert::IsTrue(vec2::willOverlapInterval(la, ra, va, lb, rb, vb) < 0,
-			L"two intervals moving too fast", LINE_INFO());
+			L"two intervals moving same, too fast", LINE_INFO());
 		va = -1, vb = 1;
 		Assert::IsTrue(vec2::willOverlapInterval(la, ra, va, lb, rb, vb) < 0,
 			L"two intervals moving away", LINE_INFO());
@@ -315,8 +315,43 @@ public:
 		va = 1, vb = -1;
 		Assert::IsTrue(vec2::willOverlapInterval(la, ra, va, lb, rb, vb) > 0,
 			L"two intervals moving towards", LINE_INFO());
-		
-		
+		va = 2, vb = 1;
+		Assert::IsTrue(vec2::willOverlapInterval(la, ra, va, lb, rb, vb) > 0,
+			L"two intervals moving same, fast enough", LINE_INFO());
+
+		la = 0, ra = 2, lb = 1, rb = 3;
+		Assert::IsTrue(vec2::willOverlapInterval(la, ra, va, lb, rb, vb) == 0,
+			L"already collided", LINE_INFO());
+	}
+
+	TEST_METHOD(VectorWillCollideSAT)
+	{
+		std::vector<vec2> a = {
+			vec2(0,0), vec2(2,0),
+			vec2(0,2), vec2(2,2)
+		};
+		std::vector<vec2> b = {
+			vec2(3,0), vec2(4,1),
+			vec2(6,-1), vec2(5,-2)
+		};
+
+		vec2 va, vb;
+
+		Assert::IsTrue(vec2::willCollideSAT(a, va, b, vb) < 0,
+			L"disjoint, not moving", LINE_INFO());
+		va = vec2(-1, -1), vb = vec2(1, 1);
+		Assert::IsTrue(vec2::willCollideSAT(a, va, b, vb) < 0,
+			L"disjoint, moving perpendicular", LINE_INFO());
+
+		va = vec2(1, 0), vb = vec2(-1, 0);
+		Assert::IsTrue(vec2::willCollideSAT(a, va, b, vb) > 0,
+			L"disjoint, both moving towards", LINE_INFO());
+		va = vec2(1, -1), vb = vec2(-1, 1);
+		Assert::IsTrue(vec2::willCollideSAT(a, va, b, vb) > 0,
+			L"disjoint, both moving towards", LINE_INFO());
+		va = vec2(1, 0), vb = vec2();
+		Assert::IsTrue(vec2::willCollideSAT(a, va, b, vb) > 0,
+			L"disjoint, one moving towards", LINE_INFO());
 	}
 };
 #endif
