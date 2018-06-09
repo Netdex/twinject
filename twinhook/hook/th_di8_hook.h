@@ -22,7 +22,7 @@ void Hook_DInput8_DirectInput8Create(DirectInput8Hook hook);
 class th_di8_hook : th_hook
 {
 	static th_di8_hook *instance;
-
+	
 	BYTE di8_last_keys[256] = { 0 };
 	BYTE di8_proxy_keys[256] = { 0 };
 	BOOL di8_key_mask[256] = { FALSE };
@@ -30,6 +30,7 @@ class th_di8_hook : th_hook
 	void set_vk_data(BYTE *pData, BYTE *pActual);
 public:
 	DirectInput8Wrapper *DirectInput8 = nullptr;
+	bool block = false;
 
 	th_di8_hook(th_player *player) : th_hook(player) {}
 	virtual ~th_di8_hook() = default;

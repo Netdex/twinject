@@ -24,6 +24,14 @@ th_di8_hook* th_di8_hook::inst()
 
 void th_di8_hook::set_vk_data(BYTE *pData, BYTE *pActual)
 {
+	// if the block flag is set, make the game ignore all input
+	if(block)
+	{
+		memset(pActual, DIK_KEY_UP, 256);
+		return;
+	}
+
+	// set the proper key states, taking the mask into account
 	for (int i = 0; i < 256; i++)
 	{
 		if (di8_key_mask[i])
