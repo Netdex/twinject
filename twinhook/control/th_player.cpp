@@ -29,11 +29,16 @@ void th_player::onTick()
 	th_di8_hook* di8 = th_di8_hook::inst();
 	BYTE diKeys[256];
 	if (di8->DirectInput8) {
-		if (di8->DirectInput8->DirectInputDevice8->GetDeviceState(256, diKeys) == DI_OK)
+		if (di8->DirectInput8->DirectInputDevice8->DirectInputDevice8->GetDeviceState(256, diKeys) == DI_OK)
 		{
 			BYTE press[256];
 			kpd.tick(diKeys, press);
-			this->handleInput(diKeys, press);
+
+			th_di8_hook::inst()->block = 
+				cmdp.inpState == th_command_proc::inp_state::RECEIVING;
+			if(cmdp.inpState != th_command_proc::inp_state::RECEIVING)
+				this->handleInput(diKeys, press);
+			cmdp.handleInput(diKeys, press);
 		}
 	}
 	if (algorithm)
@@ -57,7 +62,7 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 
 	if (algorithm)
 		algorithm->visualize(d3dDev);
-
+	cmdp.render(d3dDev);
 	DI8_Overlay_RenderInput(d3dDev, this->getKeyboardState());
 }
 

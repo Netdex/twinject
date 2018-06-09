@@ -3,6 +3,7 @@
 #include "../util/vec2.h"
 #include "../algo/th_algorithm.h"
 #include "../info/keypress_detect.h"
+#include "config/th_command_proc.h"
 
 /*
  * Representing an entity. This struct has two interpretations depending on
@@ -82,6 +83,7 @@ class th_player
 protected:
 	th_algorithm * algorithm = nullptr;
 	keypress_detect kpd;
+	th_command_proc cmdp;
 
 	// game specific pointers
 	gs_addr gs_ptr;
