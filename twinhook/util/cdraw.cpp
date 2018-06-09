@@ -58,15 +58,28 @@ namespace cdraw
 	}
 
 
-	void text(char *str, D3DCOLOR color, int x, int y, int w, int h)
+	void text(char *str, D3DCOLOR color, int x, int y)
 	{
 		if (!CDrawFlagInit) return;
 
 		static RECT textbox;
-		SetRect(&textbox, x, y, w, h);
+		SetRect(&textbox, x, y, 0, 0);
 		if (CDrawDefaultDxFont) {
 			CDrawTextSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
-			CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, -1, &textbox, DT_LEFT | DT_TOP, color);
+			CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, -1, &textbox, DT_LEFT | DT_TOP | DT_NOCLIP, color);
+			CDrawTextSprite->End();
+		}
+	}
+
+	void text(char *str, int len, D3DCOLOR color, int x, int y)
+	{
+		if (!CDrawFlagInit) return;
+
+		static RECT textbox;
+		SetRect(&textbox, x, y, 0, 0);
+		if (CDrawDefaultDxFont) {
+			CDrawTextSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
+			CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, len, &textbox, DT_LEFT | DT_TOP | DT_NOCLIP, color);
 			CDrawTextSprite->End();
 		}
 	}
