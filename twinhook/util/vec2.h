@@ -1,7 +1,5 @@
 #pragma once
 
-#define ZERO_EPSILON .000001f
-
 class vec2 {
 public:
 	float x, y;
@@ -16,6 +14,7 @@ public:
 
 	bool operator==(const vec2& o) const;
 	bool operator!=(const vec2& o) const;
+	bool operator<(const vec2& o) const;
 
 	void operator+=(const vec2& o);
 	void operator-=(const vec2& o);

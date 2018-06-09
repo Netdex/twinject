@@ -62,7 +62,7 @@ void th_vector_algo::onTick()
 		di8->setVkState(DIK_UP, DIK_KEY_UP);
 	}
 	if (abs(threat.x) > FOCUS_FORCE_THRESHOLD || abs(threat.y) > FOCUS_FORCE_THRESHOLD ||
-		(abs(threat.x) < ZERO_EPSILON && abs(threat.y) < ZERO_EPSILON))
+		(abs(threat.x) < 0.000001 && abs(threat.y) < 0.000001))
 	{
 		di8->setVkState(DIK_LSHIFT, DIK_KEY_UP);
 	}

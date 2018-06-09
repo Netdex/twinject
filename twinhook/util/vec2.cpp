@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "vec2.h"
 
+#include <set>
+
 vec2::vec2() : x(0), y(0)
 {
 }
@@ -48,6 +50,13 @@ bool vec2::operator==(const vec2& o) const
 bool vec2::operator!=(const vec2& o) const
 {
 	return !(*this == o);
+}
+
+bool vec2::operator<(const vec2& o) const
+{
+	if (x == o.x)
+		return y < o.y;
+	return x < o.x;
 }
 
 vec2 operator+(const vec2& a, const vec2& b)
@@ -124,9 +133,8 @@ void vec2::normalize()
 
 vec2 vec2::unit() const
 {
-	vec2 c(*this);
-	c.normalize();
-	return c;
+	float l = len();
+	return vec2(x / l, y / l);
 }
 
 float vec2::lensq() const
@@ -136,12 +144,12 @@ float vec2::lensq() const
 
 float vec2::len() const
 {
-	return sqrt(lensq());
+	return sqrt(x * x + y * y);
 }
 
 bool vec2::zero() const
 {
-	return abs(x) < ZERO_EPSILON && abs(y) < ZERO_EPSILON;
+	return x == 0 && y == 0;
 }
 
 bool vec2::nan() const
@@ -383,15 +391,15 @@ int vec2::quadraticSolve(float a, float b, float c, float& x1, float& x2)
 
 bool vec2::isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b)
 {
-	std::vector<vec2> normals;
+	std::set<vec2> normals;
 	int sizeA = a.size();
 	int sizeB = b.size();
 
 	// calculate normals
 	for (int i = 0; i < sizeA; ++i)
-		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal());
+		normals.insert((a[(i + sizeA + 1) % sizeA] - a[i]).normal());
 	for (int i = 0; i < sizeB; ++i)
-		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal());
+		normals.insert((b[(i + sizeB + 1) % sizeB] - b[i]).normal());
 
 	// check for separating axis
 	for (vec2 n : normals)
@@ -423,15 +431,15 @@ bool vec2::isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b)
 float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va, 
 	const std::vector<vec2>& b, vec2 vb)
 {
-	std::vector<vec2> normals;
+	std::set<vec2> normals;
 	int sizeA = a.size();
 	int sizeB = b.size();
 
 	// calculate normals
 	for (int i = 0; i < sizeA; ++i)
-		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal().unit());
+		normals.insert((a[(i + sizeA + 1) % sizeA] - a[i]).normal().unit());
 	for (int i = 0; i < sizeB; ++i)
-		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal().unit());
+		normals.insert((b[(i + sizeB + 1) % sizeB] - b[i]).normal().unit());
 
 	float maxTicks = 0;
 
