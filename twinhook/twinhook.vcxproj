@@ -73,6 +73,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <ShowIncludes>false</ShowIncludes>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,6 +131,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="config\th_command_proc.cpp" />
     <ClCompile Include="control\th_player.cpp" />
     <ClCompile Include="gfx\th_info_overlay.cpp" />
     <ClCompile Include="patch\th10_patch_autobomb.cpp" />
@@ -163,6 +167,7 @@
     <ClCompile Include="test\vec2_test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config\th_command_proc.h" />
     <ClInclude Include="gfx\th_info_overlay.h" />
     <ClInclude Include="patch\th10_patch_autobomb.h" />
     <ClInclude Include="strategy\th_laser_expander.h" />

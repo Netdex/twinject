@@ -165,6 +165,9 @@
     <ClCompile Include="patch\th10_patch_autobomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="config\th_command_proc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -264,6 +267,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="patch\th10_patch_autobomb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config\th_command_proc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
