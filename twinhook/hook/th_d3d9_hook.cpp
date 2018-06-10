@@ -47,7 +47,9 @@ void th_d3d9_hook::d3d9BeginHook(IDirect3DDevice9 *d3dDev)
 void th_d3d9_hook::d3d9EndHook(IDirect3DDevice9 *d3dDev)
 {
 	inst()->player->onTick();
+	cdraw::begin();
 	inst()->player->draw(d3dDev);
+	cdraw::end();
 	inst()->player->onAfterTick();
 }
 

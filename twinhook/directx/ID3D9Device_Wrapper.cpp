@@ -184,9 +184,11 @@ HRESULT Direct3DDevice9Wrapper::GetDepthStencilSurface(IDirect3DSurface9** ppZSt
 }
 HRESULT Direct3DDevice9Wrapper::BeginScene()
 {
+	HRESULT ret = Direct3DDevice9->BeginScene();
+	
 	if (Direct3D9->Hook.BeginSceneHook)
 		Direct3D9->Hook.BeginSceneHook(this);
-	return Direct3DDevice9->BeginScene();
+	return ret;
 }
 HRESULT Direct3DDevice9Wrapper::EndScene()
 {

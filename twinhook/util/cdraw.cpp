@@ -6,9 +6,9 @@ namespace cdraw
 {
 	static IDirect3DDevice9 *CDrawDefaultD3DDevice = NULL;
 	static IDirect3DTexture9* CDrawDefaultPrimitive = NULL;
-	static LPD3DXFONT CDrawDefaultDxFont;
-	static LPD3DXLINE CDrawDefaultDxLine;
-	static LPD3DXSPRITE CDrawTextSprite;
+	static LPD3DXFONT CDrawDefaultDxFont = NULL;
+	static LPD3DXLINE CDrawDefaultDxLine = NULL;
+	static LPD3DXSPRITE CDrawTextSprite = NULL;
 
 	static bool CDrawFlagInit = false;
 
@@ -27,6 +27,18 @@ namespace cdraw
 		init_line(d3dDev);
 
 		LOG("CDraw: initialized graphics primitives");
+	}
+
+	void begin()
+	{
+		if (!CDrawFlagInit) return;
+		CDrawTextSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
+	}
+
+	void end()
+	{
+		if (!CDrawFlagInit) return;
+		CDrawTextSprite->End();
 	}
 
 	void fillRect(float x, float y, float w, float h, D3DCOLOR Color)
@@ -50,25 +62,13 @@ namespace cdraw
 	void rect(float x, float y, float w, float h, D3DCOLOR c)
 	{
 		if (!CDrawFlagInit) return;
-
-		line(x, y, x + w, y, c);
-		line(x, y + h, x + w, y + h, c);
-		line(x, y, x, y + h, c);
-		line(x + w, y, x + w, y + h, c);
+		D3DXVECTOR2 vert[] = { {x, y}, {x, y + h}, {x + w, y + h}, {x + w, y}, {x,y} };
+		CDrawDefaultDxLine->Draw(vert, 5, c);
 	}
-
 
 	void text(char *str, D3DCOLOR color, int x, int y)
 	{
-		if (!CDrawFlagInit) return;
-
-		static RECT textbox;
-		SetRect(&textbox, x, y, 0, 0);
-		if (CDrawDefaultDxFont) {
-			CDrawTextSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
-			CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, -1, &textbox, DT_LEFT | DT_TOP | DT_NOCLIP, color);
-			CDrawTextSprite->End();
-		}
+		text(str, -1, color, x, y);
 	}
 
 	void text(char *str, int len, D3DCOLOR color, int x, int y)
@@ -78,9 +78,7 @@ namespace cdraw
 		static RECT textbox;
 		SetRect(&textbox, x, y, 0, 0);
 		if (CDrawDefaultDxFont) {
-			CDrawTextSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
 			CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, len, &textbox, DT_LEFT | DT_TOP | DT_NOCLIP, color);
-			CDrawTextSprite->End();
 		}
 	}
 
@@ -111,9 +109,7 @@ namespace cdraw
 			line[s].x = x1;
 			line[s].y = y1;
 		}
-		CDrawDefaultDxLine->Begin();
 		CDrawDefaultDxLine->Draw(line, sides + 1, color);
-		CDrawDefaultDxLine->End();
 	}
 
 	HRESULT gen_texture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32)

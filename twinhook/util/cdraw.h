@@ -11,7 +11,8 @@ namespace cdraw
 	};
 
 	void init(IDirect3DDevice9 *d3dDev);
-
+	void begin();
+	void end();
 
 	void fillRect(float x, float y, float w, float h, D3DCOLOR Color);
 	void rect(float x, float y, float w, float h, D3DCOLOR Color);
