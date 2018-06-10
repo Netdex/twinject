@@ -36,7 +36,7 @@ DWORD OnOutputDebugStringEvent(const LPDEBUG_EVENT debug_event)
 		strEventMessage = msg;
 	else
 		strEventMessage = (char*)msg;
-	_tprintf("DEBUG: %ws\n", (LPCWSTR)strEventMessage);
+	_tprintf("%ws\n", (LPCWSTR)strEventMessage);
 	delete[]msg;
 	return DBG_CONTINUE;
 }
