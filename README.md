@@ -1,29 +1,43 @@
-# twinject
-`This project is a work-in-progress.`
+# twinject 
+[![Build status](https://ci.appveyor.com/api/projects/status/wy06i4vscngsel5n?svg=true)](https://ci.appveyor.com/project/Netdex/twinject)  
+`This project is a work-in-progress.`  
 
 ![alt text?](https://i.imgur.com/uimgJ4L.png)
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions.
 
-For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies. In the demonstration videos, the fast moving projectiles are the obstacles which must be dodged - if the player hits any of these projectiles they die immediately. The player itself also fires projectiles, which damage enemies. The player is the little red sprite near the bottom of the screen. Props to ZUN for making games that people still play 20 years later.
+For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies. In the demonstration videos, the fast moving projectiles are the obstacles which must be dodged - if the player hits any of these projectiles they die immediately. The player itself also fires projectiles, which damage enemies. Props to ZUN for making games that people still play 20 years later.
 
 Why did I do this? I thought it would be a neat challenge to apply my knowledge of reverse engineering, and low-level development. This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available. The dodging algorithm uses a mix of linear algebra and numerical optimization to quickly approximate good movements for the bot to make. This is explained in detail in the Technical Descriptions linked below.
 
-So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for th07, th08 and th15. Since all the necessary abstractions already exist, I also plan to utilize machine learning strategies as a possible solution.
+Documentation is currently incomplete/outdated, and is currently on my list of things to do. At the moment, I am prioritizing features and demonstrations.
+
+So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for games listed in the table below. Since all the necessary abstractions already exist, I also plan to utilize machine learning strategies as a possible solution.
 
 ## Demonstrations
 
 ### Constrained Velocity Obstacle Algorithm
-Watch as it struggles to deathbomb through every laser it sees.  
+Note that when these demonstrations were recorded, the bot was incapable of dodging lasers. Watch as it struggles to deathbomb through every laser it sees.  
 #### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)  
 #### [LoLK Stage 6](https://youtu.be/9WElfhVE-Lk)
 
 ### Vector Dodging + Method of Virtual Potential Field Algorithm
+Note that this algorithm is not as effective as the VO algorithm above, so the playing is suboptimal.  
 #### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)  
 #### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)  
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
+|Bindings              |th07 |th08 |th10 |th15 |
+|----------------------|-----|-----|-----|-----|
+|Bullet Hook           |✔️   |✔️  |✔️  |✔️  |
+|Enemy Hook            |❌   |❌  |✔️  |❓   |
+|Powerup Hook          |❌   |✔️  |✔️  |❌  |
+|Laser Hook            |❌   |❌  |✔️  |✔️  |
+|Stage Info Hook       |✔️   |✔️  |✔️  |✔️  |
+|Direct3D Hook         |✔️   |✔️  |✔️  |✔️  |
+|DirectInput Hook      |✔️   |✔️  |✔️  |✔️  |
+
 |Feature               |th07 |th08 |th10 |th15 |
 |----------------------|-----|-----|-----|-----|
 |Dodge Bullet          |✔️   |✔️  |✔️  |✔️  |
@@ -55,7 +69,7 @@ Hooks for different parts of games are created. Some hooks can be reused across 
 
 An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
 - Method of Velocity Vector and Virtual Potential Field
-- Method of Constrained Vector Obstacle
+- Method of Constrained Velocity Obstacle
 - Method of Artificial Neural Network
 
 The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm. This is required since every game requires different hooks, and may have some game-specific quirk that needs to be handled.
