@@ -15,7 +15,7 @@ namespace cdraw
 	void init_solid_texture(LPDIRECT3DDEVICE9 m_pD3Ddev);
 	void init_font(IDirect3DDevice9 *m_pD3Ddev, int sz, LPWSTR face);
 	void init_line(IDirect3DDevice9 *m_pD3Ddev);
-
+	
 	void init(IDirect3DDevice9 *d3dDev)
 	{
 		if (CDrawFlagInit) return;
@@ -68,17 +68,27 @@ namespace cdraw
 
 	void text(char *str, D3DCOLOR color, int x, int y)
 	{
-		text(str, -1, color, x, y);
+		text(str, -1, color, x, y, CDrawTextSprite);
 	}
 
 	void text(char *str, int len, D3DCOLOR color, int x, int y)
+	{
+		text(str, len, color, x, y, CDrawTextSprite);
+	}
+
+	void text(char* str, D3DCOLOR color, int x, int y, LPD3DXSPRITE sprite)
+	{
+		text(str, -1, color, x, y, sprite);
+	}
+
+	void text(char* str, int len, D3DCOLOR color, int x, int y, LPD3DXSPRITE sprite)
 	{
 		if (!CDrawFlagInit) return;
 
 		static RECT textbox;
 		SetRect(&textbox, x, y, 0, 0);
 		if (CDrawDefaultDxFont) {
-			CDrawDefaultDxFont->DrawTextA(CDrawTextSprite, str, len, &textbox, DT_LEFT | DT_TOP | DT_NOCLIP, color);
+			CDrawDefaultDxFont->DrawTextA(sprite, str, len, &textbox, DT_LEFT | DT_TOP | DT_NOCLIP, color);
 		}
 	}
 
