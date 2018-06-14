@@ -1,6 +1,11 @@
 # twinject 
 [![Build status](https://ci.appveyor.com/api/projects/status/wy06i4vscngsel5n?svg=true)](https://ci.appveyor.com/project/Netdex/twinject)  
-`This project is a work-in-progress.`  
+```
+This project is a work-in-progress, new features are being added every week. 
+At the moment all of my resources are focused on development, and very few are 
+allocated to documentation. As a result, some of the documentation here might be 
+out-of-date or just plain wrong.
+```
 
 ![alt text?](https://i.imgur.com/uimgJ4L.png)
 ## What is this?
@@ -115,6 +120,7 @@ G - Enable bot
 B - Disable bot
 H - Display debug graphics
 N - Hide debug graphics 
+/ - Input debug command
 
 To close the bot, close the debug console window and the game will close after.
 Closing the game first may cause cleanup to not occur.
@@ -123,6 +129,9 @@ Make sure DirectInput is not disabled.
 ```
 
 ## Troubleshooting
+Before trying anything here, make sure your game is completely clean (unpatched, untranslated), since some patches fiddle 
+with the code and may affect functionality.
+
 ### Hotkeys do not work
 Make sure DirectInput is not disabled.
 ![alt text?](https://i.imgur.com/r2unX8N.png)
