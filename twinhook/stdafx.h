@@ -1,6 +1,6 @@
 #pragma once
 #define DIRECTINPUT_VERSION 0x0900
-#define _WIN32_WINNT 0x0500
+//#define _WIN32_WINNT 0x0500
 #define NOMINMAX
 
 // windows includes
