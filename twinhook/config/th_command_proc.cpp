@@ -3,6 +3,14 @@
 #include "util/cdraw.h"
 #include "th_config.h"
 
+th_command_proc::th_command_proc()
+{
+}
+
+th_command_proc::~th_command_proc()
+{
+}
+
 void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 {
 	for (int k = 0; k < 256; ++k)
@@ -18,27 +26,30 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 				break;
 			case DIK_BACKSPACE:
 				if (inpState == RECEIVING) {
-					if (bufferPos > 0)
-						bufferPos--;
+					if (promptBufferPos > 0)
+						promptBufferPos--;
 				}
 				break;
 			case DIK_ESCAPE:
 				if (inpState == RECEIVING) {
 					inpState = WAITING;
-					bufferPos = 0;
+					promptBufferPos = 0;
 				}
 				break;
 			case DIK_RETURN:
 				if (inpState == RECEIVING) {
 					inpState = WAITING;
-					bufferPos = 0;
+					char command[PROMPT_BUFFER_SZ + 1] = { 0 };
+					memcpy(command, promptBuffer, promptBufferPos);
+					print(command);
+					promptBufferPos = 0;
 					// TODO executor
 				}
 				break;
 			default:
 				if (inpState == RECEIVING)
 				{
-					if (bufferPos < BUFFER_SZ)
+					if (promptBufferPos < PROMPT_BUFFER_SZ)
 					{
 						int vk = MapVirtualKey(k, MAPVK_VSC_TO_VK);
 						// this part is a bit inefficient
@@ -47,7 +58,7 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 						WORD c;
 						if (ToAscii(vk, k, kbds, &c, 0))
 						{
-							buffer[bufferPos++] = (char) c;
+							promptBuffer[promptBufferPos++] = (char) c;
 						}
 					}
 				}
@@ -62,7 +73,23 @@ void th_command_proc::render(IDirect3DDevice9* pD3dDev)
 	if (inpState == RECEIVING) {
 		cdraw::fillRect(0, th_param.WINDOW_HEIGHT - 20,
 			th_param.WINDOW_WIDTH, 20, D3DCOLOR_ARGB(200, 0, 0, 0));
-		cdraw::text(renderBuffer, bufferPos + PROLOGUE_SZ, D3DCOLOR_ARGB(255, 255, 255, 255),
+		cdraw::text(promptRenderBuffer, promptBufferPos + PROMPT_PROLOGUE_SZ,
+			D3DCOLOR_ARGB(255, 255, 255, 255),
 			10, (int)(th_param.WINDOW_HEIGHT - 17));
 	}
+}
+
+void th_command_proc::printf(const char* fmt, ...) const
+{
+	char szUserFmt[256];
+	va_list args;
+	va_start(args, fmt);
+	vsprintf_s(szUserFmt, 256, fmt, args);
+	print(szUserFmt);
+	va_end(args);
+}
+
+void th_command_proc::print(const char* str) const
+{
+	OutputDebugStringA(str);
 }
