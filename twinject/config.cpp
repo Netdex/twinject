@@ -16,6 +16,10 @@ int handler(void* user, const char* section, const char* name,
 	else if (MATCH("twinject", "dllname")) {
 		pconfig->dllname = StrDup(value);
 	}
+	else if (MATCH("twinject", "env"))
+	{
+		pconfig->env = StrDup(value);
+	}
 	else {
 		return 0;
 	}

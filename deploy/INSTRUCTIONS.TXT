@@ -9,8 +9,10 @@ Please read all documentation in the repository.
 Extract all files to your Touhou game directory.
 
 -- RUNNING --
-Run twinject.exe, which will chainload the game.
 Make sure your game executable and the one defined in twinject.ini match.
+Make sure the game loader is defined correctly (env=th\=thXX)
+Run twinject.exe, which will chainload the game.
+
 
 -- CONTROLS --
 G - Enable bot

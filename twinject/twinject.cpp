@@ -60,6 +60,7 @@ int main(const int argc, const char *argv[])
 	GetCurrentDirectory(MAX_PATH, currentdir);
 	PathCombine(exepath, currentdir, config.exename);
 	PathCombine(dllpath, currentdir, config.dllname);
+	_putenv(config.env);
 #endif
 	char twinjectDir[256];
 	GetModuleFileName(NULL, twinjectDir, 256);
