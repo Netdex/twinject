@@ -1,5 +1,6 @@
 #pragma once
 
+// global parameters that should be constant thru every game
 extern struct th_param {
 	float WINDOW_WIDTH = 640;
 	float WINDOW_HEIGHT = 480;
