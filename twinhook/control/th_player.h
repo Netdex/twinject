@@ -95,7 +95,7 @@ public:
 	bool enabled = false;
 	bool render = false;
 
-	th_player(gs_addr gsa) : gs_ptr(gsa) {}
+	th_player(gs_addr gsa) : gs_ptr(gsa), cmdp(this) {}
 	virtual ~th_player() = default;
 
 	/**

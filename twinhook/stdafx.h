@@ -15,6 +15,8 @@
 #include <vector>
 #include <tuple>
 #include <algorithm>
+#include <sstream>
+#include <string>
 
 // directx includes
 #include <d3d9.h>

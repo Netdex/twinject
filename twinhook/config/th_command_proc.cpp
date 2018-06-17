@@ -3,14 +3,6 @@
 #include "util/cdraw.h"
 #include "th_config.h"
 
-th_command_proc::th_command_proc()
-{
-}
-
-th_command_proc::~th_command_proc()
-{
-}
-
 void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 {
 	for (int k = 0; k < 256; ++k)
@@ -41,9 +33,17 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 					inpState = WAITING;
 					char command[PROMPT_BUFFER_SZ + 1] = { 0 };
 					memcpy(command, promptBuffer, promptBufferPos);
-					print(command);
+
+					// string tokenization
+					std::string str(command);
+					std::stringstream ss(str);
+					std::vector<std::string> tokens;
+					std::string tok;
+					while (ss >> tok)
+						tokens.push_back(tok);
+					process(tokens);
+
 					promptBufferPos = 0;
-					// TODO executor
 				}
 				break;
 			default:
@@ -58,7 +58,7 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 						WORD c;
 						if (ToAscii(vk, k, kbds, &c, 0))
 						{
-							promptBuffer[promptBufferPos++] = (char) c;
+							promptBuffer[promptBufferPos++] = (char)c;
 						}
 					}
 				}
@@ -76,6 +76,52 @@ void th_command_proc::render(IDirect3DDevice9* pD3dDev)
 		cdraw::text(promptRenderBuffer, promptBufferPos + PROMPT_PROLOGUE_SZ,
 			D3DCOLOR_ARGB(255, 255, 255, 255),
 			10, (int)(th_param.WINDOW_HEIGHT - 17));
+	}
+}
+
+void th_command_proc::process(const std::vector<std::string>& args) const
+{
+	// TODO I don't like using if statements for stuff like this, 
+	// I'd rather use a map of classes and command executors, 
+	// since they can do stuff like autogenerate help docs
+	// But for now this is fine
+
+	if (args.size() < 1) return;
+	if (args[0] == "patch")
+	{
+		if (args.size() < 2) return;
+		if(args[1] == "set")
+		{
+			
+		}
+		else if(args[1] == "reset")
+		{
+			
+		}
+		else
+		{
+			printf("usage: /patch (set|reset) <patch>");
+		}
+	}
+	else if (args[0] == "plyr")
+	{
+		if (args.size() < 2) return;
+		if(args[1] == "algo")
+		{
+			
+		}
+		else
+		{
+			printf("usage: /plyr (algo) ...");
+		}
+	}
+	else if(args[0] == "reg")
+	{
+		if (args.size() < 2) return;
+	}
+	else
+	{
+		print("unknown command");
 	}
 }
 
