@@ -7,7 +7,7 @@ allocated to documentation. As a result, some of the documentation here might be
 out-of-date or just plain wrong.
 ```
 
-![alt text?](https://i.imgur.com/uimgJ4L.png)
+![alt text?](https://i.imgur.com/Nos4Z1D.png)
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions.
 
