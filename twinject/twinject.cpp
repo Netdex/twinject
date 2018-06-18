@@ -16,7 +16,7 @@ PROCESS_INFORMATION pi;
 const char *ininame = "twinject.ini";
 
 #define DEBUGGER				// If you use an external debugger, this line must be commented out. Debugging messages will not be received.
-//#define TH10_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
+//#define USER_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
 
 int main(const int argc, const char *argv[])
 {
@@ -45,6 +45,11 @@ int main(const int argc, const char *argv[])
 	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";
 	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th15";
+#elif defined(USER_LOADER)
+	_putenv("th=th08");
+	char *exepath = "D:\\Games\\Touhou Project\\08.0 ~ Imperishable Night\\th08.exe";
+	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
+	char *currentdir = "D:\\Games\\Touhou Project\\08.0 ~ Imperishable Night";
 #else
 	// The following code loads configuration data from an external file
 	configuration config;
