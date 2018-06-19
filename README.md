@@ -102,8 +102,12 @@ and place into game directory if the game requires it.
 twinject.ini must be in the same folder as twinject.exe, and contains configuration options. Here's the default configuration:
 ```
 [twinject]
+; Filename of game executable
 exename=th08.exe
+; Filename of twinhook dll
 dllname=twinhook.dll
+; Name of game loader (e.g. th=th08)
+env=th=th08
 ```
 
 ## Usage
@@ -125,7 +129,10 @@ N - Hide debug graphics
 To close the bot, close the debug console window and the game will close after.
 Closing the game first may cause cleanup to not occur.
 
-Make sure DirectInput is not disabled.
+If you are using the th_vo_algo (the default), make sure you only enable the bot after the stage loads and the player is able to move, 
+since the th_vo_algo needs to calibrate the player by moving it around. You should see a log message after successful calibration.
+
+Make sure DirectInput is not disabled, it is required for movement.
 ```
 
 ## Troubleshooting
@@ -135,7 +142,8 @@ with the code and may affect functionality.
 ### Hotkeys do not work
 Make sure DirectInput is not disabled.
 ![alt text?](https://i.imgur.com/r2unX8N.png)
-Also, make sure `twinhook.dll` is **not** compiled with the Debug target, as it adds debugging code which mangles the hooks for the DirectInput8 hook.
+Also, make sure `twinhook.dll` is **not** compiled with the Debug target, as it adds debugging code which mangles the hooks for the DirectInput8 hook. 
+Additionally, make sure you do not have a controller plugged in, since this messes with DirectInput.
 
 ### Graphical overlay does not appear
 If the game requires the dx8->dx9 patch, make sure it is applied (`dxd8.dll` and `enbconvertor.ini`).
