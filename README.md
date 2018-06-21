@@ -7,7 +7,9 @@ allocated to documentation. As a result, some of the documentation here might be
 out-of-date or just plain wrong.
 ```
 
-![alt text?](https://i.imgur.com/Nos4Z1D.png)
+## [Demonstration Video](https://youtu.be/UKoz499YXr8)
+[![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/UKoz499YXr8)
+
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions.
 
@@ -23,6 +25,7 @@ So far, I plan to implement bindings for this bot for every mainline game. As of
 
 ### Constrained Velocity Obstacle Algorithm
 Note that when these demonstrations were recorded, the bot was incapable of dodging lasers. Watch as it struggles to deathbomb through every laser it sees.  
+#### [MoF Stage 3 Lunatic](https://youtu.be/UKoz499YXr8)
 #### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)  
 #### [LoLK Stage 6](https://youtu.be/9WElfhVE-Lk)
 
