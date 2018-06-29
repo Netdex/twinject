@@ -68,14 +68,10 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 
 void th_player::handleInput(const BYTE diKeys[256], const BYTE press[256])
 {
-	if (diKeys[DIK_G])
-		setEnable(true);
-	if (diKeys[DIK_B])
-		setEnable(false);
-	if (diKeys[DIK_H])
-		render = true;
-	if (diKeys[DIK_N])
-		render = false;
+	if (press[DIK_G])
+		setEnable(!enabled);
+	if (press[DIK_H])
+		render = !render;
 
 	algorithm->handleInput(diKeys, press);
 }
