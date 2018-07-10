@@ -102,7 +102,12 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 		size_t len;
 		char buf[256];
 		getenv_s(&len, buf, 256, "th");
-		LOG("detected game: %s", buf);
+		if(strcmp(buf, "") == 0)
+		{
+			LOG("WARNING: The game loader to use is not specified so no loader will "
+				"be used, this is probably not what you want!");
+		}
+		LOG("detected game: '%s'", buf);
 
 		// call respective game initialization routine based on envvar
 		if (th_init.find(buf) != th_init.end())
