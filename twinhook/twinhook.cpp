@@ -107,16 +107,18 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 			LOG("WARNING: The game loader to use is not specified so no loader will "
 				"be used, this is probably not what you want!");
 		}
-		LOG("detected game: '%s'", buf);
+		else {
+			LOG("detected game: '%s'", buf);
 
-		// call respective game initialization routine based on envvar
-		if (th_init.find(buf) != th_init.end())
-		{
-			th_init[buf]();
-		}
-		else
-		{
-			LOG("no implementation exists for this game");
+			// call respective game initialization routine based on envvar
+			if (th_init.find(buf) != th_init.end())
+			{
+				th_init[buf]();
+			}
+			else
+			{
+				LOG("WARNING: no implementation exists for this game");
+			}
 		}
 		break;
 	}
