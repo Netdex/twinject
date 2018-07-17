@@ -35,8 +35,8 @@ void th_player::onTick()
 			kpd.tick(diKeys, press);
 
 			th_di8_hook::inst()->block = 
-				cmdp.inpState == th_command_proc::inp_state::RECEIVING;
-			if(cmdp.inpState != th_command_proc::inp_state::RECEIVING)
+				cmdp.inputState == th_command_proc::input_state::RECEIVING;
+			if(cmdp.inputState != th_command_proc::input_state::RECEIVING)
 				this->handleInput(diKeys, press);
 			cmdp.handleInput(diKeys, press);
 		}

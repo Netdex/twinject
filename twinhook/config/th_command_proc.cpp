@@ -2,6 +2,7 @@
 #include "th_command_proc.h"
 #include "util/cdraw.h"
 #include "th_config.h"
+#include "patch/th_patch_registry.h"
 
 void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 {
@@ -12,25 +13,25 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 			switch (k)
 			{
 			case DIK_SLASH:
-				if (inpState == WAITING) {
-					inpState = RECEIVING;
+				if (inputState == WAITING) {
+					inputState = RECEIVING;
 				}
 				break;
 			case DIK_BACKSPACE:
-				if (inpState == RECEIVING) {
+				if (inputState == RECEIVING) {
 					if (promptBufferPos > 0)
 						promptBufferPos--;
 				}
 				break;
 			case DIK_ESCAPE:
-				if (inpState == RECEIVING) {
-					inpState = WAITING;
+				if (inputState == RECEIVING) {
+					inputState = WAITING;
 					promptBufferPos = 0;
 				}
 				break;
 			case DIK_RETURN:
-				if (inpState == RECEIVING) {
-					inpState = WAITING;
+				if (inputState == RECEIVING) {
+					inputState = WAITING;
 					char command[PROMPT_BUFFER_SZ + 1] = { 0 };
 					memcpy(command, promptBuffer, promptBufferPos);
 
@@ -47,7 +48,7 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 				}
 				break;
 			default:
-				if (inpState == RECEIVING)
+				if (inputState == RECEIVING)
 				{
 					if (promptBufferPos < PROMPT_BUFFER_SZ)
 					{
@@ -70,7 +71,7 @@ void th_command_proc::handleInput(BYTE state[256], BYTE change[256])
 
 void th_command_proc::render(IDirect3DDevice9* pD3dDev)
 {
-	if (inpState == RECEIVING) {
+	if (inputState == RECEIVING) {
 		cdraw::fillRect(0, th_param.WINDOW_HEIGHT - 20,
 			th_param.WINDOW_WIDTH, 20, D3DCOLOR_ARGB(200, 0, 0, 0));
 		cdraw::text(promptRenderBuffer, promptBufferPos + PROMPT_PROLOGUE_SZ,
@@ -79,50 +80,15 @@ void th_command_proc::render(IDirect3DDevice9* pD3dDev)
 	}
 }
 
-void th_command_proc::process(const std::vector<std::string>& args) const
+void th_command_proc::process(const std::vector<std::string> &args)
 {
-	// TODO I don't like using if statements for stuff like this, 
-	// I'd rather use a map of classes and command executors, 
-	// since they can do stuff like autogenerate help docs
-	// But for now this is fine
-
 	if (args.size() < 1) return;
-	if (args[0] == "patch")
-	{
-		if (args.size() < 2) return;
-		if(args[1] == "set")
-		{
-			
-		}
-		else if(args[1] == "reset")
-		{
-			
-		}
-		else
-		{
-			printf("usage: /patch (set|reset) <patch>");
-		}
-	}
-	else if (args[0] == "plyr")
-	{
-		if (args.size() < 2) return;
-		if(args[1] == "algo")
-		{
-			
-		}
-		else
-		{
-			printf("usage: /plyr (algo) ...");
-		}
-	}
-	else if(args[0] == "reg")
-	{
-		if (args.size() < 2) return;
-	}
-	else
+	if (commands.find(args[0]) == commands.end())
 	{
 		print("unknown command");
+		return;
 	}
+	(this->*commands[args[0]])(args);
 }
 
 void th_command_proc::printf(const char* fmt, ...) const
@@ -138,4 +104,16 @@ void th_command_proc::printf(const char* fmt, ...) const
 void th_command_proc::print(const char* str) const
 {
 	OutputDebugStringA(str);
+}
+
+void th_command_proc::_cmd_patch(const std::vector<std::string>& args)
+{
+}
+
+void th_command_proc::_cmd_algo(const std::vector<std::string>& args)
+{
+}
+
+void th_command_proc::_cmd_reg(const std::vector<std::string>& args)
+{
 }
