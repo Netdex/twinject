@@ -41,7 +41,6 @@ private:
 	void _cmd_algo(const std::vector<std::string> &args);
 	void _cmd_reg(const std::vector<std::string> &args);
 
-
 	// this part was a real pain to get right
 	typedef void (th_command_proc::*command_proc_t)(const std::vector<std::string> &args);
 	std::unordered_map<std::string, command_proc_t> commands {

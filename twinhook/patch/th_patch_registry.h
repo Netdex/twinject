@@ -5,4 +5,6 @@
 
 namespace th_registry {
 	extern std::unordered_map<std::string, th_patch*> patch;
+
+	th_patch* getPatch(const std::string &patchName);
 }

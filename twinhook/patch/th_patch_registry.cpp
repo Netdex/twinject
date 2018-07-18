@@ -9,3 +9,10 @@ std::unordered_map<std::string, th_patch*> th_registry::patch{
 	{ "th10_autobomb",  new th10_patch_autobomb() },
 	{ "th15_autobomb",  new th15_patch_autobomb() }
 };
+
+th_patch* th_registry::getPatch(const std::string& patchName)
+{
+	if (patch.find(patchName) == patch.end())
+		return nullptr;
+	return patch[patchName];
+}
