@@ -16,7 +16,7 @@ PROCESS_INFORMATION pi;
 const char *ininame = "twinject.ini";
 
 #define DEBUGGER				// If you use an external debugger, this line must be commented out. Debugging messages will not be received.
-#define TH10_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
+//#define TH10_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
 
 int main(const int argc, const char *argv[])
 {
