@@ -5,8 +5,7 @@ void th_laser_expander::expand(const std::vector<laser>& lasers, std::vector<ent
 {
 	for(laser l : lasers)
 	{
-		std::vector<vec2> laserVerts;
-		l.getVertices(laserVerts);
+		std::vector<vec2> laserVerts = l.getVertices();;
 		vec2 lmin = vec2::minv(laserVerts);
 		vec2 lmax = vec2::maxv(laserVerts);
 		quadtreeDivide(l, laserVerts, lmin, lmax - lmin, bullets, 0);
@@ -18,8 +17,7 @@ void th_laser_expander::quadtreeDivide(const laser &laser, const std::vector<vec
 {
 	if (splits >= maxSplits) return;
 
-	std::vector<vec2> vertices;
-	vec2::aabbVert(p, s, vertices);
+	std::vector<vec2> vertices = vec2::aabbVert(p, s);
 	if (!vec2::isCollideSAT(laserVertices, vertices))
 		return;
 
@@ -33,8 +31,7 @@ void th_laser_expander::quadtreeDivide(const laser &laser, const std::vector<vec
 	
 	vec2 newSize = s / 2;
 
-	std::vector<vec2> domains;
-	vec2::aabbVert(p, newSize, domains);
+	std::vector<vec2> domains = vec2::aabbVert(p, newSize);
 	for(vec2 vert : domains)
 	{
 		quadtreeDivide(laser, laserVertices, vert, newSize, bullets, splits + 1);

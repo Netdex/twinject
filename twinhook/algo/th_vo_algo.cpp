@@ -96,10 +96,9 @@ void th_vo_algo::onTick()
 			}
 			else
 			{
-				std::vector<vec2> playerVert;
-				std::vector<vec2> laserVert;
-				vec2::aabbVert(plyr.p - plyr.sz / 2, plyr.sz, playerVert);
-				l.getVertices(laserVert);
+				
+				std::vector<vec2> playerVert = vec2::aabbVert(plyr.p - plyr.sz / 2, plyr.sz);
+				std::vector<vec2> laserVert = l.getVertices();
 
 				colTick = vec2::willCollideSAT(playerVert, pvel, laserVert, l.v);
 			}
@@ -132,22 +131,12 @@ void th_vo_algo::onTick()
 				if (hitCircle)
 				{
 					colTick = vec2::willCollideCircle(
-						plyr.p, p->p,
-						plyr.sz.x / 2, p->sz.x / 2,
-						pvel,
-						p->v
-					);
+						plyr.p, p->p, plyr.sz.x / 2, p->sz.x / 2, pvel, p->v);
 				}
 				else
 				{
 					colTick = vec2::willCollideAABB(
-						plyr.p - plyr.sz / 2,
-						p->p - p->sz / 2,
-						plyr.sz,
-						p->sz,
-						pvel,
-						p->v
-					);
+						plyr.p - plyr.sz / 2, p->p - p->sz / 2, plyr.sz, p->sz, pvel, p->v);
 				}
 				if (colTick >= 0) {
 					targetTicks[dir] = std::min(colTick, targetTicks[dir]);
@@ -161,27 +150,20 @@ void th_vo_algo::onTick()
 	{
 		vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
 		float t = vec2::willExitAABB(
-			vec2(0, 0), plyr.p - plyr.sz / 2,
-			vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), plyr.sz,
-			vec2(), pvel
-		);
-
-
+			vec2(0, 0), plyr.p - plyr.sz / 2, vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), 
+			plyr.sz, vec2(), pvel);
 		if (t >= 0) {
 			if (t < collisionTicks[dir])
-			{
 				collisionTicks[dir] = t;
-			}
 		}
 	}
-
 
 	// Viable target calculations
 	int tarIdx = -1;
 	for (int dir = 0; dir < NUM_DIRS; ++dir)
 	{
 		if (targetTicks[dir] < collisionTicks[dir]
-			&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
+				&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
 			tarIdx = dir;
 	}
 

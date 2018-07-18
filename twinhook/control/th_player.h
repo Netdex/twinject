@@ -39,8 +39,9 @@ struct laser
 	float rad;			// perpendicular radius
 	float ang;			// angle
 
-	void laser::getVertices(std::vector<vec2>& vertices) const
+	std::vector<vec2> laser::getVertices() const
 	{
+		std::vector<vec2> vertices;
 		// note: these vertices must be in VERTEX ORDER
 		vec2 points[] = {
 			vec2(0, rad), vec2(0, -rad),
@@ -50,6 +51,7 @@ struct laser
 		{
 			vertices.push_back(points[i].rotate(ang) + p);
 		}
+		return vertices;
 	}
 };
 

@@ -36,7 +36,7 @@ public:
 	static vec2 proj(const vec2 &a, const vec2 &b);
 	static vec2 perp(const vec2 &a, const vec2 &b);
 	
-	static void aabbVert(const vec2 &p, const vec2 &s, std::vector<vec2> &vertices);
+	static std::vector<vec2> aabbVert(const vec2 &p, const vec2 &s);
 
 	/**
 	 * \brief Determine the minimum component-wise vector

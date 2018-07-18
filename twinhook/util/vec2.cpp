@@ -170,12 +170,14 @@ vec2 vec2::transform(float (*t)(float)) const
 	return vec2(t(x), t(y));
 }
 
-void vec2::aabbVert(const vec2& p, const vec2& s, std::vector<vec2>& vertices)
+std::vector<vec2> vec2::aabbVert(const vec2& p, const vec2& s)
 {
+	std::vector<vec2> vertices;
 	vertices.push_back(p);
 	vertices.push_back(vec2(p.x + s.x, p.y));
 	vertices.push_back(vec2(p.x, p.y + s.y));
 	vertices.push_back(vec2(p.x + s.x, p.y + s.y));
+	return vertices;
 }
 
 float vec2::dot(const vec2& a, const vec2& b)
