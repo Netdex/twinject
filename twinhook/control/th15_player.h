@@ -1,13 +1,10 @@
 #pragma once
 #include "th_player.h"
-#include "strategy/th_laser_expander.h"
-
 
 class th15_player : public th_player
 {
-	th_laser_expander tle;
 public:
-	th15_player() : th_player(gs_addr{ (uint8_t*)0x004E9BB8,(uint8_t*)0x4E6F28 }), tle(10, 30, 6) {}
+	th15_player() : th_player(gs_addr{ (uint8_t*)0x004E9BB8,(uint8_t*)0x4E6F28 }) {}
 	~th15_player() = default;
 
 	void onInit() override;
