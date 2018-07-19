@@ -323,13 +323,7 @@ float vec2::willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2
 	float a = (v2 - v1).lensq();
 	float b = 2 * dot(p2 - p1, v2 - v1);
 	float c = (p2 - p1).lensq() - (r1 + r2) * (r1 + r2);
-
-	float disc = b * b - 4 * a * c;
-	if (disc < 0)
-	{
-		return -1;
-	}
-
+	
 	// WARNING: there is no imposed limit on x1, x2
 	float x1, x2;
 	int rts = quadraticSolve(a, b, c, x1, x2);
