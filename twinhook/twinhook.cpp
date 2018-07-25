@@ -12,6 +12,10 @@
 #include "hook/th15_bullet_proc_hook.h"
 #include "control/th10_player.h"
 
+#include <imgui/imgui.h>
+#include <imgui/examples/imgui_impl_win32.h>
+#include <imgui/examples/imgui_impl_dx9.h>
+
 /**
  * \brief Initialize th07 bot
  */
@@ -123,6 +127,9 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 		break;
 	}
 	case DLL_PROCESS_DETACH:
+		ImGui_ImplDX9_Shutdown();
+		ImGui_ImplWin32_Shutdown();
+		ImGui::DestroyContext();
 		break;
 	}
 	return TRUE;

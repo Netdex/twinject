@@ -17,6 +17,7 @@ void th10_player::onTick()
 float arcRad = 0;
 void th10_player::onBeginTick()
 {
+	th_player::onBeginTick();
 	this->doBulletPoll();
 	this->doEnemyPoll();
 	this->doPowerupPoll();

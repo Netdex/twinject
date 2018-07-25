@@ -1,11 +1,16 @@
 #include "stdafx.h"
 #include "th_player.h"
+#include "config/th_config.h"
+#include "directx/IDI8ADevice_Wrapper.h"
 #include "gfx/di8_input_overlay.h"
 #include "gfx/th_info_overlay.h"
 #include "hook/th_di8_hook.h"
-#include "directx/IDI8ADevice_Wrapper.h"
 #include "hook/th_d3d9_hook.h"
-#include "config/th_config.h"
+#include "hook/th_wndproc_imgui_hook.h"
+
+#include <imgui/imgui.h>
+#include <imgui/examples/imgui_impl_dx9.h>
+#include <imgui/examples/imgui_impl_win32.h>
 
 void th_player::onInit()
 {
@@ -17,11 +22,38 @@ void th_player::onInit()
 		th_param.WINDOW_WIDTH = (float)rect.right;
 		th_param.WINDOW_HEIGHT = (float)rect.bottom;
 		LOG("detected window dimensions %ld %ld", rect.right, rect.bottom);
+
+		/* IMGUI Integration */
+		th_wndproc_imgui_hook::bind(cparams.hFocusWindow);
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+		ImGui_ImplWin32_Init(cparams.hFocusWindow);
+		ImGui_ImplDX9_Init(th_d3d9_hook::inst()->d3ddev9_wrapper);
+		ImGui::StyleColorsDark();
 	}
 	else
 	{
 		ASSERT((false, "fatal, d3ddev9_wrapper inaccessible"));
 	}
+
+	
+}
+
+void th_player::onBeginTick()
+{
+	/* IMGUI Integration */
+	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("twinject");
+	ImGui::Text("IMGUI render test!");
+	ImGui::End();
+
+	ImGui::EndFrame();
 }
 
 void th_player::onTick()
@@ -50,6 +82,11 @@ void th_player::onAfterTick()
 	bullets.clear();
 	powerups.clear();
 	lasers.clear();
+
+	/* IMGUI Integration */
+	ImGui::Render();
+	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+	// TODO verify loss of D3D9 device does not affect IMGUI
 }
 
 void th_player::draw(IDirect3DDevice9* d3dDev)

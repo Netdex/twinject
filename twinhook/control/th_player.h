@@ -108,7 +108,7 @@ public:
 	/**
 	 * \brief Called right before a tick has begun.
 	 */
-	virtual void onBeginTick() {}
+	virtual void onBeginTick();
 
 	/**
 	 * \brief Called during a tick.

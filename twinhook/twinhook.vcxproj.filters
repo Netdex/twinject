@@ -13,145 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\util">
-      <UniqueIdentifier>{1ecae554-7b8d-4808-9edd-1f83c77ca513}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\util">
-      <UniqueIdentifier>{befb00fb-4972-49ab-9986-b5f40d25d999}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\hook">
-      <UniqueIdentifier>{95f861b0-0cd8-43df-97ed-be4b3eaeea6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\hook">
-      <UniqueIdentifier>{e714dc2f-26fc-4aa3-a8c1-ea1ea718046a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\directx">
-      <UniqueIdentifier>{26d2e39e-0f64-4eb6-9e01-63fff0409b51}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\directx">
-      <UniqueIdentifier>{f6f0dd86-8217-4562-bf80-15a4b9753f8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\control">
-      <UniqueIdentifier>{dbcc21e5-5a89-458f-b4e8-3886c208a225}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\control">
-      <UniqueIdentifier>{02d8b0a8-4929-4a83-a37b-9e490684e386}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\patch">
-      <UniqueIdentifier>{073eb184-6ac2-4669-80ab-304cf51d01a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\patch">
-      <UniqueIdentifier>{231cd6fb-3128-4bd0-a7ff-338eebe694c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\gfx">
-      <UniqueIdentifier>{6bce54b5-b9e9-4dea-8586-295a9dddcb12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\gfx">
-      <UniqueIdentifier>{4e16eb2d-224a-4c92-9fef-36d6015431b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\config">
-      <UniqueIdentifier>{49a97a80-c650-4c17-a2ea-51cd95f90782}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\algo">
-      <UniqueIdentifier>{c80fed97-9471-4d07-8943-e25b107febf0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\algo">
-      <UniqueIdentifier>{39f9bbbb-8ac8-4f78-8777-ccfa63bf6788}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\test">
-      <UniqueIdentifier>{8cd88d1b-2e8e-4d3c-ad14-154bc041babc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\config">
-      <UniqueIdentifier>{ea3113b7-b79a-43dd-9d27-4a962cd59f46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\info">
-      <UniqueIdentifier>{276f78fb-7f09-4d4f-a6e1-18cfe2b15458}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\info">
-      <UniqueIdentifier>{96cfff83-baeb-438d-879e-de8a7509477b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="twinhook.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="util\cdraw.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
-    <ClCompile Include="info\keypress_detect.cpp">
-      <Filter>Source Files\info</Filter>
-    </ClCompile>
-    <ClCompile Include="algo\th_vector_algo.cpp">
-      <Filter>Source Files\algo</Filter>
-    </ClCompile>
-    <ClCompile Include="algo\th_vo_algo.cpp">
-      <Filter>Source Files\algo</Filter>
-    </ClCompile>
-    <ClCompile Include="util\color.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
-    <ClCompile Include="util\detour.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
-    <ClCompile Include="gfx\di8_input_overlay.cpp">
-      <Filter>Source Files\gfx</Filter>
-    </ClCompile>
-    <ClCompile Include="directx\ID3D9_Wrapper.cpp">
-      <Filter>Source Files\directx</Filter>
-    </ClCompile>
-    <ClCompile Include="directx\ID3D9Device_Wrapper.cpp">
-      <Filter>Source Files\directx</Filter>
-    </ClCompile>
-    <ClCompile Include="directx\IDI8A_Wrapper.cpp">
-      <Filter>Source Files\directx</Filter>
-    </ClCompile>
-    <ClCompile Include="directx\IDI8ADevice_Wrapper.cpp">
-      <Filter>Source Files\directx</Filter>
-    </ClCompile>
-    <ClCompile Include="util\logfs.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
-    <ClCompile Include="config\th_config.cpp">
-      <Filter>Source Files\config</Filter>
-    </ClCompile>
-    <ClCompile Include="hook\th_d3d9_hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
-    <ClCompile Include="hook\th_di8_hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
-    <ClCompile Include="hook\th07_bullet_proc_hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
-    <ClCompile Include="hook\th08_bullet_proc_hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
-    <ClCompile Include="hook\th15_bullet_proc_hook.cpp">
-      <Filter>Source Files\hook</Filter>
-    </ClCompile>
-    <ClCompile Include="patch\th15_patch_autobomb.cpp">
-      <Filter>Source Files\patch</Filter>
-    </ClCompile>
-    <ClCompile Include="patch\th08_patch_autobomb.cpp">
-      <Filter>Source Files\patch</Filter>
-    </ClCompile>
-    <ClCompile Include="control\th15_player.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
-    <ClCompile Include="control\th10_player.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
-    <ClCompile Include="control\th08_player.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
-    <ClCompile Include="control\th07_player.cpp">
-      <Filter>Source Files\control</Filter>
-    </ClCompile>
-    <ClCompile Include="util\vec2.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
-    <ClCompile Include="test\vec2_test.cpp">
-      <Filter>Source Files\test</Filter>
     </ClCompile>
     <ClCompile Include="gfx\th_info_overlay.cpp">
       <Filter>Source Files</Filter>
@@ -174,97 +39,106 @@
     <ClCompile Include="patch\th_patch_registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="algo\th_vector_algo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="algo\th_vo_algo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="config\th_config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control\th07_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control\th08_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control\th10_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control\th15_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\ID3D9_Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\ID3D9Device_Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\IDI8A_Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\IDI8ADevice_Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx\di8_input_overlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\th_d3d9_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\th07_bullet_proc_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\th_di8_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\th08_bullet_proc_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\th15_bullet_proc_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="info\keypress_detect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\vec2_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="patch\th15_patch_autobomb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="patch\th08_patch_autobomb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\cdraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\color.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\detour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\logfs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\vec2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\imgui\examples\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\imgui\imgui\examples\imgui_impl_dx9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hook\th_wndproc_imgui_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\cdraw.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="info\keypress_detect.h">
-      <Filter>Header Files\info</Filter>
-    </ClInclude>
-    <ClInclude Include="algo\th_vector_algo.h">
-      <Filter>Header Files\algo</Filter>
-    </ClInclude>
-    <ClInclude Include="algo\th_algorithm.h">
-      <Filter>Header Files\algo</Filter>
-    </ClInclude>
-    <ClInclude Include="algo\th_vo_algo.h">
-      <Filter>Header Files\algo</Filter>
-    </ClInclude>
-    <ClInclude Include="util\color.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="util\detour.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx\di8_input_overlay.h">
-      <Filter>Header Files\gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="directx\ID3D9_Wrapper.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="directx\ID3D9Device_Wrapper.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="directx\IDI8A_Wrapper.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="directx\IDI8ADevice_Wrapper.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="util\logfs.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="config\th_config.h">
-      <Filter>Header Files\config</Filter>
-    </ClInclude>
-    <ClInclude Include="hook\th_d3d9_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="hook\th_di8_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="hook\th_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="hook\th07_bullet_proc_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="hook\th08_bullet_proc_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="hook\th15_bullet_proc_hook.h">
-      <Filter>Header Files\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="patch\th15_patch_autobomb.h">
-      <Filter>Header Files\patch</Filter>
-    </ClInclude>
-    <ClInclude Include="patch\th08_patch_autobomb.h">
-      <Filter>Header Files\patch</Filter>
-    </ClInclude>
-    <ClInclude Include="patch\th_patch.h">
-      <Filter>Header Files\patch</Filter>
-    </ClInclude>
-    <ClInclude Include="control\th10_player.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="control\th15_player.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="control\th08_player.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="control\th07_player.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="control\th_player.h">
-      <Filter>Header Files\control</Filter>
-    </ClInclude>
-    <ClInclude Include="util\vec2.h">
-      <Filter>Header Files\util</Filter>
     </ClInclude>
     <ClInclude Include="gfx\th_info_overlay.h">
       <Filter>Header Files</Filter>
@@ -282,6 +156,96 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="config\th_registry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="algo\th_algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="algo\th_vector_algo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="algo\th_vo_algo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config\th_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th07_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th08_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th10_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th15_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\ID3D9_Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\ID3D9Device_Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\IDI8A_Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\IDI8ADevice_Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx\di8_input_overlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th_d3d9_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th_di8_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th07_bullet_proc_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th08_bullet_proc_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th15_bullet_proc_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="info\keypress_detect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="patch\th_patch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="patch\th08_patch_autobomb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="patch\th15_patch_autobomb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\cdraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\detour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\logfs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\vec2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hook\th_wndproc_imgui_hook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
