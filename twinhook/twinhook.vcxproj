@@ -139,6 +139,7 @@
     <ClCompile Include="config\th_command_proc.cpp" />
     <ClCompile Include="config\th_registry.cpp" />
     <ClCompile Include="control\th_player.cpp" />
+    <ClCompile Include="gfx\imgui_controller.cpp" />
     <ClCompile Include="gfx\th_info_overlay.cpp" />
     <ClCompile Include="hook\th_wndproc_imgui_hook.cpp" />
     <ClCompile Include="patch\th10_patch_autobomb.cpp" />
@@ -177,10 +178,12 @@
   <ItemGroup>
     <ClInclude Include="config\th_command_proc.h" />
     <ClInclude Include="config\th_registry.h" />
+    <ClInclude Include="gfx\imgui_controller.h" />
     <ClInclude Include="gfx\th_info_overlay.h" />
     <ClInclude Include="hook\th_wndproc_imgui_hook.h" />
     <ClInclude Include="patch\th10_patch_autobomb.h" />
     <ClInclude Include="patch\th_patch_registry.h" />
+    <ClInclude Include="pattern\nocopy.h" />
     <ClInclude Include="strategy\th_laser_expander.h" />
     <ClInclude Include="util\cdraw.h" />
     <ClInclude Include="util\color.h" />

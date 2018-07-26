@@ -4,6 +4,7 @@
 #include "../algo/th_algorithm.h"
 #include "../info/keypress_detect.h"
 #include "config/th_command_proc.h"
+#include "gfx/imgui_controller.h"
 
 /*
  * Representing an entity. This struct has two interpretations depending on
@@ -83,9 +84,10 @@ union th_kbd_state
 class th_player
 {
 protected:
-	th_algorithm * algorithm = nullptr;
+	th_algorithm *algorithm = nullptr;
 	keypress_detect kpd;
 	th_command_proc cmdp;
+	imgui_controller *imguictl = nullptr;
 
 	// game specific pointers
 	gs_addr gs_ptr;
@@ -98,7 +100,10 @@ public:
 	bool render = false;
 
 	th_player(gs_addr gsa) : gs_ptr(gsa), cmdp(this) {}
-	virtual ~th_player() = default;
+	virtual ~th_player()
+	{
+		if (imguictl)	delete imguictl;
+	};
 
 	/**
 	 * \brief Called when player has been initialized.

@@ -37,7 +37,7 @@ void th08_player::onTick()
 
 void th08_player::onBeginTick()
 {
-
+	th_player::onBeginTick();
 }
 
 void th08_player::onAfterTick()

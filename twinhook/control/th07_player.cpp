@@ -20,6 +20,7 @@ void th07_player::onTick()
 
 void th07_player::onBeginTick()
 {
+	th_player::onBeginTick();
 }
 
 void th07_player::onAfterTick()

@@ -6,11 +6,8 @@
 #include "gfx/th_info_overlay.h"
 #include "hook/th_di8_hook.h"
 #include "hook/th_d3d9_hook.h"
-#include "hook/th_wndproc_imgui_hook.h"
 
 #include <imgui/imgui.h>
-#include <imgui/examples/imgui_impl_dx9.h>
-#include <imgui/examples/imgui_impl_win32.h>
 
 void th_player::onInit()
 {
@@ -23,37 +20,19 @@ void th_player::onInit()
 		th_param.WINDOW_HEIGHT = (float)rect.bottom;
 		LOG("detected window dimensions %ld %ld", rect.right, rect.bottom);
 
-		/* IMGUI Integration */
-		th_wndproc_imgui_hook::bind(cparams.hFocusWindow);
-
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-		ImGui_ImplWin32_Init(cparams.hFocusWindow);
-		ImGui_ImplDX9_Init(th_d3d9_hook::inst()->d3ddev9_wrapper);
-		ImGui::StyleColorsDark();
+		imguictl = new imgui_controller(cparams.hFocusWindow, 
+			th_d3d9_hook::inst()->d3ddev9_wrapper);
+		imguictl->init();
 	}
 	else
 	{
 		ASSERT((false, "fatal, d3ddev9_wrapper inaccessible"));
 	}
-
-	
 }
 
 void th_player::onBeginTick()
 {
-	/* IMGUI Integration */
-	ImGui_ImplDX9_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-	ImGui::Begin("twinject");
-	ImGui::Text("IMGUI render test!");
-	ImGui::End();
-
-	ImGui::EndFrame();
+	if (imguictl)	imguictl->preframe();
 }
 
 void th_player::onTick()
@@ -66,9 +45,9 @@ void th_player::onTick()
 			BYTE press[256];
 			kpd.tick(diKeys, press);
 
-			th_di8_hook::inst()->block = 
+			th_di8_hook::inst()->block =
 				cmdp.inputState == th_command_proc::input_state::RECEIVING;
-			if(cmdp.inputState != th_command_proc::input_state::RECEIVING)
+			if (cmdp.inputState != th_command_proc::input_state::RECEIVING)
 				this->handleInput(diKeys, press);
 			cmdp.handleInput(diKeys, press);
 		}
@@ -83,14 +62,12 @@ void th_player::onAfterTick()
 	powerups.clear();
 	lasers.clear();
 
-	/* IMGUI Integration */
-	ImGui::Render();
-	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-	// TODO verify loss of D3D9 device does not affect IMGUI
+	if(imguictl)	imguictl->render();
 }
 
 void th_player::draw(IDirect3DDevice9* d3dDev)
 {
+	/* TODO deprecate old drawing functionality for info */
 	_B();
 	_D(D3DCOLOR_ARGB(255, 0, 255, 255), "TWINJECT [netdex]");
 	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "  b p l #: %d %d %d", bullets.size(), powerups.size(), lasers.size());
@@ -101,6 +78,9 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 		algorithm->visualize(d3dDev);
 	cmdp.render(d3dDev);
 	DI8_Overlay_RenderInput(d3dDev, this->getKeyboardState());
+
+	/* IMGUI Integration*/
+	if (imguictl)	ImGui::ShowDemoWindow();
 }
 
 void th_player::handleInput(const BYTE diKeys[256], const BYTE press[256])
@@ -138,7 +118,7 @@ entity th_player::getPlayerEntity()
 	PBYTE PlayerPtrAddr = (PBYTE)this->gs_ptr.plyr_pos;
 	entity plyr = {
 		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET,
-		     *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
+			 *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
 		vec2(),
 		vec2(5, 5), // hard-coded player size
 		0
