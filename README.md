@@ -8,7 +8,7 @@ out-of-date or just plain wrong.
 ```
 ```
 If you have any questions, inquiries, or are just having trouble getting something working, 
-feel free to email me (my email address is on my GitHub profile).
+feel free to open a ticket or email me (my email address is on my GitHub profile).
 ```
 ## [Demonstration Video](https://youtu.be/UKoz499YXr8)
 [![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/UKoz499YXr8)
