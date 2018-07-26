@@ -6,12 +6,15 @@ At the moment all of my resources are focused on development, and very few are
 allocated to documentation. As a result, some of the documentation here might be 
 out-of-date or just plain wrong.
 ```
-
+```
+If you have any questions, inquiries, or are just having trouble getting something working, 
+feel free to email me (my email address is on my GitHub profile).
+```
 ## [Demonstration Video](https://youtu.be/UKoz499YXr8)
 [![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/UKoz499YXr8)
 
 ## What is this?
-_twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions.
+_twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions. _twinject_'s first goal is to expose game information and APIs to interact with the game.
 
 For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies. In the demonstration videos, the fast moving projectiles are the obstacles which must be dodged - if the player hits any of these projectiles they die immediately. The player itself also fires projectiles, which damage enemies. Props to ZUN for making games that people still play 20 years later.
 
@@ -123,10 +126,8 @@ Run twinject.exe, which will chainload the game executable.
 Make sure your game executable and the one defined in twinject.ini match.
 
 -- CONTROLS --
-G - Enable bot
-B - Disable bot
-H - Display debug graphics
-N - Hide debug graphics 
+G - Enable/disable bot
+H - Show/hide debug graphics
 / - Input debug command
 
 To close the bot, close the debug console window and the game will close after.
@@ -136,6 +137,10 @@ If you are using the th_vo_algo (the default), make sure you only enable the bot
 since the th_vo_algo needs to calibrate the player by moving it around. You should see a log message after successful calibration.
 
 Make sure DirectInput is not disabled, it is required for movement.
+
+If you have any other problems, please read the troubleshooting section below. 
+If you still have any other problems, feel free to contact me. 
+You can either make an issue or email me (my email is on my GitHub profile).
 ```
 
 ## Troubleshooting
@@ -164,6 +169,8 @@ Note that this bot generates valid replays. **Do not submit replays** generated 
 
 ## 3rd Party
 This code is [licensed under the MIT](https://github.com/Netdex/twinject/blob/master/LICENSE).
+
+Libraries and their licenses are documented under `dependencies/`. 
 
 Information regarding Touhou game internals to assist in reverse engineering have been used from the following sources:  
 [TH10_Collision_Points by binvec](https://github.com/binvec/TH10_Collision_Points)  
