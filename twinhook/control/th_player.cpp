@@ -20,7 +20,7 @@ void th_player::onInit()
 		th_param.WINDOW_HEIGHT = (float)rect.bottom;
 		LOG("detected window dimensions %ld %ld", rect.right, rect.bottom);
 
-		imguictl = new imgui_controller(cparams.hFocusWindow, 
+		imguictl = new imgui_controller(cparams.hFocusWindow,
 			th_d3d9_hook::inst()->d3ddev9_wrapper);
 		imguictl->init();
 	}
@@ -59,20 +59,16 @@ void th_player::onTick()
 void th_player::onAfterTick()
 {
 	bullets.clear();
+	enemies.clear();
 	powerups.clear();
 	lasers.clear();
 
-	if(imguictl)	imguictl->render();
+	if (imguictl)	imguictl->render();
 }
 
 void th_player::draw(IDirect3DDevice9* d3dDev)
 {
 	/* TODO deprecate old drawing functionality for info */
-	_B();
-	_D(D3DCOLOR_ARGB(255, 0, 255, 255), "TWINJECT [netdex]");
-	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "  b p l #: %d %d %d", bullets.size(), powerups.size(), lasers.size());
-	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "bot state: %s", enabled ? "ENABLED" : "DISABLED");
-	_D(D3DCOLOR_ARGB(255, 255, 255, 255), "viz state: %s", render ? "DETAILED" : "NONE");
 
 	if (algorithm)
 		algorithm->visualize(d3dDev);
@@ -80,7 +76,25 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 	DI8_Overlay_RenderInput(d3dDev, this->getKeyboardState());
 
 	/* IMGUI Integration*/
-	if (imguictl)	ImGui::ShowDemoWindow();
+	if(imguictl)
+	{
+		using namespace ImGui;
+		Begin("twinject (netdex)");
+		Text("b e p l #: %d %d %d %d", bullets.size(), enemies.size(), powerups.size(), lasers.size());
+		Text("bot state: %s", enabled ? "ENABLED" : "DISABLED");
+		Text("viz state: %s", render ? "DETAILED" : "NONE");
+
+		if (Button("Toggle Bot"))
+			setEnable(!enabled);
+		SameLine();
+		if (Button("Toggle Debug"))
+			render = !render;
+		Checkbox("Show IMGUI demo", &imguiShowDemoWindow);
+		End();
+
+		if (imguiShowDemoWindow)	ShowDemoWindow();
+
+	}
 }
 
 void th_player::handleInput(const BYTE diKeys[256], const BYTE press[256])

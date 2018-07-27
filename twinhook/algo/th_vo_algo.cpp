@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <imgui/imgui.h>
+
 #include "th_vo_algo.h"
 #include "control/th_player.h"
 #include "hook/th_di8_hook.h"
@@ -7,6 +9,7 @@
 #include "util/color.h"
 #include "control/th15_player.h"
 #include "control/th10_player.h"
+#include "gfx/imgui_mixins.h"
 
 void th_vo_algo::onBegin()
 {
@@ -15,6 +18,22 @@ void th_vo_algo::onBegin()
 
 void th_vo_algo::onTick()
 {
+	/* IMGUI Integration */
+	using namespace ImGui;
+	Begin("th_vo_algo");
+	Text("Constrained Velocity Obstacle Algorithm");
+	if (CollapsingHeader("Info"))
+	{
+		Text("calib: %s", isCalibrated ? "true" : "false");
+		SameLine(); ShowHelpMarker("Algorithm player speed calibration");
+
+		Text("calib vel: norm %.2f, foc %.2f", playerVel, playerFocVel);
+		SameLine(); ShowHelpMarker("Calibrated velocities in normal and focused mode");
+
+		Text("col test: %s", hitCircle ? "hit circle" : "hit box");
+		SameLine(); ShowHelpMarker("Collision test used");
+	}
+	
 	auto di8 = th_di8_hook::inst();
 
 	if (!player->enabled) {
@@ -200,6 +219,21 @@ void th_vo_algo::onTick()
 		tarIdx = maxIdx;
 	}
 
+	/* IMGUI Integration */
+	int minTimeIdx = 0;
+	for(int dir = 1; dir < NUM_DIRS; ++dir)
+	{
+		if (collisionTicks[dir] < collisionTicks[minTimeIdx])
+			minTimeIdx = dir;
+	}
+	for (int i = 1; i < RISK_HISTORY_SIZE; ++i)
+		riskHistory[i - 1] = riskHistory[i];
+	riskHistory[RISK_HISTORY_SIZE - 1] = collisionTicks[minTimeIdx];
+	PlotLines("danger hist", riskHistory, IM_ARRAYSIZE(riskHistory), 0, "", 
+		0.f, 30.f, ImVec2(0, 80));
+	SameLine(); ShowHelpMarker("frames until collision of the best move,\n"
+							   "maximization parameter");
+
 	/*LOG("C[%d] | H:%.0f U:%.0f D:%.0f L:%.0f R:%.0f UL:%.0f UR:%.0f DL:%.0f DR:%.0f",
 		tarIdx,
 		collisionTicks[0] == FLT_MAX ? -1 : collisionTicks[0], collisionTicks[1],
@@ -225,6 +259,8 @@ void th_vo_algo::onTick()
 	{
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
 	}
+	End();
+
 }
 
 void th_vo_algo::calibInit()
@@ -395,8 +431,6 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 			plyr.p.y - plyr.sz.y / 2 + th_param.GAME_Y_OFFSET,
 			plyr.sz.x, plyr.sz.y, D3DCOLOR_ARGB(255, 0, 255, 0));
 	}
-
-
 }
 
 bool th_vo_algo::calibTick()

@@ -93,6 +93,7 @@ protected:
 	gs_addr gs_ptr;
 public:
 	std::vector<entity> bullets;
+	std::vector<entity> enemies;	// TODO implement viz, add, use
 	std::vector<entity> powerups;
 	std::vector<laser> lasers;
 
@@ -163,4 +164,8 @@ public:
 	 * Thank you!
 	 */
 	th_kbd_state getKeyboardState() const;
+private:
+	/* IMGUI display variables */
+
+	bool imguiShowDemoWindow = false;
 };

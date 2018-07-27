@@ -140,6 +140,10 @@ class th_vo_algo : public th_algorithm
 		vec2 p, vec2 s,
 		float minRes) const;
 
+	/* IMGUI Integration */
+	static const int RISK_HISTORY_SIZE = 90;
+	float riskHistory[RISK_HISTORY_SIZE] = {0};
+
 public:
 	th_vo_algo(th_player *player) : th_algorithm(player) {}
 	th_vo_algo(th_player *player, bool hit_circle) : th_algorithm(player), hitCircle(hit_circle) {}
