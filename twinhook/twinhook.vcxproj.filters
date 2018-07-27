@@ -138,6 +138,9 @@
     <ClCompile Include="gfx\imgui_controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gfx\imgui_mixins.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -255,6 +258,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pattern\nocopy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx\imgui_mixins.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
