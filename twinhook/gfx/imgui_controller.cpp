@@ -17,10 +17,11 @@ void imgui_controller::init()
 	IMGUI_CHECKVERSION();
 	CreateContext();
 	ImGuiIO& io = GetIO(); (void)io;
+	io.FontAllowUserScaling = true;
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX9_Init(pD3DDev);
-	StyleColorsDark();
+	StyleColorsClassic();
 }
 
 void imgui_controller::preframe()
