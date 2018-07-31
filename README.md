@@ -109,7 +109,7 @@ twinject.ini (you may need to create this yourself, specified below)
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
 and place into game directory if the game requires it.
 ```
-If you don't want to build it, there are stable Releases in this repository. The tagged commits represent stable points, since sometimes I break the build and it doesn't work. If you want to test the latest features (since the Releases take effort to create, so I don't do them often), you can download the build artifacts from [Appveyor](https://ci.appveyor.com/project/Netdex/twinject). If you are having trouble getting it to build, feel free to open a ticket or contact me.
+If you don't want to build it, there are stable Releases in this repository. The tagged commits represent stable points, since sometimes I break the build and it doesn't work. If you want to test the latest features (since the Releases take effort to create, so I don't do them often), you can download the build artifacts from [Appveyor](https://ci.appveyor.com/project/netdex/twinject/build/artifacts). If you are having trouble getting it to build, feel free to open a ticket or contact me.
 
 ### Configuration
 twinject.ini must be in the same folder as twinject.exe, and contains configuration options. Here's the default configuration:
