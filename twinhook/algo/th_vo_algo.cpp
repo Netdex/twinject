@@ -259,7 +259,7 @@ void th_vo_algo::onTick()
 
 	// deathbomb if the bot is going to die in the next frame
 	// this is very dependant on the collision predictor being very accurate
-	if (collisionTicks[tarIdx] <= 1)
+	if (!powerupTarget && collisionTicks[tarIdx] < 0.5f)
 	{
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
 	}
