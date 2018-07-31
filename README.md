@@ -8,8 +8,9 @@ out-of-date or just plain wrong.
 ```
 ```
 If you have any questions, inquiries, want to help, or are just having trouble getting 
-something working, feel free to open a ticket or email me 
-(my email address is on my GitHub profile).
+something working, feel free to open a ticket or email me (my email address is on my GitHub profile). 
+It's much easier to answer emails when they come rather than keep the documentation here up-to-date 
+all the time, so I apologize if any of the documentation here is confusing or wrong.
 ```
 ## [Demonstration Video](https://youtu.be/UKoz499YXr8)
 [![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/UKoz499YXr8)
@@ -60,7 +61,7 @@ This method uses a method of virtual potential fields and Coulomb's law as a loc
 |Collect Powerups      |❌   |✔️  |✔️  |❌  |
 |Target Enemies        |❌   |❌  |❌  |❌  |
 
-... and some other undocumented features.
+... and some other undocumented features. Keep in mind that this table probably isn't kept up to date.
 
 ## Documentation of Functionality
 Consists of two parts, **twinhook** and **twinject**.
@@ -72,7 +73,7 @@ This technical description is now a bit out of date, as radical changes were mad
 [Technical Description of th08 binding](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
 
 ### twinject
-twinject loads twinhook into game with MS Detours.
+twinject loads twinhook into game with MS Detours. This documentation is up-to-date, since I haven't the injector part in years (don't fix it if it ain't broke).
 
 [Technical Description of Injection](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
 
@@ -90,6 +91,8 @@ The automated player is a game-specific wrapper for each game that twinject supp
 
 Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
 
+If you have any further questions about the code structure feel free to contact me.
+
 ## Building
 The dependencies are included in the repository, and are referenced by relative path.
 
@@ -106,7 +109,7 @@ twinject.ini (you may need to create this yourself, specified below)
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
 and place into game directory if the game requires it.
 ```
-If you don't want to build it, there are stable Releases in this repository. The tagged commits represent stable points, since sometimes I break the build and it doesn't work. If you want to test the latest features (since the Releases take effort to create, so I don't do them often), you can download the build artifacts from [Appveyor](https://ci.appveyor.com/project/Netdex/twinject).
+If you don't want to build it, there are stable Releases in this repository. The tagged commits represent stable points, since sometimes I break the build and it doesn't work. If you want to test the latest features (since the Releases take effort to create, so I don't do them often), you can download the build artifacts from [Appveyor](https://ci.appveyor.com/project/Netdex/twinject). If you are having trouble getting it to build, feel free to open a ticket or contact me.
 
 ### Configuration
 twinject.ini must be in the same folder as twinject.exe, and contains configuration options. Here's the default configuration:
@@ -149,7 +152,7 @@ You can either make an issue or email me (my email is on my GitHub profile).
 
 ## Troubleshooting
 Before trying anything here, make sure your game is completely clean (unpatched, untranslated), since some patches fiddle 
-with the code and may affect functionality.
+with the code and may affect functionality. If nothing works, please open a ticket. 
 
 ### Hotkeys do not work
 Make sure DirectInput is not disabled.
