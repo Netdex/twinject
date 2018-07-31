@@ -7,8 +7,9 @@ allocated to documentation. As a result, some of the documentation here might be
 out-of-date or just plain wrong.
 ```
 ```
-If you have any questions, inquiries, or are just having trouble getting something working, 
-feel free to open a ticket or email me (my email address is on my GitHub profile).
+If you have any questions, inquiries, want to help, or are just having trouble getting 
+something working, feel free to open a ticket or email me 
+(my email address is on my GitHub profile).
 ```
 ## [Demonstration Video](https://youtu.be/UKoz499YXr8)
 [![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/UKoz499YXr8)
@@ -22,18 +23,20 @@ Why did I do this? I thought it would be a neat challenge to apply my knowledge 
 
 Documentation is currently incomplete/outdated, and is currently on my list of things to do. At the moment, I am prioritizing features and demonstrations.
 
-So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for games listed in the table below. Since all the necessary abstractions already exist, I also plan to utilize machine learning strategies as a possible solution.
+So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for games listed in the table below. Some binding implementations or reverse engineering knowledge have been borrowed from other sources and are cited at the bottom. Thank you! Since all the necessary abstractions already exist, I also plan to utilize machine learning strategies as a possible solution.
 
 ## Demonstrations
+As of now, I have implemented two player algorithms with varying degrees of success.
 
 ### Constrained Velocity Obstacle Algorithm
+The constrained velocity obstacle algorithm uses a linear velocity obstacle predictor based approach with an infinite horizon but constrained bounds, and picks the best possible move at the current instant in a greedy fashion.  
 Note that when these demonstrations were recorded, the bot was incapable of dodging lasers. Watch as it struggles to deathbomb through every laser it sees.  
 #### [MoF Stage 3 Lunatic](https://youtu.be/UKoz499YXr8)
 #### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)  
 #### [LoLK Stage 6](https://youtu.be/9WElfhVE-Lk)
 
 ### Vector Dodging + Method of Virtual Potential Field Algorithm
-Note that this algorithm is not as effective as the VO algorithm above, so the playing is suboptimal.  
+This method uses a method of virtual potential fields and Coulomb's law as a local optimization technique, along with a hardcoded proximity based vector projection dodging algorithm for fast bullets. Note that this algorithm is not as effective as the VO algorithm above, so the playing is suboptimal.  
 #### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)  
 #### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)  
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
@@ -66,12 +69,12 @@ Consists of two parts, **twinhook** and **twinject**.
 twinhook is a DLL, injected before runtime into a Touhou game. It uses MS Detours to trampoline functions.  
 This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
 
-[Technical Description](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
+[Technical Description of th08 binding](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
 
 ### twinject
 twinject loads twinhook into game with MS Detours.
 
-[Technical Description](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
+[Technical Description of Injection](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
 
 ### Code Structure
 #### [Doxygen](https://rawgit.com/Netdex/twinject/master/docs/html/index.html) (mostly undocumented)
