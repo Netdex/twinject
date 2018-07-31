@@ -44,6 +44,7 @@ void th_vo_algo::onTick()
 		di8->resetVkState(DIK_Z);
 		di8->resetVkState(DIK_LSHIFT);
 		di8->resetVkState(DIK_LCONTROL);
+		End();
 		return;
 	}
 
@@ -53,6 +54,7 @@ void th_vo_algo::onTick()
 		if (isCalibrated) {
 			LOG("calibrated plyr vel: %f %f", playerVel, playerFocVel);
 		}
+		End();
 		return;
 	}
 
@@ -186,8 +188,10 @@ void th_vo_algo::onTick()
 			tarIdx = dir;
 	}
 
+	bool powerupTarget = true;
 	// check if we could find a targetable powerup
 	if (tarIdx == -1) {
+		powerupTarget = false;
 		// find direction with maximum frames until collision
 
 		/* TODO changed from 0 to 1 to disable hold position
