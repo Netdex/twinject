@@ -135,6 +135,7 @@ public:
 	/**
 	 * \brief Process raw input from game
 	 * \param diKeys Key state
+	 * \deprecated DirectInput capturing is not capatible with some games
 	 */
 	virtual void handleInput(const BYTE diKeys[256], const BYTE press[256]);
 

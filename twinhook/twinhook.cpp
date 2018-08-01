@@ -15,14 +15,11 @@
 #include <imgui/imgui.h>
 #include <imgui/examples/imgui_impl_win32.h>
 #include <imgui/examples/imgui_impl_dx9.h>
+#include "control/th11_player.h"
 
-/**
- * \brief Initialize th07 bot
- */
 void th07_init()
 {
 	th07_player *player = new th07_player();
-	//th_vector_algo *algo = new th_vector_algo(player);
 	th_vo_algo *algo = new th_vo_algo(player);
 	player->bindAlgorithm(algo);
 
@@ -31,13 +28,9 @@ void th07_init()
 	th07_bullet_proc_hook::bind(player);
 }
 
-/**
- * \brief Initialize th08 bot
- */
 void th08_init()
 {
 	th08_player *player = new th08_player();
-	//th_vector_algo *algo = new th_vector_algo(player);
 	th_vo_algo *algo = new th_vo_algo(player);
 	player->bindAlgorithm(algo);
 
@@ -46,47 +39,42 @@ void th08_init()
 	th08_bullet_proc_hook::bind(player);
 }
 
-/**
- * \brief Initialize th10 bot
- */
 void th10_init()
 {
 	th10_player *player = new th10_player();
 	th_vo_algo *algo = new th_vo_algo(player);
 	player->bindAlgorithm(algo);
-	th_d3d9_hook::bind(player, false);
+	th_d3d9_hook::bind(player, false); 
 	th_di8_hook::bind(player);
-	// why doesn't th10 have a hook? because we get the information
-	// by polling memory regions instead of hooking.
+	// no bullet proc hook due to polling
 }
 
-/**
- * \brief Initialize th15 bot
- */
+void th11_init()
+{
+	th11_player *player = new th11_player();
+	th_vo_algo *algo = new th_vo_algo(player);
+	player->bindAlgorithm(algo);
+	th_d3d9_hook::bind(player, false);
+	th_di8_hook::bind(player);
+}
+
 void th15_init()
 {
 	th15_player *player = new th15_player();
-	//th_vector_algo *algo = new th_vector_algo(player);
 	th_vo_algo *algo = new th_vo_algo(player, true);
-	//th_ann_algo *algo = new th_ann_algo(player, true);
 	player->bindAlgorithm(algo);
 	th_d3d9_hook::bind(player, false);
 	th_di8_hook::bind(player);
 	th15_bullet_proc_hook::bind(player);
 }
 
-/**
- * \brief Game loading routine
- */
 typedef void(*th_loader_t)();
 
-/**
- * \brief Map from game environment variable name to loading routine
- */
 static std::unordered_map<std::string, th_loader_t> th_init{
 	{"th07", th07_init},
 	{"th08", th08_init},
 	{"th10", th10_init},
+	{"th11", th11_init},
 	{"th15", th15_init}
 };
 
@@ -106,7 +94,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 		size_t len;
 		char buf[256];
 		getenv_s(&len, buf, 256, "th");
-		if(strcmp(buf, "") == 0)
+		if (strcmp(buf, "") == 0)
 		{
 			LOG("WARNING: The game loader to use is not specified so no loader will "
 				"be used, this is probably not what you want!");

@@ -38,20 +38,9 @@ void th_player::onBeginTick()
 void th_player::onTick()
 {
 	th_di8_hook* di8 = th_di8_hook::inst();
-	BYTE diKeys[256];
-	if (di8->DirectInput8) {
-		if (di8->DirectInput8->DirectInputDevice8->DirectInputDevice8->GetDeviceState(256, diKeys) == DI_OK)
-		{
-			BYTE press[256];
-			kpd.tick(diKeys, press);
+	if (!di8->DirectInput8)
+		return;
 
-			th_di8_hook::inst()->block =
-				cmdp.inputState == th_command_proc::input_state::RECEIVING;
-			if (cmdp.inputState != th_command_proc::input_state::RECEIVING)
-				this->handleInput(diKeys, press);
-			cmdp.handleInput(diKeys, press);
-		}
-	}
 	if (algorithm)
 		algorithm->onTick();
 }

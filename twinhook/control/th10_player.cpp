@@ -14,7 +14,6 @@ void th10_player::onTick()
 	th_player::onTick();
 }
 
-float arcRad = 0;
 void th10_player::onBeginTick()
 {
 	th_player::onBeginTick();
@@ -22,10 +21,6 @@ void th10_player::onBeginTick()
 	this->doEnemyPoll();
 	this->doPowerupPoll();
 	this->doLaserPoll();
-
-	// hack that expands OBB lasers into AABBs, which I 
-	// have already written functional collision predictor code for
-	//tle.expand(lasers, bullets);
 }
 
 void th10_player::onAfterTick()
@@ -41,7 +36,6 @@ void th10_player::draw(IDirect3DDevice9* d3dDev)
 void th10_player::handleInput(const BYTE diKeys[256], const BYTE press[256])
 {
 	th_player::handleInput(diKeys, press);
-
 }
 
 void th10_player::onEnableChanged(bool enable)
