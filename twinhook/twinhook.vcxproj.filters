@@ -141,6 +141,9 @@
     <ClCompile Include="gfx\imgui_mixins.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="control\th11_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -261,6 +264,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gfx\imgui_mixins.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th11_player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

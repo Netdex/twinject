@@ -1,4 +1,6 @@
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <windows.h>
 #include <detours.h>
 #include <tchar.h>
@@ -24,31 +26,43 @@ int main(const int argc, const char *argv[])
 ===========================================\n\n");
 
 	// The following block of code defines debugging paths to the games I have in my debug environment.
-	// TODO use dynamic configuration based loading instead of hard coding everything
+	// Undefine the loader define to read the configuration file.
+
+	const char *DBG_DLL_PATH = "D:\\Programming\\Multi\\twinject\\Debug\\twinhook.dll";
+	const char *RLS_DLL_PATH = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
+
+	char dllpath[MAX_PATH] = { 0 };
+
+#ifdef DEBUG
+	printf("WARNING: Injector was compiled in debug mode!\n");
+	strcpy(dllpath, DBG_DLL_PATH);
+#else
+	strcpy(dllpath, RLS_DLL_PATH);
+#endif
+
 #if defined(TH07_LOADER)
 	_putenv("th=th07");
 	char *exepath = "D:\\Programming\\Multi\\th07\\th07.exe";
-	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th07";
 #elif defined(TH08_LOADER)
 	_putenv("th=th08");
 	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";
-	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th08";
 #elif defined(TH10_LOADER)
 	_putenv("th=th10");
 	char *exepath = "D:\\Programming\\Multi\\th10\\th10.exe";
-	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th10";
+#elif defined(TH11_LOADER)
+	_putenv("th=th11");
+	char *exepath = "D:\\Programming\\Multi\\th11\\th11.exe";
+	char *currentdir = "D:\\Programming\\Multi\\th11";
 #elif defined(TH15_LOADER)
 	_putenv("th=th15");
 	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";
-	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Programming\\Multi\\th15";
 #elif defined(USER_LOADER)
 	_putenv("th=th08");
 	char *exepath = "D:\\Games\\Touhou Project\\08.0 ~ Imperishable Night\\th08.exe";
-	char *dllpath = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
 	char *currentdir = "D:\\Games\\Touhou Project\\08.0 ~ Imperishable Night";
 #else
 	// The following code loads configuration data from an external file
@@ -60,23 +74,28 @@ int main(const int argc, const char *argv[])
 	}
 
 	char exepath[MAX_PATH];
-	char dllpath[MAX_PATH];
 	char currentdir[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, currentdir);
 	PathCombine(exepath, currentdir, config.exename);
 	PathCombine(dllpath, currentdir, config.dllname);
 	_putenv(config.env);
 #endif
-	char twinjectDir[256];
-	GetModuleFileName(NULL, twinjectDir, 256);
+
+#ifndef DEBUGGER
+	printf("WARNING: Debugger disabled upon compile-time! No debug messages will appear!\n");
+#endif
+
+	char twinjectDir[MAX_PATH];
+	GetModuleFileName(NULL, twinjectDir, MAX_PATH);
 	SetDllDirectory(twinjectDir);
-	printf("SetDllDirectory(%s)\n", twinjectDir);
+	printf("Setting DLL directory path to: %s\n", twinjectDir);
+	printf("Injecting DLL from path: %s\n", dllpath);
 
 	memset(&si, 0, sizeof(si));
 	memset(&pi, 0, sizeof(pi));
 	si.cb = sizeof(si);
 	if (DetourCreateProcessWithDll(exepath, NULL, NULL, NULL, TRUE,
-		CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE 
+		CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE
 #ifdef DEBUGGER
 		| DEBUG_PROCESS
 #endif
@@ -88,6 +107,7 @@ int main(const int argc, const char *argv[])
 	else
 	{
 		printf("twinject: Injection Fail\n");
+		return 1;
 	}
 
 	DEBUG_EVENT debugEv;
