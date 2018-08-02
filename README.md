@@ -43,23 +43,23 @@ This method uses a method of virtual potential fields and Coulomb's law as a loc
 #### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
 
 ## Support
-|Bindings              |th07 |th08 |th10 |th15 |
-|----------------------|-----|-----|-----|-----|
-|Bullet Hook           |✔️   |✔️  |✔️  |✔️  |
-|Enemy Hook            |❌   |❌  |✔️  |❓   |
-|Powerup Hook          |❌   |✔️  |✔️  |❌  |
-|Laser Hook            |❌   |❌  |✔️  |✔️  |
-|Stage Info Hook       |✔️   |✔️  |✔️  |✔️  |
-|Direct3D Hook         |✔️   |✔️  |✔️  |✔️  |
-|DirectInput Hook      |✔️   |✔️  |✔️  |✔️  |
+|Bindings              |th07 |th08 |th10 |th11 |th15 |
+|----------------------|-----|-----|-----|-----|-----|
+|Bullet Hook           |✔️   |✔️  |✔️  |✔️  |✔️  |
+|Enemy Hook            |❌   |❌  |✔️  |❌  |❓   |
+|Powerup Hook          |❌   |✔️  |✔️  |❌  |❌  |
+|Laser Hook            |❌   |❌  |✔️  |❌  |✔️  |
+|Stage Info Hook       |✔️   |✔️  |✔️  |✔️  |✔️  |
+|Direct3D Hook         |✔️   |✔️  |✔️  |✔️  |✔️  |
+|DirectInput Hook      |✔️   |✔️  |✔️  |✔️* |✔️  |
 
-|Feature               |th07 |th08 |th10 |th15 |
-|----------------------|-----|-----|-----|-----|
-|Dodge Bullet          |✔️   |✔️  |✔️  |✔️  |
-|Dodge Enemy           |❌   |❌  |✔️  |✔️  |
-|Dodge Laser           |❌   |❌  |✔️  |✔️  |
-|Collect Powerups      |❌   |✔️  |✔️  |❌  |
-|Target Enemies        |❌   |❌  |❌  |❌  |
+|Feature               |th07 |th08 |th10 |th11 |th15 |
+|----------------------|-----|-----|-----|-----|-----|
+|Dodge Bullet          |✔️   |✔️  |✔️  |✔️  |✔️  |
+|Dodge Enemy           |❌   |❌  |✔️  |❌  |✔️  |
+|Dodge Laser           |❌   |❌  |✔️  |❌  |✔️  |
+|Collect Powerups      |❌   |✔️  |✔️  |❌  |❌  |
+|Target Enemies        |❌   |❌  |❌  |❌  |❌  |
 
 ... and some other undocumented features. Keep in mind that this table probably isn't kept up to date.
 
