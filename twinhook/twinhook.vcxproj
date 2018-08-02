@@ -145,7 +145,7 @@
     <ClCompile Include="gfx\imgui_mixins.cpp" />
     <ClCompile Include="gfx\th_info_overlay.cpp" />
     <ClCompile Include="hook\th_wndproc_imgui_hook.cpp" />
-    <ClCompile Include="patch\th10_patch_autobomb.cpp" />
+    <ClCompile Include="patch\th_patch.cpp" />
     <ClCompile Include="patch\th_patch_registry.cpp" />
     <ClCompile Include="strategy\th_laser_expander.cpp" />
     <ClCompile Include="util\cdraw.cpp">
@@ -163,11 +163,9 @@
     <ClCompile Include="gfx\di8_input_overlay.cpp" />
     <ClCompile Include="util\logfs.cpp" />
     <ClCompile Include="hook\th08_bullet_proc_hook.cpp" />
-    <ClCompile Include="patch\th08_patch_autobomb.cpp" />
     <ClCompile Include="control\th08_player.cpp" />
     <ClCompile Include="control\th10_player.cpp" />
     <ClCompile Include="hook\th15_bullet_proc_hook.cpp" />
-    <ClCompile Include="patch\th15_patch_autobomb.cpp" />
     <ClCompile Include="control\th15_player.cpp" />
     <ClCompile Include="config\th_config.cpp" />
     <ClCompile Include="hook\th_d3d9_hook.cpp" />
@@ -187,6 +185,7 @@
     <ClInclude Include="gfx\th_info_overlay.h" />
     <ClInclude Include="hook\th_wndproc_imgui_hook.h" />
     <ClInclude Include="patch\th10_patch_autobomb.h" />
+    <ClInclude Include="patch\th11_patch_dinput_fix.h" />
     <ClInclude Include="patch\th_patch_registry.h" />
     <ClInclude Include="pattern\nocopy.h" />
     <ClInclude Include="strategy\th_laser_expander.h" />

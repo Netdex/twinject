@@ -10,6 +10,7 @@
 #include "control/th15_player.h"
 #include "control/th10_player.h"
 #include "gfx/imgui_mixins.h"
+#include "control/th11_player.h"
 
 void th_vo_algo::onBegin()
 {
@@ -465,7 +466,8 @@ bool th_vo_algo::calibTick()
 
 		// BUG why does LoLK do this differently
 		if (dynamic_cast<th15_player*>(player)
-			|| dynamic_cast<th10_player*>(player))
+			|| dynamic_cast<th10_player*>(player)
+			|| dynamic_cast<th11_player*>(player))
 			playerVel = plyr.p.x - calibStartX;
 		else
 			playerVel = calibStartX - plyr.p.x;
@@ -495,7 +497,8 @@ bool th_vo_algo::calibTick()
 
 		// BUG why do MoF and LoLK do this differently
 		if (dynamic_cast<th15_player*>(player)
-			|| dynamic_cast<th10_player*>(player))
+			|| dynamic_cast<th10_player*>(player)
+			|| dynamic_cast<th11_player*>(player))
 			playerFocVel = plyr.p.x - calibStartX;
 		else
 			playerFocVel = calibStartX - plyr.p.x;

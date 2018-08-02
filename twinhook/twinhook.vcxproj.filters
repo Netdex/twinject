@@ -27,9 +27,6 @@
     <ClCompile Include="strategy\th_laser_expander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="patch\th10_patch_autobomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="config\th_command_proc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,12 +93,6 @@
     <ClCompile Include="test\vec2_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="patch\th15_patch_autobomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="patch\th08_patch_autobomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="util\cdraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -142,6 +133,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="control\th11_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="patch\th_patch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -267,6 +261,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="control\th11_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="patch\th11_patch_dinput_fix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

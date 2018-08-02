@@ -1,18 +1,35 @@
 #pragma once
 
-#include <memory>
+#include <vector>
+#include <windows.h>
 
 class th_patch
 {
-
+public:
+	enum result
+	{
+		PATCH_SUCCESS = 0,
+		PATCH_MEMORY_VIOLATION,
+		PATCH_VERIFY_MISMATCH,
+		PATCH_INVALID,
+		PATCH_REDUNDANT
+	};
+	virtual result patch();
+	virtual result unpatch();
 protected:
 	struct th_patch_def
 	{
-		void* addr;
-		std::vector<char> patch;
+		void* addr;					// pointer to base modification address
+		std::vector<char> patch;	// patch contents
+
+		bool shouldVerify = false;	// whether to do verification
+		std::vector<char> expected;	// expected unpatched contents
 
 		th_patch_def(void* addr, const char *patch, size_t len)
 			: addr(addr), patch(patch, patch + len){}
+		th_patch_def(void* addr, const char *patch, const char *expected, size_t len)
+			: addr(addr), patch(patch, patch + len), expected(expected, expected + len),
+			shouldVerify(true) {}
 	};
 
 	th_patch(std::vector<th_patch_def> patches) 
@@ -25,34 +42,6 @@ private:
 	std::vector<th_patch_def> original;
 	HANDLE hProcess = NULL;
 
-	void apply_patch(th_patch_def *patch) const
-	{
-		WriteProcessMemory(hProcess, patch->addr, 
-			&*patch->patch.begin(), patch->patch.size(), NULL);
-	}
-
-public:
-	virtual void patch()
-	{
-		if (patched)
-			return;
-
-		original.clear();
-		for (auto i : patches)
-		{
-			original.push_back(th_patch_def(i.addr, (const char*) i.addr, i.patch.size()));
-			apply_patch(&i);
-		}
-		patched = true;
-	}
-	virtual void unpatch()
-	{
-		if (!patched)
-			return;
-		for (auto i : original)
-		{
-			apply_patch(&i);
-		}
-		patched = false;
-	}
+	result apply_patch(th_patch_def *patch) const;
+	result validate_patch(th_patch_def *patch) const;
 };

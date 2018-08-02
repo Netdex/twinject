@@ -16,6 +16,7 @@
 #include <imgui/examples/imgui_impl_win32.h>
 #include <imgui/examples/imgui_impl_dx9.h>
 #include "control/th11_player.h"
+#include "patch/th_patch_registry.h"
 
 void th07_init()
 {
@@ -56,6 +57,7 @@ void th11_init()
 	player->bindAlgorithm(algo);
 	th_d3d9_hook::bind(player, false);
 	th_di8_hook::bind(player);
+	th_registry::patch("th11_dinput_fix");
 }
 
 void th15_init()
