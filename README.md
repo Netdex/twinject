@@ -63,36 +63,6 @@ This method uses a method of virtual potential fields and Coulomb's law as a loc
 
 ... and some other undocumented features. Keep in mind that this table probably isn't kept up to date.
 
-## Documentation of Functionality
-Consists of two parts, **twinhook** and **twinject**.
-
-### twinhook
-twinhook is a DLL, injected before runtime into a Touhou game. It uses MS Detours to trampoline functions.  
-This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
-
-[Technical Description of th08 binding](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
-
-### twinject
-twinject loads twinhook into game with MS Detours. This documentation is up-to-date, since I haven't the injector part in years (don't fix it if it ain't broke).
-
-[Technical Description of Injection](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
-
-### Code Structure
-#### [Doxygen](https://rawgit.com/Netdex/twinject/master/docs/html/index.html) (mostly undocumented)
-
-Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
-
-An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
-- Method of Velocity Vector and Virtual Potential Field
-- Method of Constrained Velocity Obstacle
-- Method of Artificial Neural Network
-
-The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm. This is required since every game requires different hooks, and may have some game-specific quirk that needs to be handled.
-
-Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
-
-If you have any further questions about the code structure feel free to contact me.
-
 ## Building
 The dependencies are included in the repository, and are referenced by relative path.
 
@@ -149,6 +119,38 @@ If you have any other problems, please read the troubleshooting section below.
 If you still have any other problems, feel free to contact me. 
 You can either make an issue or email me (my email is on my GitHub profile).
 ```
+
+## Documentation of Functionality
+Consists of two parts, **twinhook** and **twinject**.
+
+### twinhook
+twinhook is a DLL, injected before runtime into a Touhou game. It uses MS Detours to trampoline functions.  
+This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
+
+[Technical Description of th08 binding](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
+
+### twinject
+twinject loads twinhook into game with MS Detours. This documentation is up-to-date, since I haven't the injector part in years (don't fix it if it ain't broke).
+
+[Technical Description of Injection](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
+
+### Code Structure
+#### [Doxygen](https://rawgit.com/Netdex/twinject/master/docs/html/index.html) (mostly undocumented)
+
+![alt text?](https://github.com/Netdex/twinject/raw/master/desc/architecture.png)
+
+Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
+
+An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
+- Method of Velocity Vector and Virtual Potential Field
+- Method of Constrained Velocity Obstacle
+- Method of Artificial Neural Network
+
+The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm. This is required since every game requires different hooks, and may have some game-specific quirk that needs to be handled.
+
+Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
+
+If you have any further questions about the code structure feel free to contact me.
 
 ## Troubleshooting
 Before trying anything here, make sure your game is completely clean (unpatched, untranslated), since some patches fiddle 
