@@ -1,5 +1,6 @@
 # twinject 
-[![Build status](https://ci.appveyor.com/api/projects/status/wy06i4vscngsel5n?svg=true)](https://ci.appveyor.com/project/Netdex/twinject)  
+[![Build status](https://ci.appveyor.com/api/projects/status/wy06i4vscngsel5n?svg=true)](https://ci.appveyor.com/project/Netdex/twinject) 
+### [Click here to visit Wiki (documentation)](https://github.com/Netdex/twinject/wiki)
 ```
 This project is a work-in-progress, new features are being added every week. 
 At the moment all of my resources are focused on development, and very few are 
@@ -36,11 +37,7 @@ Note that when these demonstrations were recorded, the bot was incapable of dodg
 #### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)  
 #### [LoLK Stage 6](https://youtu.be/9WElfhVE-Lk)
 
-### Vector Dodging + Method of Virtual Potential Field Algorithm
-This method uses a method of virtual potential fields and Coulomb's law as a local optimization technique, along with a hardcoded proximity based vector projection dodging algorithm for fast bullets. Note that this algorithm is not as effective as the VO algorithm above, so the playing is suboptimal.  
-#### [Alternate Simple Video Demonstration (Easy for the bot)](https://youtu.be/lxQqjiYvZiE)  
-#### [Complex Video Demonstration (Difficult for the bot)](https://www.youtube.com/watch?v=xiQNC4w72L4)  
-#### [Simple Video Demonstration (Easy for the bot)](https://youtu.be/aW7tWWkghPY)
+More demonstrations are available in the [wiki](https://github.com/Netdex/twinject/wiki).
 
 ## Support
 |Bindings              |th07 |th08 |th10 |th11 |th15 |
@@ -107,6 +104,9 @@ G - Enable/disable bot
 H - Show/hide debug graphics
 / - Input debug command
 
+You can click the IMGUI windows to control twinject as well.  
+(note: key controls have been temporarily replaced with IMGUI while I sort stuff out.)
+
 To close the bot, close the debug console window and the game will close after.
 Closing the game first may cause cleanup to not occur.
 
@@ -120,57 +120,9 @@ If you still have any other problems, feel free to contact me.
 You can either make an issue or email me (my email is on my GitHub profile).
 ```
 
-## Documentation of Functionality
-Consists of two parts, **twinhook** and **twinject**.
+## [Architecture](https://github.com/Netdex/twinject/wiki/Architecture)
 
-### twinhook
-twinhook is a DLL, injected before runtime into a Touhou game. It uses MS Detours to trampoline functions.  
-This technical description is now a bit out of date, as radical changes were made to its functionality. I will update the documentation in the near future.
-
-[Technical Description of th08 binding](https://github.com/Netdex/twinject/blob/master/desc/twinhook_technical.md)
-
-### twinject
-twinject loads twinhook into game with MS Detours. This documentation is up-to-date, since I haven't the injector part in years (don't fix it if it ain't broke).
-
-[Technical Description of Injection](https://github.com/Netdex/twinject/blob/master/desc/twinject_technical.md)
-
-### Code Structure
-#### [Doxygen](https://rawgit.com/Netdex/twinject/master/docs/html/index.html) (mostly undocumented)
-
-![alt text?](https://github.com/Netdex/twinject/raw/master/desc/architecture.png)
-
-Hooks for different parts of games are created. Some hooks can be reused across games (Direct3D, DirectInput), some are game specific (bullet processing hooks).
-
-An algorithm is a methodology to process game data, and determine player movements. Multiple implementations of algorithms are/will be supported, including:
-- Method of Velocity Vector and Virtual Potential Field
-- Method of Constrained Velocity Obstacle
-- Method of Artificial Neural Network
-
-The automated player is a game-specific wrapper for each game that twinject supports. It gathers information from hooks and delivers them to the algorithm. This is required since every game requires different hooks, and may have some game-specific quirk that needs to be handled.
-
-Each game has a startup routine. This routine is responsible for intializing hooks at the correct time, setting up the chosen algorithm, and initializing the correct automated player for each game.
-
-If you have any further questions about the code structure feel free to contact me.
-
-## Troubleshooting
-Before trying anything here, make sure your game is completely clean (unpatched, untranslated), since some patches fiddle 
-with the code and may affect functionality. If nothing works, please open a ticket. 
-
-### Hotkeys do not work
-Make sure DirectInput is not disabled.
-![alt text?](https://i.imgur.com/r2unX8N.png)
-Also, make sure `twinhook.dll` is **not** compiled with the Debug target, as it adds debugging code which mangles the hooks for the DirectInput8 hook. 
-Additionally, make sure you do not have a controller plugged in, since this messes with DirectInput.
-
-### Graphical overlay does not appear
-If the game requires the dx8->dx9 patch, make sure it is applied (`dxd8.dll` and `enbconvertor.ini`).
-
-### Game does not open
-Make sure the game actually runs without twinject first (make sure you have DirectX 9 installed, preferrably the package from 2010). 
-Also make sure that the correct game executable is set in twinject.ini (create this file if it does not exist, there's an example config in the Releases).
-
-### Extreme frame drop
-Disable the debug visualization if it is enabled.
+## [Troubleshooting](https://github.com/Netdex/twinject/wiki/Troubleshooting)
 
 ## Ethics
 ### Replays
