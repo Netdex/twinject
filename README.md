@@ -13,8 +13,8 @@ something working, feel free to open a ticket or email me (my email address is o
 It's much easier to answer emails when they come rather than keep the documentation here up-to-date 
 all the time, so I apologize if any of the documentation here is confusing or wrong.
 ```
-## [Demonstration Video](https://youtu.be/UKoz499YXr8)
-[![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/UKoz499YXr8)
+## [Demonstration Video](https://youtu.be/-3xhwImamQw)
+[![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/-3xhwImamQw)
 
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions. _twinject_'s first goal is to expose game information and APIs to interact with the game.
@@ -33,6 +33,7 @@ As of now, I have implemented two player algorithms with varying degrees of succ
 ### Constrained Velocity Obstacle Algorithm
 The constrained velocity obstacle algorithm uses a linear velocity obstacle predictor based approach with an infinite horizon but constrained bounds, and picks the best possible move at the current instant in a greedy fashion.  
 Note that when these demonstrations were recorded, the bot was incapable of dodging lasers. Watch as it struggles to deathbomb through every laser it sees.  
+#### [MoF 1CC Normal](https://youtu.be/-3xhwImamQw)
 #### [MoF Stage 3 Lunatic](https://youtu.be/UKoz499YXr8)
 #### [1CC LoLK Normal](https://www.youtube.com/watch?v=lwiM6dhBiYQ)  
 #### [LoLK Stage 6](https://youtu.be/9WElfhVE-Lk)
