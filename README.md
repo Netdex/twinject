@@ -68,6 +68,10 @@ The dependencies are included in the repository, and are referenced by relative 
 ```
 1. Clone repository to disk
 2. Build in Visual Studio 2017 with Release (x86) target.
+The following components are required:
+- VC++ 2017 version 15.8 v14.5 latest v141 tools (other verisons should be okay, you will need to retarget)
+- Windows 10 SDK (10.0.17134.0) (other versions should be okay, you will need to retarget)
+- Visual C++ ATL for x86 and x64 (technically this isn't required, but I used CString for convenience)
 
 Place the following files into the game directory:
 twinject.exe
