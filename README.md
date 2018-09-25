@@ -11,7 +11,7 @@ out-of-date or just plain wrong.
 If you have any questions, inquiries, want to help, or are just having trouble getting 
 something working, feel free to open a ticket or email me (my email address is on my GitHub profile). 
 It's much easier to answer emails when they come rather than keep the documentation here up-to-date 
-all the time, so I apologize if any of the documentation here is confusing or wrong.
+all the time.
 ```
 ## [Demonstration Video](https://youtu.be/-3xhwImamQw)
 [![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/-3xhwImamQw)
