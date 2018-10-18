@@ -9,6 +9,7 @@
 #include "../algo/th_algorithm.h"
 #include "../hook/th_d3d9_hook.h"
 #include "gfx/th_info_overlay.h"
+#include "patch/th_patch_registry.h"
 
 /*
 * TODO
@@ -59,14 +60,13 @@ void th08_player::onEnableChanged(bool enable)
 {
 	th_player::onEnableChanged(enable);
 
-	th08_patch_autobomb ptch;
 	if (enable)
 	{
-		ptch.patch();
+		th_registry::patch("th08_autobomb");
 	}
 	else
 	{
-		ptch.unpatch();
+		th_registry::unpatch("th08_autobomb");
 	}
 }
 

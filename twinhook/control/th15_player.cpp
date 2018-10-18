@@ -9,6 +9,7 @@
 #include "../patch/th15_patch_autobomb.h"
 #include "../hook/th_d3d9_hook.h"
 #include "gfx/th_info_overlay.h"
+#include "patch/th_patch_registry.h"
 
 
 void th15_player::onInit()
@@ -47,14 +48,13 @@ void th15_player::onEnableChanged(bool enable)
 	th_player::onEnableChanged(enable);
 
 	// this is cheating
-	th15_patch_autobomb ptch;
 	if (enable)
 	{
-		ptch.patch();
+		th_registry::patch("th15_autobomb");
 	}
 	else
 	{
-		ptch.unpatch();
+		th_registry::unpatch("th15_autobomb");
 	}
 }
 
