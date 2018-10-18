@@ -41,6 +41,14 @@ void th_player::onTick()
 	if (!di8->DirectInput8)
 		return;
 
+	BYTE diKeys[256];
+	if (di8->DirectInput8->DirectInputDevice8->DirectInputDevice8->GetDeviceState(256, diKeys) == DI_OK)
+	{
+		BYTE press[256];
+		kpd.tick(diKeys, press);
+		this->handleInput(diKeys, press);
+	}
+
 	if (algorithm)
 		algorithm->onTick();
 }
@@ -65,7 +73,7 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 	DI8_Overlay_RenderInput(d3dDev, this->getKeyboardState());
 
 	/* IMGUI Integration*/
-	if(imguictl)
+	if (imguictl)
 	{
 		using namespace ImGui;
 		Begin("twinject (netdex)");
