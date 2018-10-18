@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <windows.h>
 
@@ -33,7 +34,7 @@ protected:
 	};
 
 	th_patch(std::vector<th_patch_def> patches) 
-		: patches(patches), hProcess(GetCurrentProcess()){}
+		: patches(std::move(patches)), hProcess(GetCurrentProcess()){}
 	virtual ~th_patch() = default;
 
 private:
