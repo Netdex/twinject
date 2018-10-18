@@ -17,7 +17,17 @@
 #include <imgui/examples/imgui_impl_dx9.h>
 #include "control/th11_player.h"
 #include "patch/th_patch_registry.h"
+#include "control/th06_player.h"
 
+void th06_init()
+{
+	th06_player *player = new th06_player();
+	th_vo_algo *algo = new th_vo_algo(player);
+	player->bindAlgorithm(algo);
+
+	th_d3d9_hook::bind(player, true);
+	th_di8_hook::bind(player);
+}
 void th07_init()
 {
 	th07_player *player = new th07_player();
@@ -73,6 +83,7 @@ void th15_init()
 typedef void(*th_loader_t)();
 
 static std::unordered_map<std::string, th_loader_t> th_init{
+	{"th06", th06_init},
 	{"th07", th07_init},
 	{"th08", th08_init},
 	{"th10", th10_init},

@@ -138,6 +138,9 @@
     <ClCompile Include="patch\th_patch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="control\th06_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -264,6 +267,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="patch\th11_patch_dinput_fix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\th06_player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -139,6 +139,7 @@
     <ClCompile Include="..\dependencies\imgui\imgui\imgui_draw.cpp" />
     <ClCompile Include="config\th_command_proc.cpp" />
     <ClCompile Include="config\th_registry.cpp" />
+    <ClCompile Include="control\th06_player.cpp" />
     <ClCompile Include="control\th11_player.cpp" />
     <ClCompile Include="control\th_player.cpp" />
     <ClCompile Include="gfx\imgui_controller.cpp" />
@@ -179,6 +180,7 @@
   <ItemGroup>
     <ClInclude Include="config\th_command_proc.h" />
     <ClInclude Include="config\th_registry.h" />
+    <ClInclude Include="control\th06_player.h" />
     <ClInclude Include="control\th11_player.h" />
     <ClInclude Include="gfx\imgui_controller.h" />
     <ClInclude Include="gfx\imgui_mixins.h" />

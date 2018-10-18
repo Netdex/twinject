@@ -40,7 +40,11 @@ int main(const int argc, const char *argv[])
 	strcpy(dllpath, RLS_DLL_PATH);
 #endif
 
-#if defined(TH07_LOADER)
+#if defined (TH06_LOADER)
+	_putenv("th=th06");
+	char *exepath = "D:\\Programming\\Multi\\th06\\th06e.exe";
+	char *currentdir = "D:\\Programming\\Multi\\th06";
+#elif defined(TH07_LOADER)
 	_putenv("th=th07");
 	char *exepath = "D:\\Programming\\Multi\\th07\\th07.exe";
 	char *currentdir = "D:\\Programming\\Multi\\th07";
