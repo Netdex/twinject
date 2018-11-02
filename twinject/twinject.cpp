@@ -6,6 +6,7 @@
 #include <tchar.h>
 #include <psapi.h>
 #include <strsafe.h>
+#include <atlstr.h>
 
 #include "debugger.h"
 #include "config.h"
