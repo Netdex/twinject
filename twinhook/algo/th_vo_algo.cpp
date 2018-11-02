@@ -260,7 +260,7 @@ void th_vo_algo::onTick()
 			di8->setVkState(DIR_KEYS[tarIdx][i], DIK_KEY_DOWN);
 
 	// deathbomb if the bot is going to die in the next frame
-	// this is very dependant on the collision predictor being very accurate
+	// this is very dependent on the collision predictor being very accurate
 	if (!powerupTarget && collisionTicks[tarIdx] < 0.5f)
 	{
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
@@ -283,18 +283,18 @@ float th_vo_algo::minStaticCollideTick(
 	std::vector<entity> &collided) const
 {
 	float minTick = FLT_MAX;
-	for (auto bullet = bullets.begin(); bullet != bullets.end(); ++bullet)
+	for (const auto& bullet : bullets)
 	{
 		float colTick;
 		colTick = vec2::willCollideAABB(
-			p, bullet->p - bullet->sz / 2,
-			s, bullet->sz,
-			vec2(), bullet->v
+			p, bullet.p - bullet.sz / 2,
+			s, bullet.sz,
+			vec2(), bullet.v
 		);
 
 		if (colTick >= 0) {
 			minTick = std::min(colTick, minTick);
-			collided.push_back(*bullet);
+			collided.push_back(bullet);
 		}
 		//// don't do more calculations if the density is saturated
 		//if (minTick != FLT_MAX && minTick / MAX_FRAMES_TILL_COLLISION > 1)
