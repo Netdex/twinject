@@ -34,7 +34,8 @@ void th_vo_algo::onTick()
 		Text("col test: %s", hitCircle ? "hit circle" : "hit box");
 		SameLine(); ShowHelpMarker("Collision test used");
 	}
-	
+	Checkbox("Show Vector Field", &this->renderVectorField);
+
 	auto di8 = th_di8_hook::inst();
 
 	if (!player->enabled) {
@@ -104,13 +105,13 @@ void th_vo_algo::onTick()
 		}
 	}
 
-	for(laser l : player->lasers)
+	for (laser l : player->lasers)
 	{
-		for(int dir = 0; dir < NUM_DIRS; ++dir)
+		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
 			vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
 			float colTick;
-			if(hitCircle)
+			if (hitCircle)
 			{
 				// TODO I have not written the SAT predictor code for circles yet, 
 				// so this part won't work for circles.
@@ -118,7 +119,7 @@ void th_vo_algo::onTick()
 			}
 			else
 			{
-				
+
 				std::vector<vec2> playerVert = vec2::aabbVert(plyr.p - plyr.sz / 2, plyr.sz);
 				std::vector<vec2> laserVert = l.getVertices();
 
@@ -172,7 +173,7 @@ void th_vo_algo::onTick()
 	{
 		vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
 		float t = vec2::willExitAABB(
-			vec2(0, 0), plyr.p - plyr.sz / 2, vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT), 
+			vec2(0, 0), plyr.p - plyr.sz / 2, vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
 			plyr.sz, vec2(), pvel);
 		if (t >= 0) {
 			if (t < collisionTicks[dir])
@@ -185,7 +186,7 @@ void th_vo_algo::onTick()
 	for (int dir = 0; dir < NUM_DIRS; ++dir)
 	{
 		if (targetTicks[dir] < collisionTicks[dir]
-				&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
+			&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
 			tarIdx = dir;
 	}
 
@@ -226,7 +227,7 @@ void th_vo_algo::onTick()
 
 	/* IMGUI Integration */
 	int minTimeIdx = 0;
-	for(int dir = 1; dir < NUM_DIRS; ++dir)
+	for (int dir = 1; dir < NUM_DIRS; ++dir)
 	{
 		if (collisionTicks[dir] < collisionTicks[minTimeIdx])
 			minTimeIdx = dir;
@@ -234,10 +235,10 @@ void th_vo_algo::onTick()
 	for (int i = 1; i < RISK_HISTORY_SIZE; ++i)
 		riskHistory[i - 1] = riskHistory[i];
 	riskHistory[RISK_HISTORY_SIZE - 1] = collisionTicks[minTimeIdx];
-	PlotLines("danger hist", riskHistory, IM_ARRAYSIZE(riskHistory), 0, "", 
+	PlotLines("danger hist", riskHistory, IM_ARRAYSIZE(riskHistory), 0, "",
 		0.f, 30.f, ImVec2(0, 80));
 	SameLine(); ShowHelpMarker("frames until collision of the best move,\n"
-							   "maximization parameter");
+		"maximization parameter");
 
 	/*LOG("C[%d] | H:%.0f U:%.0f D:%.0f L:%.0f R:%.0f UL:%.0f UR:%.0f DL:%.0f DR:%.0f",
 		tarIdx,
@@ -340,13 +341,14 @@ void th_vo_algo::vizPotentialQuadtree(
 		if (colTick >= 0) {
 			if (fSqsz / 2 <= minRes)
 			{
-				hsv col_hsv = { colTick / MAX_FRAMES_TILL_COLLISION * 360, 1, 1 };
+				float fadeCoeff = std::max(0.0f, std::min(1.0f, 1.0f / (colTick / MAX_FRAMES_TILL_COLLISION)));
+				hsv col_hsv = { 0, fadeCoeff,  fadeCoeff };
 				rgb col_rgb = hsv2rgb(col_hsv);
 				cdraw::fillRect(
 					th_param.GAME_X_OFFSET + colDomains[i].x,
 					th_param.GAME_Y_OFFSET + colDomains[i].y,
 					sqsz.x, sqsz.y,
-					D3DCOLOR_ARGB(100,
+					D3DCOLOR_ARGB((int)(fadeCoeff * 128),
 					(int)(col_rgb.r * 255), (int)(col_rgb.g * 255), (int)(col_rgb.b * 255))
 				);
 			}
@@ -364,13 +366,16 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 	{
 		entity plyr = player->getPlayerEntity();
 
-		// draw vector field (laggy)
-		/*viz_potential_quadtree(
-			player->bullets,
-			vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
-			VEC_FIELD_MIN_RESOLUTION);*/
+		if (this->renderVectorField) 
+		{
+			// draw vector field (laggy)
+			vizPotentialQuadtree(
+				player->bullets,
+				vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
+				VEC_FIELD_MIN_RESOLUTION);
+		}
 
-			// draw laser points
+		// draw laser points
 		for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
 		{
 			cdraw::fillRect(
@@ -382,7 +387,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 			vec2 proj = (*i).p + (*i).v * 10;
 			cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
 				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 255, 0, 0));
-			
+
 			// voodoo witchcraft magic
 
 			float rex = i->rad * (float)cos(M_PI / 2 + i->ang);

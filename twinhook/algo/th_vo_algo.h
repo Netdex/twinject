@@ -3,7 +3,7 @@
 
 /* Visualization Constants */
 static const float VEC_FIELD_MIN_RESOLUTION = 8.f;
-static const float MAX_FRAMES_TILL_COLLISION = 200.f;	// used for coloring vector field
+static const float MAX_FRAMES_TILL_COLLISION = 10.f;	// used for coloring vector field
 
 /* Algorithmic Constants */
 static const float SQRT_2 = sqrt(2.f);
@@ -115,6 +115,8 @@ class th_vo_algo : public th_algorithm
 	bool calibTick();
 
 	/* Visualization Parameters*/
+
+	bool renderVectorField = false;
 
 	/**
 	 * \brief Find the minimum collision tick of a static AABB
