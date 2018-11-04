@@ -24,7 +24,7 @@ void th_vector_algo::onTick()
 
 	entity plyr = player->getPlayerEntity();
 	vec2 guide, threat;
-	net_vector(plyr.p, vec2(), guide, threat);
+	net_vector(plyr.position, vec2(), guide, threat);
 	vec2 net = guide + threat;
 
 	if (abs(net.x) > BOT_ACTION_THRESHOLD)
@@ -80,16 +80,16 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 		// bullet markers
 		for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
 		{
-			if ((*i).me)
+			if ((*i).meta)
 			{
-				cdraw::rect((*i).p.x - 7 + th_param.GAME_X_OFFSET, (*i).p.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
+				cdraw::rect((*i).position.x - 7 + th_param.GAME_X_OFFSET, (*i).position.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).meta), 1, 1)));
 			}
 			else {
-				cdraw::rect((*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET, (*i).p.y - (*i).sz.x / 2 + th_param.GAME_Y_OFFSET, (*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+				cdraw::rect((*i).position.x - (*i).size.x / 2 + th_param.GAME_X_OFFSET, (*i).position.y - (*i).size.x / 2 + th_param.GAME_Y_OFFSET, (*i).size.x, (*i).size.y, D3DCOLOR_ARGB(255, 255, 2, 200));
 			}
-			vec2 proj = (*i).p + (*i).v.transform(proj_transform);
+			vec2 proj = (*i).position + (*i).velocity.transform(proj_transform);
 
-			cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
+			cdraw::line((*i).position.x + th_param.GAME_X_OFFSET, (*i).position.y + th_param.GAME_Y_OFFSET,
 				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
 
@@ -105,7 +105,7 @@ void th_vector_algo::visualize(IDirect3DDevice9* d3dDev)
 
 		// player area
 
-		cdraw::fillRect(plyr.p.x - 2 + th_param.GAME_X_OFFSET, plyr.p.y - 2 + th_param.GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
+		cdraw::fillRect(plyr.position.x - 2 + th_param.GAME_X_OFFSET, plyr.position.y - 2 + th_param.GAME_Y_OFFSET, 5, 5, D3DCOLOR_ARGB(255, 0, 255, 0));
 
 		//CDraw_Line(boss.x + th08_param::GAME_X_OFFSET, 0, boss.x + th08_param::GAME_X_OFFSET, (float)th08_param::WINDOW_HEIGHT, D3DCOLOR_ARGB(255, 255, 0, 0));
 	}
@@ -121,12 +121,12 @@ void th_vector_algo::net_vector(vec2 c, vec2 bs, vec2& guide, vec2& threat) cons
 		* Bullet Path: location a(x, y) target b(x, y) normal d(x, y)
 		*/
 
-		float ur = BOT_MIN_RADIUS + (*i).sz.x / 2 * 1.41421356237f;
+		float ur = BOT_MIN_RADIUS + (*i).size.x / 2 * 1.41421356237f;
 		float sr = ur + BOT_MACROSAFETY_DELTA;
 		float lr = ur + BOT_MICROSAFETY_DELTA;
 
-		vec2 a = (*i).p;										// bullet position
-		vec2 b = a + (*i).v.transform(proj_transform);			// bullet projected future position
+		vec2 a = (*i).position;										// bullet position
+		vec2 b = a + (*i).velocity.transform(proj_transform);			// bullet projected future position
 		vec2 ac = c - a;										// vector from player to bullet
 		vec2 ab = b - a;										// vector from bullet to future position
 		vec2 ad = vec2::proj(ac, ab);							// vector from bullet to normal
@@ -142,7 +142,7 @@ void th_vector_algo::net_vector(vec2 c, vec2 bs, vec2& guide, vec2& threat) cons
 			if (cd.zero())
 			{
 				// move the player in the direction of the bullet normal
-				threat += BOT_BULLET_PRIORITY * (*i).v.normal().unit() * ac.lensq();
+				threat += BOT_BULLET_PRIORITY * (*i).velocity.normal().unit() * ac.lensq();
 			}
 			else if (cd.lensq() < sr * sr)
 			{
@@ -155,8 +155,8 @@ void th_vector_algo::net_vector(vec2 c, vec2 bs, vec2& guide, vec2& threat) cons
 	for (auto i = player->powerups.begin(); i != player->powerups.end(); ++i)
 	{
 		// make sure this powerup isn't one of those score particles
-		if ((*i).me == 0) {
-			vec2 m((*i).p.x - c.x, (*i).p.y - c.y);
+		if ((*i).meta == 0) {
+			vec2 m((*i).position.x - c.x, (*i).position.y - c.y);
 			if (abs(m.x) < BOT_POWERUP_MAXY && abs(m.y) < BOT_POWERUP_MINY) {
 				guide -= BOT_POWERUP_PRIORITY * m.unit() / m.lensq();
 			}

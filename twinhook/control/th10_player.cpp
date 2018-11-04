@@ -112,7 +112,7 @@ void th10_player::doEnemyPoll()
 					float h = *(float*)(objAddr + 0xbc);
 					float dx = *(float*)(objAddr + 0x2c + 0xc);
 					float dy = *(float*)(objAddr + 0x30 + 0xc);
-					bullets.push_back({
+					enemies.push_back({
 						vec2(x + th_param.GAME_WIDTH / 2, y),
 						vec2(dx, dy),
 						vec2(w, h),

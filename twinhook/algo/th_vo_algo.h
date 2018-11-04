@@ -7,6 +7,28 @@ static const float MAX_FRAMES_TILL_COLLISION = 10.f;	// used for coloring vector
 
 /* Algorithmic Constants */
 static const float SQRT_2 = sqrt(2.f);
+static const float MIN_SAFETY_TICK = 5.0f;
+
+enum Direction
+{
+	Hold = 0,
+	Up,
+	Down,
+	Left,
+	Right,
+	TopLeft,
+	TopRight,
+	BottomLeft,
+	BottomRight,
+	FocusUp,
+	FocusDown,
+	FocusLeft,
+	FocusRight,
+	FocusTopLeft,
+	FocusTopRight,
+	FocusBottomLeft,
+	FocusBottomRight
+};
 
 /*
 * Unit velocity as a result of moving in specified direction
@@ -107,6 +129,9 @@ class th_vo_algo : public th_algorithm
 	float playerFocVel = 0;
 
 	void calibInit();
+
+	// Get player's movement vector when moving in this direction
+	vec2 getPlayerMovement(int dir);
 
 	/**
 	* \brief Do one tick of calibration

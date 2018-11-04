@@ -72,30 +72,30 @@ void th08_bullet_proc_hook::vectorUpdateHook(int retaddr, int a1, int a2, int a3
 	if (retaddr == 0x004314B3)
 	{
 		entity b;
-		b.p.x = *(float*)(a1 + 0);
-		b.p.y = *(float*)(a1 + 4);
-		b.v.x = *(float*)(a3 + 0);
-		b.v.y = *(float*)(a3 + 4);
+		b.position.x = *(float*)(a1 + 0);
+		b.position.y = *(float*)(a1 + 4);
+		b.velocity.x = *(float*)(a3 + 0);
+		b.velocity.y = *(float*)(a3 + 4);
 		// find log2 of bullet action binary flag
-		if (!_BitScanReverse(&b.me, *((DWORD*)a2 + 875)))
-			b.me = 0;
+		if (!_BitScanReverse(&b.meta, *((DWORD*)a2 + 875)))
+			b.meta = 0;
 
 		float bx = *(float*)(a2 + 3380);
 		float by = *((float*)(a2 + 3380) + 1);
-		b.sz = vec2(bx, by);
+		b.size = vec2(bx, by);
 		TH08_Bullets.push_back(b);
 	}
 	else if (retaddr == 0x0044095B)
 	{
 		entity b;
-		b.p = vec2(*(float*)(a1 + 0),*(float*)(a1 + 4));
-		b.v = vec2(*(float*)(a3 + 0), *(float*)(a3 + 4));
+		b.position = vec2(*(float*)(a1 + 0),*(float*)(a1 + 4));
+		b.velocity = vec2(*(float*)(a3 + 0), *(float*)(a3 + 4));
 		// get powerup temporal factor
-		b.me = *(BYTE*)(a1 - 676 + 727);
+		b.meta = *(BYTE*)(a1 - 676 + 727);
 		/*float bx = *(float*)(a2 + 3380);
 		float by = *((float*)(a2 + 3380) + 1);
 		b.sz = vec2(bx, by);*/
-		b.sz = vec2(10, 10);				// assumption
+		b.size = vec2(10, 10);				// assumption
 		TH08_Powerups.push_back(b);
 	}
 }

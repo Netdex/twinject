@@ -25,32 +25,32 @@
  */
 struct entity
 {
-	vec2 p;				// position
-	vec2 v;				// velocity
-	vec2 sz;			// bullet size
-	DWORD me;			// metadata
+	vec2 position;				// position
+	vec2 velocity;				// velocity
+	vec2 size;			// bullet size
+	DWORD meta;			// metadata
 };
 
 struct laser
 {
-	vec2 p;				// position
-	vec2 v;				// velocity
-	vec2 ex;			// laser extent
+	vec2 position;				// position
+	vec2 velocity;				// velocity
+	vec2 extent;			// laser extent
 	float length;
-	float rad;			// perpendicular radius
-	float ang;			// angle
+	float radius;			// perpendicular radius
+	float angle;			// angle
 
 	std::vector<vec2> laser::getVertices() const
 	{
 		std::vector<vec2> vertices;
 		// note: these vertices must be in VERTEX ORDER
 		vec2 points[] = {
-			vec2(0, rad), vec2(0, -rad),
-			vec2(length, -rad), vec2(length, rad)
+			vec2(0, radius), vec2(0, -radius),
+			vec2(length, -radius), vec2(length, radius)
 		};
 		for (int i = 0; i < 4; ++i)
 		{
-			vertices.push_back(points[i].rotate(ang) + p);
+			vertices.push_back(points[i].rotate(angle) + position);
 		}
 		return vertices;
 	}

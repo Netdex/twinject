@@ -23,7 +23,7 @@ void th_laser_expander::quadtreeDivide(const laser &laser, const std::vector<vec
 
 	if (std::max(s.x, s.y) <= maxSz || std::min(s.x, s.y) <= minSz) {
 		entity newEntity = {
-			p + s / 2, laser.v, s, 0
+			p + s / 2, laser.velocity, s, 0
 		};
 		bullets.push_back(newEntity);
 		return;

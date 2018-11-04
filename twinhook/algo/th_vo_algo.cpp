@@ -11,6 +11,7 @@
 #include "control/th10_player.h"
 #include "gfx/imgui_mixins.h"
 #include "control/th11_player.h"
+#include <numeric>
 
 void th_vo_algo::onBegin()
 {
@@ -76,26 +77,26 @@ void th_vo_algo::onTick()
 	{
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
-			vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
+			vec2 pvel = this->getPlayerMovement(dir);
 			float colTick;
 			// TODO this hitCircle stuff is painful, replace with interfaces and impl
 			if (hitCircle) {
 				colTick = vec2::willCollideCircle(
-					plyr.p, b->p,
-					plyr.sz.x / 2, b->sz.x / 2,
+					plyr.position, b->position,
+					plyr.size.x / 2, b->size.x / 2,
 					pvel,
-					b->v
+					b->velocity
 				);
 			}
 			else
 			{
 				colTick = vec2::willCollideAABB(
-					plyr.p - plyr.sz / 2,
-					b->p - b->sz / 2,
-					plyr.sz,
-					b->sz,
+					plyr.position - plyr.size / 2,
+					b->position - b->size / 2,
+					plyr.size,
+					b->size,
 					pvel,
-					b->v
+					b->velocity
 				);
 			}
 			if (colTick >= 0) {
@@ -109,7 +110,7 @@ void th_vo_algo::onTick()
 	{
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
-			vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
+			vec2 pvel = this->getPlayerMovement(dir);
 			float colTick;
 			if (hitCircle)
 			{
@@ -120,10 +121,10 @@ void th_vo_algo::onTick()
 			else
 			{
 
-				std::vector<vec2> playerVert = vec2::aabbVert(plyr.p - plyr.sz / 2, plyr.sz);
+				std::vector<vec2> playerVert = vec2::aabbVert(plyr.position - plyr.size / 2, plyr.size);
 				std::vector<vec2> laserVert = l.getVertices();
 
-				colTick = vec2::willCollideSAT(playerVert, pvel, laserVert, l.v);
+				colTick = vec2::willCollideSAT(playerVert, pvel, laserVert, l.velocity);
 			}
 			if (colTick >= 0) {
 				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
@@ -132,36 +133,54 @@ void th_vo_algo::onTick()
 		}
 	}
 
-	// Powerup collision frame calculations
-	// BUG powerups move non-linearly so this doesn't work well
-	// TODO do not target powerups that will go off the screen
-	// TODO do not target powerups that are too high
-	/*
-	 * Ticks until collision with target whilst moving in this diretion
-	 * Uses same direction numbering schema
+	/* 
+	 * Powerup collision frame calculations
+	 * Note: Powerups do not move linearly so using a linear model might be poor.
 	 */
+
+	// Ticks until collision with target whilst moving in this direction
 	float targetTicks[NUM_DIRS];
 	std::fill_n(targetTicks, NUM_DIRS, FLT_MAX);
 
-	for (auto p = player->powerups.begin(); p != player->powerups.end(); ++p)
+	for (auto& powerup : player->powerups)
 	{
-		// filter out unwanted powerups
-		if (p->me == 0 && p->p.y > 200) {
+		// Filter out unwanted powerups
+		if (powerup.meta == 0 && powerup.position.y > 200) {
 			for (int dir = 0; dir < NUM_DIRS; ++dir)
 			{
-				vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
-				float colTick;
-				if (hitCircle)
-				{
-					colTick = vec2::willCollideCircle(
-						plyr.p, p->p, plyr.sz.x / 2, p->sz.x / 2, pvel, p->v);
-				}
-				else
-				{
-					colTick = vec2::willCollideAABB(
-						plyr.p - plyr.sz / 2, p->p - p->sz / 2, plyr.sz, p->sz, pvel, p->v);
-				}
+				vec2 pvel = this->getPlayerMovement(dir);
+				
+				/* 
+				 * Powerups tend to be attracted towards the player, so we can be 
+				 * very lax with the collision predictor and use the AABB model 
+				 * all the time
+				 */
+				float colTick = vec2::willCollideAABB(
+						plyr.position - plyr.size / 2, powerup.position - powerup.size / 2, plyr.size, powerup.size, pvel, powerup.velocity);
+				
 				if (colTick >= 0) {
+					targetTicks[dir] = std::min(colTick, targetTicks[dir]);
+				}
+			}
+		}
+	}
+
+	// We should probably prioritize larger enemies over smaller ones, 
+	// and prioritize powerup gathering over enemies
+	for (auto enemy : player->enemies)
+	{
+		if (enemy.position.y < plyr.position.y) {
+			for (int dir = Direction::Left; dir <= Direction::Right; ++dir)
+			{
+				vec2 pvel = this->getPlayerMovement(dir);
+
+				// Calculate x-distance to y-aligned axis of the enemy
+				float xDist = enemy.position.x - plyr.position.x;
+				float colTick = xDist / pvel.x;
+				// TODO check if we are actually under them
+				// Filter out impossible values
+				if (colTick >= 0 && colTick <= 6000)
+				{
 					targetTicks[dir] = std::min(colTick, targetTicks[dir]);
 				}
 			}
@@ -171,24 +190,28 @@ void th_vo_algo::onTick()
 	// Wall collision frame calculations
 	for (int dir = 1; dir < NUM_DIRS; ++dir)
 	{
-		vec2 pvel = DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
+		vec2 pvel = this->getPlayerMovement(dir);
 		float t = vec2::willExitAABB(
-			vec2(0, 0), plyr.p - plyr.sz / 2, vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
-			plyr.sz, vec2(), pvel);
+			vec2(0, 0), plyr.position - plyr.size / 2, vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT),
+			plyr.size, vec2(), pvel);
 		if (t >= 0) {
 			if (t < collisionTicks[dir])
 				collisionTicks[dir] = t;
 		}
 	}
-
-	// Viable target calculations
+	// Look for best viable target, aka targeting will not result in collision
 	int tarIdx = -1;
-	for (int dir = 0; dir < NUM_DIRS; ++dir)
+	if(*std::min_element(collisionTicks, collisionTicks + NUM_DIRS) > MIN_SAFETY_TICK)
 	{
-		if (targetTicks[dir] < collisionTicks[dir]
-			&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
-			tarIdx = dir;
+		for (int dir = 0; dir < NUM_DIRS; ++dir)
+		{
+			if (targetTicks[dir] < collisionTicks[dir]
+				&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
+				tarIdx = dir;
+		}
 	}
+	
+	
 
 	bool powerupTarget = true;
 	// check if we could find a targetable powerup
@@ -277,6 +300,11 @@ void th_vo_algo::calibInit()
 	playerVel = 0;
 }
 
+vec2 th_vo_algo::getPlayerMovement(int dir)
+{
+	return DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
+}
+
 float th_vo_algo::minStaticCollideTick(
 	const std::vector<entity> &bullets,
 	const vec2 &p, const vec2 &s,
@@ -287,9 +315,9 @@ float th_vo_algo::minStaticCollideTick(
 	{
 		float colTick;
 		colTick = vec2::willCollideAABB(
-			p, bullet.p - bullet.sz / 2,
-			s, bullet.sz,
-			vec2(), bullet.v
+			p, bullet.position - bullet.size / 2,
+			s, bullet.size,
+			vec2(), bullet.velocity
 		);
 
 		if (colTick >= 0) {
@@ -379,67 +407,67 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 		for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
 		{
 			cdraw::fillRect(
-				th_param.GAME_X_OFFSET + i->p.x - 3,
-				th_param.GAME_Y_OFFSET + i->p.y - 3,
+				th_param.GAME_X_OFFSET + i->position.x - 3,
+				th_param.GAME_Y_OFFSET + i->position.y - 3,
 				6, 6,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 
-			vec2 proj = (*i).p + (*i).v * 10;
-			cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
+			vec2 proj = (*i).position + (*i).velocity * 10;
+			cdraw::line((*i).position.x + th_param.GAME_X_OFFSET, (*i).position.y + th_param.GAME_Y_OFFSET,
 				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 255, 0, 0));
 
 			// voodoo witchcraft magic
 
-			float rex = i->rad * (float)cos(M_PI / 2 + i->ang);
-			float rey = i->rad * (float)sin(M_PI / 2 + i->ang);
+			float rex = i->radius * (float)cos(M_PI / 2 + i->angle);
+			float rey = i->radius * (float)sin(M_PI / 2 + i->angle);
 			cdraw::line(
-				th_param.GAME_X_OFFSET + i->p.x - rex,
-				th_param.GAME_Y_OFFSET + i->p.y - rey,
-				th_param.GAME_X_OFFSET + i->p.x + i->ex.x - rex,
-				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y - rey,
+				th_param.GAME_X_OFFSET + i->position.x - rex,
+				th_param.GAME_Y_OFFSET + i->position.y - rey,
+				th_param.GAME_X_OFFSET + i->position.x + i->extent.x - rex,
+				th_param.GAME_Y_OFFSET + i->position.y + i->extent.y - rey,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 			cdraw::line(
-				th_param.GAME_X_OFFSET + i->p.x + rex,
-				th_param.GAME_Y_OFFSET + i->p.y + rey,
-				th_param.GAME_X_OFFSET + i->p.x + i->ex.x + rex,
-				th_param.GAME_Y_OFFSET + i->p.y + i->ex.y + rey,
+				th_param.GAME_X_OFFSET + i->position.x + rex,
+				th_param.GAME_Y_OFFSET + i->position.y + rey,
+				th_param.GAME_X_OFFSET + i->position.x + i->extent.x + rex,
+				th_param.GAME_Y_OFFSET + i->position.y + i->extent.y + rey,
 				D3DCOLOR_ARGB(255, 0, 0, 255));
 		}
 
 		// bullet markers
 		for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
 		{
-			if ((*i).me)
+			if ((*i).meta)
 			{
-				cdraw::rect((*i).p.x - 7 + th_param.GAME_X_OFFSET, (*i).p.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).me), 1, 1)));
+				cdraw::rect((*i).position.x - 7 + th_param.GAME_X_OFFSET, (*i).position.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).meta), 1, 1)));
 			}
 			else {
 				cdraw::rect(
-					(*i).p.x - (*i).sz.x / 2 + th_param.GAME_X_OFFSET,
-					(*i).p.y - (*i).sz.y / 2 + th_param.GAME_Y_OFFSET,
-					(*i).sz.x, (*i).sz.y, D3DCOLOR_ARGB(255, 255, 2, 200));
+					(*i).position.x - (*i).size.x / 2 + th_param.GAME_X_OFFSET,
+					(*i).position.y - (*i).size.y / 2 + th_param.GAME_Y_OFFSET,
+					(*i).size.x, (*i).size.y, D3DCOLOR_ARGB(255, 255, 2, 200));
 			}
-			vec2 proj = (*i).p + (*i).v * 10;
+			vec2 proj = (*i).position + (*i).velocity * 10;
 
-			cdraw::line((*i).p.x + th_param.GAME_X_OFFSET, (*i).p.y + th_param.GAME_Y_OFFSET,
+			cdraw::line((*i).position.x + th_param.GAME_X_OFFSET, (*i).position.y + th_param.GAME_Y_OFFSET,
 				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
 
 		for (auto b : player->powerups)
 		{
 			cdraw::rect(
-				th_param.GAME_X_OFFSET + b.p.x - b.sz.x / 2,
-				th_param.GAME_Y_OFFSET + b.p.y - b.sz.y / 2,
-				b.sz.x, b.sz.y, D3DCOLOR_ARGB(255, 255, 0, 0));
-			vec2 proj = b.p + b.v * 10;
+				th_param.GAME_X_OFFSET + b.position.x - b.size.x / 2,
+				th_param.GAME_Y_OFFSET + b.position.y - b.size.y / 2,
+				b.size.x, b.size.y, D3DCOLOR_ARGB(255, 255, 0, 0));
+			vec2 proj = b.position + b.velocity * 10;
 
-			cdraw::line(b.p.x + th_param.GAME_X_OFFSET, b.p.y + th_param.GAME_Y_OFFSET,
+			cdraw::line(b.position.x + th_param.GAME_X_OFFSET, b.position.y + th_param.GAME_Y_OFFSET,
 				proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
 		}
 		cdraw::fillRect(
-			plyr.p.x - plyr.sz.x / 2 + th_param.GAME_X_OFFSET,
-			plyr.p.y - plyr.sz.y / 2 + th_param.GAME_Y_OFFSET,
-			plyr.sz.x, plyr.sz.y, D3DCOLOR_ARGB(255, 0, 255, 0));
+			plyr.position.x - plyr.size.x / 2 + th_param.GAME_X_OFFSET,
+			plyr.position.y - plyr.size.y / 2 + th_param.GAME_Y_OFFSET,
+			plyr.size.x, plyr.size.y, D3DCOLOR_ARGB(255, 0, 255, 0));
 	}
 }
 
@@ -458,7 +486,7 @@ bool th_vo_algo::calibTick()
 		break;
 	case 1:
 		th_di8_hook::inst()->setVkState(DIK_LEFT, DIK_KEY_UP);
-		calibStartX = plyr.p.x;
+		calibStartX = plyr.position.x;
 		break;
 	case 2:
 		th_di8_hook::inst()->setVkState(DIK_RIGHT, DIK_KEY_DOWN);
@@ -473,9 +501,9 @@ bool th_vo_algo::calibTick()
 		if (dynamic_cast<th15_player*>(player)
 			|| dynamic_cast<th10_player*>(player)
 			|| dynamic_cast<th11_player*>(player))
-			playerVel = plyr.p.x - calibStartX;
+			playerVel = plyr.position.x - calibStartX;
 		else
-			playerVel = calibStartX - plyr.p.x;
+			playerVel = calibStartX - plyr.position.x;
 		break;
 	case 4:
 		// do not allow player interaction during calibration
@@ -487,7 +515,7 @@ bool th_vo_algo::calibTick()
 		break;
 	case 5:
 		th_di8_hook::inst()->setVkState(DIK_LEFT, DIK_KEY_UP);
-		calibStartX = plyr.p.x;
+		calibStartX = plyr.position.x;
 		break;
 	case 6:
 		th_di8_hook::inst()->setVkState(DIK_RIGHT, DIK_KEY_DOWN);
@@ -504,9 +532,9 @@ bool th_vo_algo::calibTick()
 		if (dynamic_cast<th15_player*>(player)
 			|| dynamic_cast<th10_player*>(player)
 			|| dynamic_cast<th11_player*>(player))
-			playerFocVel = plyr.p.x - calibStartX;
+			playerFocVel = plyr.position.x - calibStartX;
 		else
-			playerFocVel = calibStartX - plyr.p.x;
+			playerFocVel = calibStartX - plyr.position.x;
 		return true;
 	}
 	++calibFrames;
