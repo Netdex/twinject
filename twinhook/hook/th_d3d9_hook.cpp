@@ -58,11 +58,14 @@ static bool d3d9_created = false;
 
 static IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 {
-	LOG("D3D9: Feeding fake IDirect3D9");
 	IDirect3D9 *legit = Direct3DCreate9_Original(sdkVers);
-	Direct3D9Wrapper *Direct3D9 = new Direct3D9Wrapper(legit, d3d9_hook);
-	d3d9_created = true;
-	return Direct3D9;
+	if (!d3d9_created) {
+		LOG("D3D9: Feeding fake IDirect3D9");
+		Direct3D9Wrapper *Direct3D9 = new Direct3D9Wrapper(legit, d3d9_hook);
+		d3d9_created = true;
+		return Direct3D9;
+	}
+	return legit;
 }
 
 static void Hook_D3D9_Direct3DCreate9()

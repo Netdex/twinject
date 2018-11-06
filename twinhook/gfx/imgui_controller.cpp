@@ -33,7 +33,6 @@ void imgui_controller::preframe()
 
 void imgui_controller::render()
 {
-	EndFrame();
 	Render();
 
 	// We must apply state of working case, then return state back to normal

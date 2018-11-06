@@ -144,6 +144,7 @@
     <ClCompile Include="control\th_player.cpp" />
     <ClCompile Include="gfx\imgui_controller.cpp" />
     <ClCompile Include="gfx\imgui_mixins.cpp" />
+    <ClCompile Include="gfx\imgui_window.cpp" />
     <ClCompile Include="gfx\th_info_overlay.cpp" />
     <ClCompile Include="hook\th_wndproc_imgui_hook.cpp" />
     <ClCompile Include="patch\th_patch.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="control\th11_player.h" />
     <ClInclude Include="gfx\imgui_controller.h" />
     <ClInclude Include="gfx\imgui_mixins.h" />
+    <ClInclude Include="gfx\imgui_window.h" />
     <ClInclude Include="gfx\th_info_overlay.h" />
     <ClInclude Include="hook\th_wndproc_imgui_hook.h" />
     <ClInclude Include="patch\th10_patch_autobomb.h" />

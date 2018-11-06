@@ -2,22 +2,22 @@
 #include <unordered_map>
 
 #include "hook/th_di8_hook.h"
-#include "control/th08_player.h"
 #include "hook/th_d3d9_hook.h"
-#include "hook/th08_bullet_proc_hook.h"
-#include "control/th07_player.h"
 #include "hook/th07_bullet_proc_hook.h"
-#include "algo/th_vo_algo.h"
-#include "control/th15_player.h"
+#include "hook/th08_bullet_proc_hook.h"
 #include "hook/th15_bullet_proc_hook.h"
-#include "control/th10_player.h"
 
-#include <imgui/imgui.h>
-#include <imgui/examples/imgui_impl_win32.h>
-#include <imgui/examples/imgui_impl_dx9.h>
-#include "control/th11_player.h"
-#include "patch/th_patch_registry.h"
 #include "control/th06_player.h"
+#include "control/th07_player.h"
+#include "control/th08_player.h"
+#include "control/th10_player.h"
+#include "control/th11_player.h"
+#include "control/th15_player.h"
+
+#include "algo/th_vo_algo.h"
+
+#include "patch/th_patch_registry.h"
+#include "gfx/imgui_window.h"
 
 void th06_init()
 {
@@ -55,7 +55,7 @@ void th10_init()
 	th10_player *player = new th10_player();
 	th_vo_algo *algo = new th_vo_algo(player);
 	player->bindAlgorithm(algo);
-	th_d3d9_hook::bind(player, false); 
+	th_d3d9_hook::bind(player, false);
 	th_di8_hook::bind(player);
 	// no bullet proc hook due to polling
 }
@@ -128,9 +128,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 		break;
 	}
 	case DLL_PROCESS_DETACH:
-		ImGui_ImplDX9_Shutdown();
-		ImGui_ImplWin32_Shutdown();
-		ImGui::DestroyContext();
+		imgui_window_cleanup();
 		break;
 	}
 	return TRUE;

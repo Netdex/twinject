@@ -1,13 +1,16 @@
 #include "stdafx.h"
+
+#include <imgui/imgui.h>
+
 #include "th_player.h"
 #include "config/th_config.h"
 #include "directx/IDI8ADevice_Wrapper.h"
-#include "gfx/di8_input_overlay.h"
-#include "gfx/th_info_overlay.h"
+
 #include "hook/th_di8_hook.h"
 #include "hook/th_d3d9_hook.h"
 
-#include <imgui/imgui.h>
+#include "gfx/di8_input_overlay.h"
+#include "gfx/imgui_window.h"
 
 void th_player::onInit()
 {
@@ -18,21 +21,20 @@ void th_player::onInit()
 		GetClientRect(cparams.hFocusWindow, &rect);
 		th_param.WINDOW_WIDTH = (float)rect.right;
 		th_param.WINDOW_HEIGHT = (float)rect.bottom;
-		LOG("detected window dimensions %ld %ld", rect.right, rect.bottom);
+		LOG("Detected window dimensions %ld %ld", rect.right, rect.bottom);
 
-		imguictl = new imgui_controller(cparams.hFocusWindow,
-			th_d3d9_hook::inst()->d3ddev9_wrapper);
-		imguictl->init();
+		ASSERT((imgui_window_init(), "Could not initialize IMGUI window"));
 	}
 	else
 	{
-		ASSERT((false, "fatal, d3ddev9_wrapper inaccessible"));
+		ASSERT((false, "d3ddev9_wrapper inaccessible"));
 	}
 }
 
 void th_player::onBeginTick()
 {
-	if (imguictl)	imguictl->preframe();
+	//if (imguictl)	imguictl->preframe();
+	imgui_window_preframe();
 }
 
 void th_player::onTick()
@@ -60,7 +62,7 @@ void th_player::onAfterTick()
 	powerups.clear();
 	lasers.clear();
 
-	if (imguictl)	imguictl->render();
+	imgui_window_render();
 }
 
 void th_player::draw(IDirect3DDevice9* d3dDev)
@@ -73,25 +75,24 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 	DI8_Overlay_RenderInput(d3dDev, this->getKeyboardState());
 
 	/* IMGUI Integration*/
-	if (imguictl)
-	{
-		using namespace ImGui;
-		Begin("twinject (netdex)");
-		Text("b e p l #: %d %d %d %d", bullets.size(), enemies.size(), powerups.size(), lasers.size());
-		Text("bot state: %s", enabled ? "ENABLED" : "DISABLED");
-		Text("viz state: %s", render ? "DETAILED" : "NONE");
 
-		if (Button("Toggle Bot"))
-			setEnable(!enabled);
-		SameLine();
-		if (Button("Toggle Debug"))
-			render = !render;
-		Checkbox("Show IMGUI demo", &imguiShowDemoWindow);
-		End();
+	using namespace ImGui;
+	Begin("twinject (netdex)");
+	Text("b e p l #: %d %d %d %d", bullets.size(), enemies.size(), powerups.size(), lasers.size());
+	Text("bot state: %s", enabled ? "ENABLED" : "DISABLED");
+	Text("viz state: %s", render ? "DETAILED" : "NONE");
 
-		if (imguiShowDemoWindow)	ShowDemoWindow();
+	if (Button("Toggle Bot"))
+		setEnable(!enabled);
+	SameLine();
+	if (Button("Toggle Debug"))
+		render = !render;
+	Checkbox("Show IMGUI demo", &imguiShowDemoWindow);
+	End();
 
-	}
+	if (imguiShowDemoWindow)	ShowDemoWindow();
+
+
 }
 
 void th_player::handleInput(const BYTE diKeys[256], const BYTE press[256])
