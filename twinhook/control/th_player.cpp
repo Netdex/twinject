@@ -14,26 +14,11 @@
 
 void th_player::onInit()
 {
-	if (th_d3d9_hook::inst()->d3ddev9_wrapper) {
-		D3DDEVICE_CREATION_PARAMETERS cparams;
-		RECT rect;
-		th_d3d9_hook::inst()->d3ddev9_wrapper->GetCreationParameters(&cparams);
-		GetClientRect(cparams.hFocusWindow, &rect);
-		th_param.WINDOW_WIDTH = (float)rect.right;
-		th_param.WINDOW_HEIGHT = (float)rect.bottom;
-		LOG("Detected window dimensions %ld %ld", rect.right, rect.bottom);
-
-		ASSERT((imgui_window_init(), "Could not initialize IMGUI window"));
-	}
-	else
-	{
-		ASSERT((false, "d3ddev9_wrapper inaccessible"));
-	}
+	ASSERT(("Could not initialize IMGUI window", imgui_window_init()));
 }
 
 void th_player::onBeginTick()
 {
-	//if (imguictl)	imguictl->preframe();
 	imgui_window_preframe();
 }
 
@@ -67,8 +52,6 @@ void th_player::onAfterTick()
 
 void th_player::draw(IDirect3DDevice9* d3dDev)
 {
-	/* TODO deprecate old drawing functionality for info */
-
 	if (algorithm)
 		algorithm->visualize(d3dDev);
 	cmdp.render(d3dDev);
@@ -91,8 +74,6 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 	End();
 
 	if (imguiShowDemoWindow)	ShowDemoWindow();
-
-
 }
 
 void th_player::handleInput(const BYTE diKeys[256], const BYTE press[256])

@@ -10,7 +10,7 @@ namespace cdraw
 		DWORD color;
 	};
 
-	void init(IDirect3DDevice9 *d3dDev);
+	void init(IDirect3DDevice9 *d3dDev, RECT destRect);
 	void begin();
 	void end();
 

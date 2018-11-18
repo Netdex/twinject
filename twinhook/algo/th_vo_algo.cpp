@@ -24,7 +24,7 @@ void th_vo_algo::onTick()
 	using namespace ImGui;
 	Begin("th_vo_algo");
 	Text("Constrained Velocity Obstacle Algorithm");
-	if (CollapsingHeader("Info"))
+	if (CollapsingHeader("Info", "info", true, true))
 	{
 		Text("calib: %s", isCalibrated ? "true" : "false");
 		SameLine(); ShowHelpMarker("Algorithm player speed calibration");
@@ -35,7 +35,6 @@ void th_vo_algo::onTick()
 		Text("col test: %s", hitCircle ? "hit circle" : "hit box");
 		SameLine(); ShowHelpMarker("Collision test used");
 	}
-	Checkbox("Show Vector Field", &this->renderVectorField);
 
 	auto di8 = th_di8_hook::inst();
 
@@ -105,7 +104,7 @@ void th_vo_algo::onTick()
 			}
 		}
 	}
-
+	
 	for (laser l : player->lasers)
 	{
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
@@ -120,7 +119,6 @@ void th_vo_algo::onTick()
 			}
 			else
 			{
-
 				std::vector<vec2> playerVert = vec2::aabbVert(plyr.position - plyr.size / 2, plyr.size);
 				std::vector<vec2> laserVert = l.getVertices();
 
@@ -211,7 +209,7 @@ void th_vo_algo::onTick()
 		}
 	}
 	
-	
+	Text("target found: %s", (tarIdx == -1) ? "false" : "true");
 
 	bool powerupTarget = true;
 	// check if we could find a targetable powerup
@@ -288,6 +286,9 @@ void th_vo_algo::onTick()
 	{
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
 	}
+	
+	Checkbox("Show Vector Field", &this->renderVectorField);
+
 	End();
 
 }

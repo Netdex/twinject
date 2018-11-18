@@ -3,6 +3,7 @@
 #include "../directx/ID3D9_Wrapper.h"
 #include "../util/cdraw.h"
 #include "../util/detour.h"
+#include "config/th_config.h"
 
 th_d3d9_hook* th_d3d9_hook::instance = nullptr;
 static Direct3D9Hook d3d9_hook;
@@ -35,7 +36,15 @@ th_d3d9_hook* th_d3d9_hook::inst()
 
 void th_d3d9_hook::d3d9InitHook(IDirect3DDevice9 *d3dDev)
 {
-	cdraw::init(d3dDev);
+	ASSERT(("d3ddev9_wrapper inaccessible", th_d3d9_hook::inst()->d3ddev9_wrapper));
+	D3DDEVICE_CREATION_PARAMETERS cparams;
+	RECT rect;
+	inst()->d3ddev9_wrapper->GetCreationParameters(&cparams);
+	GetClientRect(cparams.hFocusWindow, &rect);
+	th_param.WINDOW_WIDTH = static_cast<float>(rect.right);
+	th_param.WINDOW_HEIGHT = static_cast<float>(rect.bottom);
+	LOG("Detected window dimensions %ld %ld", rect.right, rect.bottom);
+	cdraw::init(d3dDev, rect);
 	inst()->player->onInit();
 }
 
