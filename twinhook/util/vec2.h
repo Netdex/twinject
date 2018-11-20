@@ -190,8 +190,8 @@ public:
 	 * \return 0 if already collided, <0 if will never collide, otherwise the number 
 	 * of frames until collision.
 	 */
-	static float willCollideSAT(const std::vector<vec2> &a, vec2 va,
-		const std::vector<vec2> &b, vec2 vb);
+	static float willCollideSAT(const std::vector<vec2> &a, const vec2 &va,
+		const std::vector<vec2> &b, const vec2 &vb);
 
 	static bool isOverlapInterval(float minA, float maxA, float minB, float maxB);
 	static float willOverlapInterval(float minA, float maxA, float va,

@@ -424,8 +424,8 @@ bool vec2::isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b)
 	return true;
 }
 
-float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va, 
-	const std::vector<vec2>& b, vec2 vb)
+float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2 &va, 
+	const std::vector<vec2>& b, const vec2 &vb)
 {
 	std::set<vec2> normals;
 	int sizeA = a.size();
@@ -440,7 +440,7 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va,
 	float maxTicks = 0;
 
 	// check for separating axis
-	for (vec2 n : normals)
+	for (const vec2& n : normals)
 	{
 		float minProjA = FLT_MAX, maxProjA = FLT_MIN;
 		float minProjB = FLT_MAX, maxProjB = FLT_MIN;
@@ -449,13 +449,13 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, vec2 va,
 		float vAxisB = dot(vb, n);
 
 		// determine extents of projections onto axis
-		for (vec2 pa : a)
+		for (const vec2& pa : a)
 		{
 			float pj = dot(pa, n);
 			minProjA = std::min(minProjA, pj);
 			maxProjA = std::max(maxProjA, pj);
 		}
-		for (vec2 pb : b)
+		for (const vec2& pb : b)
 		{
 			float pj = dot(pb, n);
 			minProjB = std::min(minProjB, pj);
