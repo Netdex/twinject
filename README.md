@@ -14,7 +14,7 @@ It's much easier to answer emails when they come rather than keep the documentat
 all the time.
 ```
 ## [Demonstration Video](https://youtu.be/-3xhwImamQw)
-[![alt text?](https://i.imgur.com/Nos4Z1D.png)](https://youtu.be/-3xhwImamQw)
+[![alt text?](https://i.imgur.com/eAjWOSt.png)](https://youtu.be/-3xhwImamQw)
 
 ## What is this?
 _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the bullet hell games from the *Touhou Project*. Instead of using computer vision techniques to extract data from the game, a DLL is injected and the relevant game data is directly extracted through trampolined functions. _twinject_'s first goal is to expose game information and APIs to interact with the game.
