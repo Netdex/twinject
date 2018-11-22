@@ -101,8 +101,8 @@ namespace cdraw
 	void text(char* str, int len, D3DCOLOR color, int x, int y, LPD3DXSPRITE sprite)
 	{
 		if (!CDrawFlagInit) return;
-		x *= CDrawScaleX;
-		y *= CDrawScaleY;
+		x = (int)(x * CDrawScaleX);
+		y *= (int)(y * CDrawScaleY);
 		static RECT textbox;
 		SetRect(&textbox, x, y, 0, 0);
 		if (CDrawDefaultDxFont) {

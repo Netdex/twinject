@@ -7,7 +7,7 @@ static const float MAX_FRAMES_TILL_COLLISION = 10.f;	// used for coloring vector
 
 /* Algorithmic Constants */
 static const float SQRT_2 = sqrt(2.f);
-static const float MIN_SAFETY_TICK = 5.0f;
+static const float MIN_SAFETY_TICK = 10.0f;
 
 enum Direction
 {

@@ -144,6 +144,12 @@
     <ClCompile Include="gfx\imgui_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="model\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="model\game_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -276,6 +282,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gfx\imgui_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="model\object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="model\game_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

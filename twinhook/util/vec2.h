@@ -1,6 +1,8 @@
 #pragma once
 
-class vec2 {
+#include <vector>
+
+class __declspec(dllexport) vec2 {
 public:
 	float x, y;
 

@@ -83,7 +83,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -121,7 +122,8 @@
       <OptimizeReferences>false</OptimizeReferences>
       <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>twinhook.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
     <PostBuildEvent>
@@ -142,6 +144,8 @@
     <ClCompile Include="control\th06_player.cpp" />
     <ClCompile Include="control\th11_player.cpp" />
     <ClCompile Include="control\th_player.cpp" />
+    <ClCompile Include="model\game_object.cpp" />
+    <ClCompile Include="model\object.cpp" />
     <ClCompile Include="gfx\imgui_controller.cpp" />
     <ClCompile Include="gfx\imgui_mixins.cpp" />
     <ClCompile Include="gfx\imgui_window.cpp" />
@@ -183,6 +187,8 @@
     <ClInclude Include="config\th_registry.h" />
     <ClInclude Include="control\th06_player.h" />
     <ClInclude Include="control\th11_player.h" />
+    <ClInclude Include="model\game_object.h" />
+    <ClInclude Include="model\object.h" />
     <ClInclude Include="gfx\imgui_controller.h" />
     <ClInclude Include="gfx\imgui_mixins.h" />
     <ClInclude Include="gfx\imgui_window.h" />
