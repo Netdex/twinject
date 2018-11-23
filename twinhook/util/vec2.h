@@ -4,9 +4,17 @@
 
 class __declspec(dllexport) vec2 {
 public:
-	float x, y;
+	union
+	{
+		float x, w;
+	};
+	union
+	{
+		float y, h;
+	};
 
 	vec2();
+	vec2(float t);
 	vec2(float x, float y);
 
 	vec2(const vec2& other);
@@ -200,9 +208,9 @@ public:
 		float minB, float maxB, float vb);
 };
 
-vec2 operator+(const vec2& a, const vec2& b);
-vec2 operator-(const vec2& a, const vec2& b);
-vec2 operator*(const vec2& a, float o);
-vec2 operator/(const vec2& a, float o);
-vec2 operator*(float o, const vec2& a);
-vec2 operator/(float o, const vec2& a);
+vec2 __declspec(dllexport) operator+(const vec2& a, const vec2& b);
+vec2 __declspec(dllexport) operator-(const vec2& a, const vec2& b);
+vec2 __declspec(dllexport) operator*(const vec2& a, float o);
+vec2 __declspec(dllexport) operator/(const vec2& a, float o);
+vec2 __declspec(dllexport) operator*(float o, const vec2& a);
+vec2 __declspec(dllexport) operator/(float o, const vec2& a);

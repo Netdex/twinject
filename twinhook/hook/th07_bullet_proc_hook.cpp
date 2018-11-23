@@ -38,15 +38,15 @@ void th07_bullet_proc_hook::vectorUpdateHook(void *ecx)
 	th07_player *player = dynamic_cast<th07_player*>(inst()->player);
 	ASSERT(("wrong player type bound to hook", player));
 
-	std::vector<entity> &bullets = player->bullets;
-	std::vector<entity> &powerups = player->powerups;
+	std::vector<bullet> &bullets = player->bullets;
+	std::vector<powerup> &powerups = player->powerups;
 
 	// TODO something is quite wrong with the bullet size
-	entity e = {
-		{ *(float*)((char*)ecx + 0xB8C), *((float*)((char*)ecx + 0xB8C) + 1) },
-		{ *(float*)((char*)ecx + 0xB98), *((float*)((char*)ecx + 0xB98) + 1) },
-		{ *(float*)(*(int*)((char*)ecx + 0x1E4) + 48) / 2, *(float*)(*(int*)((char*)ecx + 0x1E4) + 44)/ 2},
-		0 /*static_cast<DWORD>(*(int*)((char*)ecx + 0xBF4))*/
+	aabb bulletBounds{
+		vec2(*(float*)((char*)ecx + 0xB8C), *((float*)((char*)ecx + 0xB8C) + 1)),
+		vec2(*(float*)((char*)ecx + 0xB98), *((float*)((char*)ecx + 0xB98) + 1)),
+		vec2(*(float*)(*(int*)((char*)ecx + 0x1E4) + 48) / 2, *(float*)(*(int*)((char*)ecx + 0x1E4) + 44) / 2)
 	};
-	bullets.push_back(e);
+	bullet b{ bulletBounds };
+	bullets.push_back(b);
 }

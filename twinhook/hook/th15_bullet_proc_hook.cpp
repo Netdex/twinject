@@ -22,6 +22,19 @@ th15_bullet_proc_hook* th15_bullet_proc_hook::inst()
 
 static sub_455D00_t sub_455D00_Original = (sub_455D00_t)0x00455D00;
 
+static void sub_455D00_add(int pPos, float fRadius)
+{
+	// HACK we need to do this because SEH is enabled and we can't 
+	// create temp objects in a naked fcn with SEH enabled
+	circle a{
+			vec2(*(float*)pPos + th_param.GAME_WIDTH / 2, *(float*)(pPos + 4)) ,
+			vec2(*(float*)(pPos + (3140 - 3128)), *(float*)(pPos + (3144 - 3128))),
+			fRadius
+	};
+	bullet b{ a };
+	th15_bullet_proc_hook::inst()->player->bullets.push_back(b);
+}
+
 // signed int __userpurge _col_chk@<eax>(float fRadius@<xmm2>, int pPos, int a3)
 // recycle local variables passed by caller
 int __declspec(naked) __stdcall sub_455D00_hook(int pPos, int a3)
@@ -37,15 +50,7 @@ int __declspec(naked) __stdcall sub_455D00_hook(int pPos, int a3)
 		movss fRadius, xmm2
 	}
 	{
-		entity e = {
-			// for some bizarre reason, the x-coordinate is offset by half the screen width,
-			// such that the middle of the screen is 0
-			vec2(*(float*)pPos + th_param.GAME_WIDTH / 2, *(float*)(pPos + 4)),
-			vec2(*(float*)(pPos + (3140 - 3128)), *(float*)(pPos + (3144 - 3128))),
-			vec2(fRadius * 2, fRadius * 2),
-			0
-		};
-		th15_bullet_proc_hook::inst()->player->bullets.push_back(e);
+		sub_455D00_add(pPos, fRadius);
 	}
 	__asm {
 		// userpurge<eax>(float<xmm2>, int, int) styled call to original function
@@ -71,6 +76,24 @@ void hook_th15_sub_455D00()
 
 static sub_455E10_t sub_455E10_Original = (sub_455E10_t)0x00455E10;
 
+static void sub_455E10_add(float *a3, float a4, float rad, float angle)
+{
+	obb a{
+			vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1]),
+			a4, rad / 2.f, angle,
+			vec2()
+	};
+	laser b{ a };
+	//laser e = {
+	//	vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1])			// position x y
+	//	//vec2(*(float*)((char*)a3 + 0xc), *(float*)((char*)a3 + 4 + 0xc)), 
+	//	vec2(),
+	//	vec2(a4 * cos(angle), a4 * sin(angle)),
+	//	a4, rad/2.f, angle,
+	//	/*vec2(*(float*)(this_+0x54), *(float*)(this_+0x58))*/
+	//};
+	th15_bullet_proc_hook::inst()->player->lasers.push_back(b);
+}
 int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 {
 	// 16-byte aligned
@@ -92,15 +115,7 @@ int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 		movups a2, xmm3
 	}
 	{
-		laser e = {
-			vec2(a3[0] + th_param.GAME_WIDTH / 2, a3[1]),			// position x y
-			//vec2(*(float*)((char*)a3 + 0xc), *(float*)((char*)a3 + 4 + 0xc)), 
-			vec2(),
-			vec2(a4 * cos(angle), a4 * sin(angle)),
-			a4, rad/2.f, angle,
-			/*vec2(*(float*)(this_+0x54), *(float*)(this_+0x58))*/
-		};
-		th15_bullet_proc_hook::inst()->player->lasers.push_back(e);
+		sub_455E10_add(a3, a4, rad, angle);
 	}
 	__asm {
 		// userpurge<eax>(float<xmm2>, float<xmm3>, float, float, int) 

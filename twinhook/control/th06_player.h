@@ -18,5 +18,5 @@ public:
 	void onEnableChanged(bool enable) override;
 
 private:
-	entity getPlayerEntity() override;
+	player getPlayerEntity() override;
 };

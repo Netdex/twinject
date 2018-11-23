@@ -16,4 +16,5 @@ public:
 
 	void handleInput(const BYTE diKeys[256], const BYTE press[256]) override;
 	void onEnableChanged(bool enable) override;
+	player getPlayerEntity() override;
 };

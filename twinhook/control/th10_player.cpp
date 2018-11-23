@@ -71,12 +71,14 @@ void th10_player::doBulletPoll()
 					float w = *(float*)(ebx + 0x3F0);
 					float h = *(float*)(ebx + 0x3F4);
 
-					bullets.push_back({
-						vec2(x + th_param.GAME_WIDTH / 2, y),
+					vec2 sz = vec2(w, h);
+					aabb a{
+						vec2(x + th_param.GAME_WIDTH / 2, y) - sz / 2,
 						vec2(dx,dy),
-						vec2(w,h),
-						0
-						});
+						sz
+					};
+					bullet b{ a };
+					bullets.push_back(b);
 				}
 			}
 		}
@@ -112,12 +114,15 @@ void th10_player::doEnemyPoll()
 					float h = *(float*)(objAddr + 0xbc);
 					float dx = *(float*)(objAddr + 0x2c + 0xc);
 					float dy = *(float*)(objAddr + 0x30 + 0xc);
-					enemies.push_back({
-						vec2(x + th_param.GAME_WIDTH / 2, y),
+
+					vec2 sz = vec2(w, h);
+					aabb a{
+						vec2(x + th_param.GAME_WIDTH / 2, y) - sz / 2,
 						vec2(dx, dy),
-						vec2(w, h),
-						0
-					});
+						sz
+					};
+					enemy e{ a };
+					enemies.push_back(e);
 				}
 			}
 			objBase = objNext;
@@ -145,12 +150,16 @@ void th10_player::doPowerupPoll()
 			float y = *(float*)ebp;
 			float dx = *(float*)(ebp - 0x4 + 0xc);
 			float dy = *(float*)(ebp + 0xc);
-			powerups.push_back({
-				vec2(x + th_param.GAME_WIDTH / 2, y),
+
+			vec2 sz(6, 6);
+
+			aabb a{
+				vec2(x + th_param.GAME_WIDTH / 2, y) - sz / 2,
 				vec2(dx, dy),
-				vec2(6, 6),
-				0
-			});
+				sz
+			};
+			powerup p{ a };
+			powerups.push_back(p);
 		}
 		ebp += 0x3f0;
 	}
@@ -168,7 +177,7 @@ void th10_player::doLaserPoll()
 	int esi = *(int*)(base + 0x18);
 	if (esi)
 	{
-		do{
+		do {
 			ebx = *(int*)(esi + 0x8);
 			float x = *(float*)(esi + 0x24);
 			float y = *(float*)(esi + 0x28);
@@ -177,36 +186,38 @@ void th10_player::doLaserPoll()
 			float w = *(float*)(esi + 0x44);
 			float dx = *(float*)(esi + 0x24 + 0xc);
 			float dy = *(float*)(esi + 0x28 + 0xc);
-			lasers.push_back({
+
+			obb a{
 				vec2(x + th_param.GAME_WIDTH / 2, y),
+				h, w / 4, arc,
 				vec2(dx, dy),
-				vec2(h, 0).rotate(arc),
-				h, w / 4, arc
-			});
+			};
+			laser l{ a };
+			lasers.push_back(l);
 			esi = ebx;
-		}while(ebx);
+		} while (ebx);
 	}
 }
 
-entity th10_player::getPlayerEntity()
+player th10_player::getPlayerEntity()
 {
 	// use static pointer to game object to get player offset
 	PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos;
 	if (*PlayerPtrAddr) {
 		PBYTE plyrAddr = *PlayerPtrAddr;
 
-		entity e = {
+		vec2 sz = vec2(5, 5);
+		aabb e {
 			vec2(
 				*(float*)(plyrAddr + 0x3C0) + th_param.GAME_WIDTH / 2,
-				*(float*)(plyrAddr + 0x3C4)),
+				*(float*)(plyrAddr + 0x3C4)) - sz / 2,
 			vec2(),
 			// TODO assume 5x5 size, can probably adapt th15 code to find dimensions
 			vec2(5,5),
-			0
 		};
-		return e;
+		return player{ e };
 	}
-	return {};
+	return player{ aabb() };
 }
 
 

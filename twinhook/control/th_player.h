@@ -159,7 +159,7 @@ public:
 	 * \brief Get player characteristics
 	 * \return An entity struct populated with player characteristics
 	 */
-	virtual player getPlayerEntity();
+	virtual player getPlayerEntity() = 0;
 
 	/*
 	 * Memory addresses and values borrowed from

@@ -132,7 +132,6 @@
     <ClCompile Include="thsandbox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="entity.h" />
     <ClInclude Include="scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,11 +1,12 @@
 #pragma once
-#include "entity.h"
 #include <SDL.h>
+#include <vector>
+#include "model/object.h"
 
 class scene
 {
 public:
-	std::vector<entity*> entities;
+	std::vector<std::shared_ptr<entity>> entities;
 
 	scene();
 	~scene();

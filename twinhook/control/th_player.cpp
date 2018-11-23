@@ -106,18 +106,20 @@ void th_player::bindAlgorithm(th_algorithm* algo)
 	algorithm = algo;
 }
 
-entity th_player::getPlayerEntity()
-{
-	PBYTE PlayerPtrAddr = (PBYTE)this->gs_ptr.plyr_pos;
-	entity plyr = {
-		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET,
-			 *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
-		vec2(),
-		vec2(5, 5), // hard-coded player size
-		0
-	};
-	return plyr;
-}
+//player th_player::getPlayerEntity()
+//{
+//	// TODO this must be overridden depending on the game's hit type!
+//	PBYTE PlayerPtrAddr = (PBYTE)this->gs_ptr.plyr_pos;
+//	
+//	entity plyr = {
+//		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET,
+//			 *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET),
+//		vec2(),
+//		vec2(5, 5), // hard-coded player size
+//		0
+//	};
+//	return plyr;
+//}
 
 th_kbd_state th_player::getKeyboardState() const
 {

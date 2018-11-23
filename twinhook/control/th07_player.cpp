@@ -38,6 +38,12 @@ void th07_player::onEnableChanged(bool enable)
 	th_player::onEnableChanged(enable);
 }
 
+player th07_player::getPlayerEntity()
+{
+	// TODO
+	return player{ aabb() };
+}
+
 void th07_player::draw(IDirect3DDevice9* d3dDev)
 {
 	th_player::draw(d3dDev);

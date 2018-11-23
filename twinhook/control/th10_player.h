@@ -22,5 +22,5 @@ private:
 	void doPowerupPoll();
 	void doLaserPoll();
 
-	entity getPlayerEntity() override;
+	player getPlayerEntity() override;
 };

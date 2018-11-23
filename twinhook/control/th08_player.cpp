@@ -70,3 +70,9 @@ void th08_player::onEnableChanged(bool enable)
 	}
 }
 
+player th08_player::getPlayerEntity()
+{
+	// TODO
+	return player{ aabb() };
+}
+

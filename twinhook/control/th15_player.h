@@ -20,5 +20,5 @@ private:
 	/**
 	 * Note: the size for players in th15 is radius, not diameter.
 	 */
-	entity getPlayerEntity() override;
+	player getPlayerEntity() override;
 };

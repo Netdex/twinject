@@ -63,11 +63,13 @@ void th11_player::doBulletPoll()
 				float y = *((float *)pBase + 272);
 				float dx = *((float *)pBase + 274);
 				float dy = *((float *)pBase + 275);
-				bullets.push_back(entity{
+				aabb a{
 					vec2(x + th_param.GAME_WIDTH / 2,y),
 					vec2(dx,dy),
 					vec2(w,h)
-					});
+				};
+				bullet b{ a };
+				bullets.push_back(b);
 			}
 		}
 		pBase += 2320;
@@ -91,35 +93,37 @@ void th11_player::doLaserPoll()
 
 }
 
-entity th11_player::getPlayerEntity()
+player th11_player::getPlayerEntity()
 {
-	/*
-	 * (PLYR BASE PTR)
-	 * [0x87C]	?
-	 * [0x8]	POS (VEC2)
-	 * [0x48]	?
-	 * [0xC]	BOUND TOP LEFT (VEC3)
-	 * [0xC]	BOUND BOTTOM RIGHT (VEC3)
-	 */
-	PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos;
-	if (*PlayerPtrAddr) {
-		PBYTE plyrAddr = *PlayerPtrAddr;
+	///*
+	// * (PLYR BASE PTR)
+	// * [0x87C]	?
+	// * [0x8]	POS (VEC2)
+	// * [0x48]	?
+	// * [0xC]	BOUND TOP LEFT (VEC3)
+	// * [0xC]	BOUND BOTTOM RIGHT (VEC3)
+	// */
+	//PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos;
+	//if (*PlayerPtrAddr) {
+	//	PBYTE plyrAddr = *PlayerPtrAddr;
 
-		float w = (*(float*)(plyrAddr + 0x87C + 0x8 + 0x48 + 0xC)
-			- *(float*)(plyrAddr + 0x87C + 0x8 + 0x48)) * 2;
-		float h = (*(float*)(plyrAddr + 0x87C + 0x8 + 0x48 + 0xC + 4)
-			- *(float*)(plyrAddr + 0x87C + 0x8 + 0x48 + 4)) * 2;
-		entity e = {
-			vec2(
-				*(float*)(plyrAddr + 0x87C) + th_param.GAME_WIDTH / 2,
-				*(float*)(plyrAddr + 0x87C + 4)),
-			vec2(),
-			vec2(w, h),
-			0
-		};
-		return e;
-	}
-	return {};
+	//	float w = (*(float*)(plyrAddr + 0x87C + 0x8 + 0x48 + 0xC)
+	//		- *(float*)(plyrAddr + 0x87C + 0x8 + 0x48)) * 2;
+	//	float h = (*(float*)(plyrAddr + 0x87C + 0x8 + 0x48 + 0xC + 4)
+	//		- *(float*)(plyrAddr + 0x87C + 0x8 + 0x48 + 4)) * 2;
+	//	entity e = {
+	//		vec2(
+	//			*(float*)(plyrAddr + 0x87C) + th_param.GAME_WIDTH / 2,
+	//			*(float*)(plyrAddr + 0x87C + 4)),
+	//		vec2(),
+	//		vec2(w, h),
+	//		0
+	//	};
+	//	return e;
+	//}
+	//return {};
+	// TODO
+	return player{ aabb() };
 }
 
 

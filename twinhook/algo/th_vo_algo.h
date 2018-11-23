@@ -151,10 +151,10 @@ class th_vo_algo : public th_algorithm
 	 * \param collided All bullets which collide with the AABB are added to this vector
 	 * \return The minimum collison tick
 	 */
-	float th_vo_algo::minStaticCollideTick(
-		const std::vector<entity> &bullets,
-		const vec2 &p, const vec2 &s,
-		std::vector<entity> &collided) const;
+	float minStaticCollideTick(
+		const std::vector<bullet> &bullets,
+		const aabb &area,
+		std::vector<bullet> &collided) const;
 	/**
 	 * \brief Draw collision potentials at a specified resolution
 	 * \param bullets The bullets to check collision against
@@ -162,9 +162,9 @@ class th_vo_algo : public th_algorithm
 	 * \param s Size of AABB containing visualization boundary
 	 * \param minRes Minimum allowable resolution for visualization
 	 */
-	void th_vo_algo::vizPotentialQuadtree(
-		const std::vector<entity> &bullets,
-		vec2 p, vec2 s,
+	void vizPotentialQuadtree(
+		const std::vector<bullet> &bullets,
+		const aabb &area,
 		float minRes) const;
 
 	/* IMGUI Integration */

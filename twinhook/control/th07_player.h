@@ -6,7 +6,7 @@ class th07_player : public th_player
 public:
 
 	th07_player() : th_player(gs_addr{ (uint8_t*)0x4BDCA0, (uint8_t*)0x4B9E50 }) {}
-	~th07_player() {}
+	~th07_player() = default;
 
 	void onInit() override;
 	void onTick() override;
@@ -16,4 +16,5 @@ public:
 
 	void handleInput(const BYTE diKeys[256], const BYTE press[256]) override;
 	void onEnableChanged(bool enable) override;
+	player getPlayerEntity() override;
 };

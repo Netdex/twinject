@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinhook", "twinhook\twinhook.vcxproj", "{A47B2FB1-6209-46DC-AA46-17F03164F7D8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thsandbox", "thsandbox\thsandbox.vcxproj", "{E094CBD3-C3F1-4B39-95C6-71117A768F8A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A47B2FB1-6209-46DC-AA46-17F03164F7D8} = {A47B2FB1-6209-46DC-AA46-17F03164F7D8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

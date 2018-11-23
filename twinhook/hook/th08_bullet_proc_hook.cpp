@@ -63,39 +63,35 @@ static void Hook_TH08_sub_410A70()
 void th08_bullet_proc_hook::vectorUpdateHook(int retaddr, int a1, int a2, int a3)
 {
 	// HACK this might cause performance problems, also are we guaranteed a th08_player?
-	th_player *player =inst()->player;
+	th_player *player = inst()->player;
 	ASSERT(("wrong player type bound to hook", player));
-	std::vector<entity> &TH08_Bullets = player->bullets;
-	std::vector<entity> &TH08_Powerups = player->powerups;
+	std::vector<bullet> &TH08_Bullets = player->bullets;
+	std::vector<powerup> &TH08_Powerups = player->powerups;
 
 	// routine from bullet update
 	if (retaddr == 0x004314B3)
 	{
-		entity b;
-		b.position.x = *(float*)(a1 + 0);
-		b.position.y = *(float*)(a1 + 4);
-		b.velocity.x = *(float*)(a3 + 0);
-		b.velocity.y = *(float*)(a3 + 4);
+		aabb a{
+			vec2(*(float*)(a1 + 0), *(float*)(a1 + 4)),
+			vec2(*(float*)(a3 + 0),*(float*)(a3 + 4)),
+			vec2(*(float*)(a2 + 3380) ,*((float*)(a2 + 3380) + 1))
+		};
+		bullet b{ a };
 		// find log2 of bullet action binary flag
-		if (!_BitScanReverse(&b.meta, *((DWORD*)a2 + 875)))
+		if (!_BitScanReverse((DWORD*)&b.meta, *((DWORD*)a2 + 875)))
 			b.meta = 0;
 
-		float bx = *(float*)(a2 + 3380);
-		float by = *((float*)(a2 + 3380) + 1);
-		b.size = vec2(bx, by);
 		TH08_Bullets.push_back(b);
 	}
 	else if (retaddr == 0x0044095B)
 	{
-		entity b;
-		b.position = vec2(*(float*)(a1 + 0),*(float*)(a1 + 4));
-		b.velocity = vec2(*(float*)(a3 + 0), *(float*)(a3 + 4));
-		// get powerup temporal factor
-		b.meta = *(BYTE*)(a1 - 676 + 727);
-		/*float bx = *(float*)(a2 + 3380);
-		float by = *((float*)(a2 + 3380) + 1);
-		b.sz = vec2(bx, by);*/
-		b.size = vec2(10, 10);				// assumption
-		TH08_Powerups.push_back(b);
+		aabb a{
+			vec2(*(float*)(a1 + 0),*(float*)(a1 + 4)) ,
+			vec2(*(float*)(a3 + 0), *(float*)(a3 + 4)) ,
+			vec2(10, 10)
+		};
+		powerup p{ a,  *(BYTE*)(a1 - 676 + 727) };
+
+		TH08_Powerups.push_back(p);
 	}
 }

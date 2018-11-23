@@ -7,6 +7,10 @@ vec2::vec2() : x(0), y(0)
 {
 }
 
+vec2::vec2(float t) : x(t), y(t)
+{
+}
+
 vec2::vec2(float x, float y) : x(x), y(y)
 {
 }

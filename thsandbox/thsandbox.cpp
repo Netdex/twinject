@@ -4,6 +4,7 @@
 #include <cassert>
 #include <util/vec2.h>
 #include "scene.h"
+#include "model/object.h"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
@@ -26,10 +27,14 @@ scene sc;
 void initScene()
 {
 	sc = scene();
-	aabb *ab = new aabb(vec2(10, 10), vec2(1, 0.5), vec2(50, 60));
-	sc.entities.push_back(ab);
-
+	sc.entities.push_back(
+		std::make_shared<aabb>(vec2(10, 10), vec2(2, 1), vec2(50, 60)));
+	sc.entities.push_back(
+		std::make_shared<aabb>(vec2(1000, 10), vec2(-2, 1), vec2(150, 260)));
+	sc.entities.push_back(
+		std::make_shared<obb>(vec2(70, 10), 100, 30, 10, vec2(1,2)));
 }
+
 void loop()
 {
 	bool quit = false;

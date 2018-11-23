@@ -25,28 +25,31 @@ public:
 	std::shared_ptr<entity> obj;
 
 	virtual ~game_object() = default;
+
+	// HACK render via cdraw
+	void render() const;
 };
 
-class bullet : game_object
+class bullet : public game_object
 {
 public:
 	long long meta;
 
 	bullet(const aabb &a, long long meta = 0) 
-		: game_object(Bullet, std::make_shared<aabb>(a)), meta(meta){}
+		: game_object(Bullet, std::make_shared<aabb>(a)), meta(meta) {}
 
-	bullet(const circle &a, long long meta = 0) 
-		: game_object(Bullet, std::make_shared<circle>(a)), meta(meta){}
+	bullet(const circle &a, long long meta = 0)
+		: game_object(Bullet, std::make_shared<circle>(a)), meta(meta) {}
 };
 
-class laser : game_object
+class laser : public game_object
 {
 public:
 	laser(const obb &a)
 		: game_object(Laser, std::make_shared<obb>(a)) {}
 };
 
-class player : game_object
+class player : public game_object
 {
 public:
 
@@ -57,7 +60,7 @@ public:
 		: game_object(Player, std::make_shared<circle>(a)) {}
 };
 
-class enemy : game_object
+class enemy : public game_object
 {
 public:
 
@@ -68,7 +71,7 @@ public:
 		: game_object(Enemy, std::make_shared<circle>(a)) {}
 };
 
-class powerup : game_object
+class powerup : public game_object
 {
 public:
 	long long meta;

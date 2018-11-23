@@ -39,7 +39,8 @@ void th06_player::onEnableChanged(bool enable)
 	th_player::onEnableChanged(enable);
 }
 
-entity th06_player::getPlayerEntity()
+player th06_player::getPlayerEntity()
 {
-	return {};
+	// TODO no implementation
+	return player{aabb()};
 }
