@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
+#include <memory>
 
 // directx includes
 #include <d3d9.h>

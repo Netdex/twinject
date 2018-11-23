@@ -1,60 +1,62 @@
 #pragma once
 
-#include "../util/vec2.h"
-#include "../algo/th_algorithm.h"
-#include "../info/keypress_detect.h"
+#include "util/vec2.h"
+#include "algo/th_algorithm.h"
+#include "info/keypress_detect.h"
 #include "config/th_command_proc.h"
 #include "gfx/imgui_controller.h"
 
-/*
- * Representing an entity. This struct has two interpretations depending on
- * whether the game using hitcircles or hitboxes because I was lazy
- * (yes, this is confusing, I'll fix this)
- *
- * If hitcircles:
- * p: center of circle
- * v: velocity of circle
- * sz: radius of circle (both components are the same)
- * me: game specific
- *
- * If hitboxes:
- * p: top left corner of box
- * v: velocity of box
- * sz: dimensions (width, height) of box
- * me: game specific
- */
-struct entity
-{
-	vec2 position;				// position
-	vec2 velocity;				// velocity
-	vec2 size;			// bullet size
-	DWORD meta;			// metadata
-};
+#include "model/game_object.h"
 
-struct laser
-{
-	vec2 position;				// position
-	vec2 velocity;				// velocity
-	vec2 extent;			// laser extent
-	float length;
-	float radius;			// perpendicular radius
-	float angle;			// angle
-
-	std::vector<vec2> laser::getVertices() const
-	{
-		std::vector<vec2> vertices;
-		// note: these vertices must be in VERTEX ORDER
-		vec2 points[] = {
-			vec2(0, radius), vec2(0, -radius),
-			vec2(length, -radius), vec2(length, radius)
-		};
-		for (int i = 0; i < 4; ++i)
-		{
-			vertices.push_back(points[i].rotate(angle) + position);
-		}
-		return vertices;
-	}
-};
+///*
+// * Representing an entity. This struct has two interpretations depending on
+// * whether the game using hitcircles or hitboxes because I was lazy
+// * (yes, this is confusing, I'll fix this)
+// *
+// * If hitcircles:
+// * p: center of circle
+// * v: velocity of circle
+// * sz: radius of circle (both components are the same)
+// * me: game specific
+// *
+// * If hitboxes:
+// * p: top left corner of box
+// * v: velocity of box
+// * sz: dimensions (width, height) of box
+// * me: game specific
+// */
+//struct entity
+//{
+//	vec2 position;				// position
+//	vec2 velocity;				// velocity
+//	vec2 size;			// bullet size
+//	DWORD meta;			// metadata
+//};
+//
+//struct laser
+//{
+//	vec2 position;				// position
+//	vec2 velocity;				// velocity
+//	vec2 extent;			// laser extent
+//	float length;
+//	float radius;			// perpendicular radius
+//	float angle;			// angle
+//
+//	std::vector<vec2> laser::getVertices() const
+//	{
+//		std::vector<vec2> vertices;
+//		// note: these vertices must be in VERTEX ORDER
+//		vec2 points[] = {
+//			vec2(0, radius), vec2(0, -radius),
+//			vec2(length, -radius), vec2(length, radius)
+//		};
+//		for (int i = 0; i < 4; ++i)
+//		{
+//			vertices.push_back(points[i].rotate(angle) + position);
+//		}
+//		return vertices;
+//	}
+//};
 
 // game-specific addresses for common behaviour
 struct gs_addr
@@ -92,9 +94,9 @@ protected:
 	// game specific pointers
 	gs_addr gs_ptr;
 public:
-	std::vector<entity> bullets;
-	std::vector<entity> enemies;	// TODO implement viz, add, use
-	std::vector<entity> powerups;
+	std::vector<bullet> bullets;
+	std::vector<enemy> enemies;
+	std::vector<powerup> powerups;
 	std::vector<laser> lasers;
 
 	bool enabled = false;
@@ -157,7 +159,7 @@ public:
 	 * \brief Get player characteristics
 	 * \return An entity struct populated with player characteristics
 	 */
-	virtual entity getPlayerEntity();
+	virtual player getPlayerEntity();
 
 	/*
 	 * Memory addresses and values borrowed from
