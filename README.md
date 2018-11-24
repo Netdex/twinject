@@ -139,7 +139,7 @@ This code is [licensed under the specified terms here](https://github.com/Netdex
 Libraries and their licenses are documented under `dependencies/`. 
 
 Information regarding Touhou game internals to assist in reverse engineering have been used from the following sources:  
-[TH10_Collision_Points by binvec](https://github.com/binvec/TH10_Collision_Points)  
+[TH10_DataReversing by binvec](https://github.com/binvec/TH10_DataReversing)  
 [thinput by Drake](https://www.shrinemaiden.org/forum/index.php?topic=16024.0)  
 [Nice cheat.](http://cheater.seesaa.net/)  
 [Ethan Silver's Junkpile](https://web.archive.org/web/20130630114418/http://diceroller.site40.net/?page=touhou_12e)  
