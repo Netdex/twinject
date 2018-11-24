@@ -41,7 +41,7 @@ static void draw_entity(SDL_Renderer *renderer,
 void scene::render(SDL_Renderer *renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	for(auto e : entities)
+	for (auto e : entities)
 		draw_entity(renderer, e);
 
 	for (size_t i = 0; i < entities.size(); ++i)
@@ -55,7 +55,10 @@ void scene::render(SDL_Renderer *renderer)
 			{
 				auto et1 = e1->translate(e1->velocity * t);
 				auto et2 = e2->translate(e2->velocity * t);
-				SDL_SetRenderDrawColor(renderer, 0x80, 0x80, 0x80, 0xFF);
+				if (t == 0)
+					SDL_SetRenderDrawColor(renderer, 0xFF, 0x40, 0x40, 0xFF);
+				else
+					SDL_SetRenderDrawColor(renderer, 0x40, 0x40, 0x40, 0xFF);
 				draw_entity(renderer, et1);
 				draw_entity(renderer, et2);
 				SDL_SetRenderDrawColor(renderer, 0x80, 0xFF, 0x80, 0xFF);
@@ -63,7 +66,7 @@ void scene::render(SDL_Renderer *renderer)
 				auto c2 = e2->com();
 				SDL_RenderDrawLine(renderer, (int)c1.x, (int)c1.y,
 					(int)c2.x, (int)c2.y);
-				SDL_SetRenderDrawColor(renderer, 0x20, 0x20, 0x20, 0xFF);
+				SDL_SetRenderDrawColor(renderer, 0x30, 0x30, 0x30, 0xFF);
 				auto ct1 = et1->com();
 				auto ct2 = et2->com();
 				SDL_RenderDrawLine(renderer, (int)c1.x, (int)c1.y,

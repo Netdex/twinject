@@ -6,6 +6,7 @@
 class polygon;
 class aabb;
 
+
 class __declspec(dllexport) entity
 {
 public:
@@ -60,8 +61,10 @@ public:
 
 	std::shared_ptr<entity> entityAtCollision(const entity &o) const;
 
+	virtual std::string serialize() const = 0;
 
 };
+
 
 class __declspec(dllexport) aabb : public entity
 {
@@ -81,9 +84,12 @@ public:
 	float willCollideWith(const entity& o) const override;
 
 	polygon toPolygon() const;
+
+	std::string serialize() const override;
 };
 
-class circle : public entity
+
+class __declspec(dllexport) circle : public entity
 {
 public:
 	vec2 center;
@@ -99,7 +105,11 @@ public:
 
 	float willExit(const entity& o) const override;
 	float willCollideWith(const entity& o) const override;
+
+	std::string serialize() const override;
+
 };
+
 
 class __declspec(dllexport) polygon : public entity
 {
@@ -116,6 +126,9 @@ public:
 
 	float willExit(const entity& o) const override;
 	float willCollideWith(const entity& o) const override;
+
+	std::string serialize() const override;
+
 
 };
 

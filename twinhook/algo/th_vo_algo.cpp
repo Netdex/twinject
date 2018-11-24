@@ -71,37 +71,21 @@ void th_vo_algo::onTick()
 
 	bool bounded = true;
 
+	std::shared_ptr<entity> pseudoPlayers[NUM_DIRS];
+	for(int dir = 0; dir < NUM_DIRS; ++dir)
+	{
+		vec2 pvel = this->getPlayerMovement(dir);
+		pseudoPlayers[dir] = plyr.obj->withVelocity(pvel);
+	}
+
 	// Bullet collision frame calculations
 	for (auto b = player->bullets.begin(); b != player->bullets.end(); ++b)
 	{
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
-			vec2 pvel = this->getPlayerMovement(dir);
-			auto pseudoPlayer = plyr.obj->withVelocity(pvel);
-
+			const auto pseudoPlayer = pseudoPlayers[dir];
 			float colTick = pseudoPlayer->willCollideWith(*b->obj);
 
-
-			//// TODO this hitCircle stuff is painful, replace with interfaces and impl
-			//if (hitCircle) {
-			//	colTick = vec2::willCollideCircle(
-			//		plyr.position, b->position,
-			//		plyr.size.x / 2, b->size.x / 2,
-			//		pvel,
-			//		b->velocity
-			//	);
-			//}
-			//else
-			//{
-			//	colTick = vec2::willCollideAABB(
-			//		plyr.position - plyr.size / 2,
-			//		b->position - b->size / 2,
-			//		plyr.size,
-			//		b->size,
-			//		pvel,
-			//		b->velocity
-			//	);
-			//}
 			if (colTick >= 0) {
 				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
 				bounded = false;
@@ -113,24 +97,8 @@ void th_vo_algo::onTick()
 	{
 		for (int dir = 0; dir < NUM_DIRS; ++dir)
 		{
-			vec2 pvel = this->getPlayerMovement(dir);
-			// TODO cache dir->pseudoPlayers for entire tick
-			auto pseudoPlayer = plyr.obj->withVelocity(pvel);
+			const auto pseudoPlayer = pseudoPlayers[dir];
 			float colTick = pseudoPlayer->willCollideWith(*l.obj);
-			// TODO inter-object collision transforms not implemented!
-			//if (hitCircle)
-			//{
-			//	// TODO I have not written the SAT predictor code for circles yet, 
-			//	// so this part won't work for circles.
-			//	colTick = -1;
-			//}
-			//else
-			//{
-			//	std::vector<vec2> playerVert = vec2::aabbVert(plyr.position - plyr.size / 2, plyr.size);
-			//	std::vector<vec2> laserVert = l.getVertices();
-
-			//	colTick = vec2::willCollideSAT(playerVert, pvel, laserVert, l.velocity);
-			//}
 
 			if (colTick >= 0) {
 				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
@@ -154,8 +122,7 @@ void th_vo_algo::onTick()
 		if (powerup.meta == 0 /*&& powerup.obj->p.y > 200*/) {
 			for (int dir = 0; dir < NUM_DIRS; ++dir)
 			{
-				vec2 pvel = this->getPlayerMovement(dir);
-				auto pseudoPlayer = plyr.obj->withVelocity(pvel);
+				const auto pseudoPlayer = pseudoPlayers[dir];
 
 				/*
 				 * Powerups tend to be attracted towards the player, so we can be
@@ -177,17 +144,16 @@ void th_vo_algo::onTick()
 	// and prioritize powerup gathering over enemies
 	for (const auto& enemy : player->enemies)
 	{
-		vec2 enemyCom = enemy.obj->com();
-		vec2 playerCom = plyr.obj->com();
+		const vec2 enemyCom = enemy.obj->com();
+		const vec2 playerCom = plyr.obj->com();
 		if (enemyCom.y < playerCom.y) {
 			for (int dir = Direction::Left; dir <= Direction::Right; ++dir)
 			{
-				vec2 pvel = this->getPlayerMovement(dir);
+				const vec2 pvel = this->getPlayerMovement(dir);
 
 				// Calculate x-distance to y-aligned axis of the enemy
 				float xDist = enemyCom.x - playerCom.x;
 				float colTick = xDist / pvel.x;
-				// TODO check if we are actually under them
 				// Filter out impossible values
 				if (colTick >= 0 && colTick <= 6000)
 				{
@@ -203,8 +169,8 @@ void th_vo_algo::onTick()
 	// Wall collision frame calculations
 	for (int dir = 1; dir < NUM_DIRS; ++dir)
 	{
-		vec2 pvel = this->getPlayerMovement(dir);
-		auto pseudoPlayer = plyr.obj->withVelocity(pvel);
+		const auto pseudoPlayer = pseudoPlayers[dir];
+
 
 		float t = pseudoPlayer->willExit(gameBounds);
 		/*float t = vec2::willExitAABB(

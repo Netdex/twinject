@@ -41,11 +41,11 @@ public:
 	bool nan() const;
 	vec2 rotate(float rad) const;
 	vec2 transform(float(*t)(float)) const;
-	
+
 	static float dot(const vec2 &a, const vec2 &b);
 	static vec2 proj(const vec2 &a, const vec2 &b);
 	static vec2 perp(const vec2 &a, const vec2 &b);
-	
+
 	static std::vector<vec2> aabbVert(const vec2 &p, const vec2 &s);
 
 	/**
@@ -76,18 +76,18 @@ public:
 	static bool inAABB(const vec2 &p, const vec2 &a, const vec2 &b);
 
 	/*
-	 *  TODO move all the code after this point out of vec2, because it doesn't really have 
+	 *  TODO move all the code after this point out of vec2, because it doesn't really have
 	 *  anything to do with vec2
 	 */
 
-	/**
-	 * \brief Determine if AABB 1 is colliding with AABB 2
-	 * \param p1 Position of AABB 1 (top-left corner)
-	 * \param p2 Position of AABB 2 (top-left corner)
-	 * \param s1 Size (x=width, y=height) of AABB 1
-	 * \param s2 Size (x=width, y=height) of AABB 2
-	 * \return Whether AABB 1 is colliding with AABB 2
-	 */
+	 /**
+	  * \brief Determine if AABB 1 is colliding with AABB 2
+	  * \param p1 Position of AABB 1 (top-left corner)
+	  * \param p2 Position of AABB 2 (top-left corner)
+	  * \param s1 Size (x=width, y=height) of AABB 1
+	  * \param s2 Size (x=width, y=height) of AABB 2
+	  * \return Whether AABB 1 is colliding with AABB 2
+	  */
 	static bool isCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2);
 
 	/**
@@ -99,7 +99,7 @@ public:
 	 * \return Whether AABB 2 is fully contained in AABB 1
 	 */
 	static bool isContainAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2);
-	
+
 	/**
 	 * \brief Determine if AABB 1 will collide with AABB 2 in the future
 	 * \param p1 Position of AABB 1 (top-left corner)
@@ -110,8 +110,8 @@ public:
 	 * \param v2 Velocity of AABB 2 (pixels/frame)
 	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision..
 	 */
-	static float willCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2, 
-								 const vec2 &v1, const vec2 &v2);
+	static float willCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
+		const vec2 &v1, const vec2 &v2);
 
 
 	/**
@@ -126,14 +126,14 @@ public:
 	 * \return 0 if already exited, -1 if no exit, otherwise number of frames until exit
 	 */
 	static float willExitAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
-							  const vec2 &v1, const vec2 &v2);
+		const vec2 &v1, const vec2 &v2);
 
 	/**
 	 * \brief Determine if two circles are collided
 	 * \param p1 Position of circle 1 center
 	 * \param p2 Position of circle 2 center
 	 * \param r1 Radius of circle 1
-	 * \param r2 Radius of circle 2 
+	 * \param r2 Radius of circle 2
 	 * \return Whether the circles are collided
 	 */
 	static bool isCollideCircle(const vec2 &p1, const vec2 &p2, float r1, float r2);
@@ -147,20 +147,8 @@ public:
 	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision
 	 */
 	static float willCollideCircle(const vec2 &p1, const vec2 &p2, float r1, float r2,
-								const vec2 &v1, const vec2 &v2);
-	
-	/**
-	 * \brief Determine if a circle will collide with a line segment in the future
-	 * \param ct The center of the circle
-	 * \param v The velocity of the circle
-	 * \param r The radius of the circle
-	 * \param p1 An endpoint of the line segment
-	 * \param p2 The other endpoint of the line segment
-	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision
-	 */
-	static float willCollideCircleLine(const vec2 &ct, const vec2 &v, float r, 
-							const vec2 &p1, const vec2 &p2);
-	
+		const vec2 &v1, const vec2 &v2);
+
 	/**
 	 * \brief Find the point on a circle that is the closest to some point
 	 * \param ct The center of the circle
@@ -170,7 +158,7 @@ public:
 	 */
 	static vec2 closestPointOnCircle(const vec2 &ct, float r, const vec2 &o);
 	/**
-	 * \brief Solve the specified quadratic equation of the form 
+	 * \brief Solve the specified quadratic equation of the form
 	 * ax^2 + bx + c
 	 * \param a Leading coefficient of x^2
 	 * \param b 2nd coefficient of x
@@ -182,7 +170,7 @@ public:
 	static int quadraticSolve(float a, float b, float c, float &x1, float &x2);
 
 	/**
-	 * \brief Check if the convex polygons defined by two point clouds collide via SAT. 
+	 * \brief Check if the convex polygons defined by two point clouds collide via SAT.
 	 * Behaviour is undefined if either polygon A or B are not strictly convex.
 	 * \param a Point cloud of convex polygon A
 	 * \param b Point cloud of convex polygon B
@@ -191,21 +179,25 @@ public:
 	static bool isCollideSAT(const std::vector<vec2> &a, const std::vector<vec2> &b);
 
 	/**
-	 * \brief Check if the convex polygons defined by two point clouds will collide via 
+	 * \brief Check if the convex polygons defined by two point clouds will collide via
 	 * modified SAT.
 	 * \param a Point cloud of convex polygon A
 	 * \param va Velocity of polygon A
 	 * \param b Point cloud of convex polygon B
 	 * \param vb Velocity of polygon B
-	 * \return 0 if already collided, <0 if will never collide, otherwise the number 
+	 * \return 0 if already collided, <0 if will never collide, otherwise the number
 	 * of frames until collision.
 	 */
 	static float willCollideSAT(const std::vector<vec2> &a, const vec2 &va,
 		const std::vector<vec2> &b, const vec2 &vb);
 
 	static bool isOverlapInterval(float minA, float maxA, float minB, float maxB);
-	static float willOverlapInterval(float minA, float maxA, float va,
-		float minB, float maxB, float vb);
+
+	static std::pair<float, float> willOverlapInterval(
+		float minA, float maxA, float va, float minB, float maxB, float vb);
+	static std::pair<float, float> intersectInterval(
+		const std::pair<float, float> & a, const std::pair<float, float> & b);
+	static bool isIntervalEmpty(const std::pair<float, float> &a);
 };
 
 vec2 __declspec(dllexport) operator+(const vec2& a, const vec2& b);
@@ -214,3 +206,4 @@ vec2 __declspec(dllexport) operator*(const vec2& a, float o);
 vec2 __declspec(dllexport) operator/(const vec2& a, float o);
 vec2 __declspec(dllexport) operator*(float o, const vec2& a);
 vec2 __declspec(dllexport) operator/(float o, const vec2& a);
+__declspec(dllexport)  std::ostream& operator<< (std::ostream& stream, const vec2& a);

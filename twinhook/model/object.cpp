@@ -74,6 +74,13 @@ polygon aabb::toPolygon() const
 	return polygon{ points, velocity };
 }
 
+std::string aabb::serialize() const
+{
+	std::ostringstream os;
+	os << "aabb p" << position << " v" << velocity << " s" << size;
+	return os.str();
+}
+
 vec2 circle::com() const
 {
 	return center;
@@ -125,6 +132,13 @@ float circle::willCollideWith(const entity& o) const
 	}
 	default: return -1.f;
 	}
+}
+
+std::string circle::serialize() const
+{
+	std::ostringstream os;
+	os << "circle c" << center << " v" << velocity << " r" << radius;
+	return os.str();
 }
 
 vec2 polygon::com() const
@@ -181,6 +195,18 @@ float polygon::willCollideWith(const entity& o) const
 	}
 	default: return -1.f;
 	}
+}
+
+std::string polygon::serialize() const
+{
+	std::ostringstream os;
+	os << "polygon { ";
+	for(const vec2 &p : points)
+	{
+		os << p << " ";
+	}
+	os << "} v" << velocity;
+	return os.str();
 }
 
 std::vector<vec2> obb::toVertices(vec2 position, float length, float radius, float angle)
