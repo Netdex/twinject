@@ -147,7 +147,7 @@ void th_vo_algo::onTick()
 		const vec2 enemyCom = enemy.obj->com();
 		const vec2 playerCom = plyr.obj->com();
 		if (enemyCom.y < playerCom.y) {
-			for (int dir = Direction::Left; dir <= Direction::Right; ++dir)
+			for (int dir = 0; dir <= NUM_DIRS; ++dir)
 			{
 				const vec2 pvel = this->getPlayerMovement(dir);
 
@@ -289,27 +289,19 @@ vec2 th_vo_algo::getPlayerMovement(int dir)
 }
 
 float th_vo_algo::minStaticCollideTick(
-	const std::vector<bullet> &bullets,
+	const std::vector<const game_object*> &bullets,
 	const aabb &area,
-	std::vector<bullet> &collided) const
+	std::vector<const game_object*> &collided) const
 {
 	float minTick = FLT_MAX;
-	for (const bullet& bullet : bullets)
+	for (const game_object* bullet : bullets)
 	{
-		float colTick = area.willCollideWith(*bullet.obj);
-		/*colTick = vec2::willCollideAABB(
-			p, bullet.position - bullet.size / 2,
-			s, bullet.size,
-			vec2(), bullet.velocity
-		);
-*/
+		float colTick = area.willCollideWith(*bullet->obj);
+
 		if (colTick >= 0) {
 			minTick = std::min(colTick, minTick);
 			collided.push_back(bullet);
 		}
-		//// don't do more calculations if the density is saturated
-		//if (minTick != FLT_MAX && minTick / MAX_FRAMES_TILL_COLLISION > 1)
-		//	return minTick;
 	}
 	if (minTick != FLT_MAX && minTick >= 0)
 		return minTick;
@@ -317,7 +309,7 @@ float th_vo_algo::minStaticCollideTick(
 };
 
 void th_vo_algo::vizPotentialQuadtree(
-	const std::vector<bullet> &bullets,
+	const std::vector<const game_object*> &bullets,
 	const aabb &area,
 	float minRes) const
 {
@@ -347,7 +339,7 @@ void th_vo_algo::vizPotentialQuadtree(
 
 	for (int i = 0; i < 4; i++)
 	{
-		std::vector<bullet> collided;
+		std::vector<const game_object*> collided;
 		float colTick = minStaticCollideTick(
 			bullets,
 			aabb{ colDomains[i], vec2(), vec2(sqsz) },
@@ -377,6 +369,18 @@ void th_vo_algo::vizPotentialQuadtree(
 
 }
 
+std::vector<const game_object*> th_vo_algo::constructDangerObjectUnion()
+{
+	std::vector<const game_object*> objs;
+	for (const laser &l : player->lasers)
+		objs.push_back(&l);
+	for (const bullet &b : player->bullets)
+		objs.push_back(&b);
+	for (const enemy &e : player->enemies)
+		objs.push_back(&e);
+	return objs;
+}
+
 void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 {
 	if (player->render)
@@ -387,7 +391,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 		{
 			// draw vector field (laggy)
 			vizPotentialQuadtree(
-				player->bullets,
+				constructDangerObjectUnion(),
 				aabb{ vec2(), vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT) },
 				VEC_FIELD_MIN_RESOLUTION);
 		}
@@ -400,71 +404,7 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 		for (const powerup &p : player->powerups)
 			p.render();
 		plyr.render();
-		//// draw laser points
-		//for (auto i = player->lasers.begin(); i != player->lasers.end(); ++i)
-		//{
-		//	cdraw::fillRect(
-		//		th_param.GAME_X_OFFSET + i->obj->.x - 3,
-		//		th_param.GAME_Y_OFFSET + i->position.y - 3,
-		//		6, 6,
-		//		D3DCOLOR_ARGB(255, 0, 0, 255));
-
-		//	vec2 proj = (*i).position + (*i).velocity * 10;
-		//	cdraw::line((*i).position.x + th_param.GAME_X_OFFSET, (*i).position.y + th_param.GAME_Y_OFFSET,
-		//		proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 255, 0, 0));
-
-		//	// voodoo witchcraft magic
-
-		//	float rex = i->radius * (float)cos(M_PI / 2 + i->angle);
-		//	float rey = i->radius * (float)sin(M_PI / 2 + i->angle);
-		//	cdraw::line(
-		//		th_param.GAME_X_OFFSET + i->position.x - rex,
-		//		th_param.GAME_Y_OFFSET + i->position.y - rey,
-		//		th_param.GAME_X_OFFSET + i->position.x + i->extent.x - rex,
-		//		th_param.GAME_Y_OFFSET + i->position.y + i->extent.y - rey,
-		//		D3DCOLOR_ARGB(255, 0, 0, 255));
-		//	cdraw::line(
-		//		th_param.GAME_X_OFFSET + i->position.x + rex,
-		//		th_param.GAME_Y_OFFSET + i->position.y + rey,
-		//		th_param.GAME_X_OFFSET + i->position.x + i->extent.x + rex,
-		//		th_param.GAME_Y_OFFSET + i->position.y + i->extent.y + rey,
-		//		D3DCOLOR_ARGB(255, 0, 0, 255));
-		//}
-
-		//// bullet markers
-		//for (auto i = player->bullets.begin(); i != player->bullets.end(); ++i)
-		//{
-		//	if ((*i).meta)
-		//	{
-		//		cdraw::rect((*i).position.x - 7 + th_param.GAME_X_OFFSET, (*i).position.y - 7 + th_param.GAME_Y_OFFSET, 14, 14, D3DCOLOR_HSV((double)(16 * (*i).meta), 1, 1)));
-		//	}
-		//	else {
-		//		cdraw::rect(
-		//			(*i).position.x - (*i).size.x / 2 + th_param.GAME_X_OFFSET,
-		//			(*i).position.y - (*i).size.y / 2 + th_param.GAME_Y_OFFSET,
-		//			(*i).size.x, (*i).size.y, D3DCOLOR_ARGB(255, 255, 2, 200));
-		//	}
-		//	vec2 proj = (*i).position + (*i).velocity * 10;
-
-		//	cdraw::line((*i).position.x + th_param.GAME_X_OFFSET, (*i).position.y + th_param.GAME_Y_OFFSET,
-		//		proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-		//}
-
-		//for (auto b : player->powerups)
-		//{
-		//	cdraw::rect(
-		//		th_param.GAME_X_OFFSET + b.position.x - b.size.x / 2,
-		//		th_param.GAME_Y_OFFSET + b.position.y - b.size.y / 2,
-		//		b.size.x, b.size.y, D3DCOLOR_ARGB(255, 255, 0, 0));
-		//	vec2 proj = b.position + b.velocity * 10;
-
-		//	cdraw::line(b.position.x + th_param.GAME_X_OFFSET, b.position.y + th_param.GAME_Y_OFFSET,
-		//		proj.x + th_param.GAME_X_OFFSET, proj.y + th_param.GAME_Y_OFFSET, D3DCOLOR_ARGB(255, 0, 255, 0));
-		//}
-		//cdraw::fillRect(
-		//	plyr.position.x - plyr.size.x / 2 + th_param.GAME_X_OFFSET,
-		//	plyr.position.y - plyr.size.y / 2 + th_param.GAME_Y_OFFSET,
-		//	plyr.size.x, plyr.size.y, D3DCOLOR_ARGB(255, 0, 255, 0));
+		
 	}
 }
 
