@@ -163,8 +163,6 @@ void th_vo_algo::onTick()
 		}
 	}
 
-	std::shared_ptr<aabb> cancer = std::dynamic_pointer_cast<aabb>(plyr.obj);
-	Text("%.2f %.2f", cancer->position.x, cancer->position.y);
 	aabb gameBounds{ vec2(), vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT) };
 	// Wall collision frame calculations
 	for (int dir = 1; dir < NUM_DIRS; ++dir)

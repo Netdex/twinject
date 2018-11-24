@@ -71,10 +71,11 @@ void th08_bullet_proc_hook::vectorUpdateHook(int retaddr, int a1, int a2, int a3
 	// routine from bullet update
 	if (retaddr == 0x004314B3)
 	{
+		vec2 sz(*(float*)(a2 + 3380), *((float*)(a2 + 3380) + 1));
 		aabb a{
-			vec2(*(float*)(a1 + 0), *(float*)(a1 + 4)),
+			vec2(*(float*)(a1 + 0), *(float*)(a1 + 4)) - sz / 2,
 			vec2(*(float*)(a3 + 0),*(float*)(a3 + 4)),
-			vec2(*(float*)(a2 + 3380) ,*((float*)(a2 + 3380) + 1))
+			sz
 		};
 		bullet b{ a };
 		// find log2 of bullet action binary flag
@@ -85,10 +86,11 @@ void th08_bullet_proc_hook::vectorUpdateHook(int retaddr, int a1, int a2, int a3
 	}
 	else if (retaddr == 0x0044095B)
 	{
+		vec2 sz(10, 10);
 		aabb a{
-			vec2(*(float*)(a1 + 0),*(float*)(a1 + 4)) ,
-			vec2(*(float*)(a3 + 0), *(float*)(a3 + 4)) ,
-			vec2(10, 10)
+			vec2(*(float*)(a1 + 0), *(float*)(a1 + 4)) - sz / 2,
+			vec2(*(float*)(a3 + 0), *(float*)(a3 + 4)),
+			sz
 		};
 		powerup p{ a,  *(BYTE*)(a1 - 676 + 727) };
 

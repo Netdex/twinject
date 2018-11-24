@@ -111,11 +111,8 @@ float circle::willExit(const entity& o) const
 	switch (o.type)
 	{
 	case AABB: {
-		const auto& a = dynamic_cast<const aabb&>(o);
-		auto bounds = this->boundingBox();
 		// Use bounding box of circle
-		return vec2::willExitAABB(bounds->position, a.position,
-			bounds->size, a.size, bounds->velocity, a.velocity);
+		return this->boundingBox()->willExit(o);
 	}
 	default: return -1.f;
 	}

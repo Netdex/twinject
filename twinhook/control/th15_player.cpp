@@ -60,31 +60,28 @@ void th15_player::onEnableChanged(bool enable)
 
 player th15_player::getPlayerEntity()
 {
-	//PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos; // this should be illegal
-	//if (*PlayerPtrAddr) {
-	//	PBYTE plyrAddr = *PlayerPtrAddr;
+	PBYTE *PlayerPtrAddr = (PBYTE*)gs_ptr.plyr_pos; // this should be illegal
+	if (*PlayerPtrAddr) {
+		PBYTE plyrAddr = *PlayerPtrAddr;
 
-	//	// we must check if size is readable, because it doesn't initialize immediately
-	//	vec2 size;
-	//	if (*(DWORD*)(plyrAddr + 0x2C008))
-	//	{
-	//		size = vec2(
-	//			*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4),
-	//			*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4));
-	//	}
+		// we must check if size is readable, because it doesn't initialize immediately
+		vec2 size;
+		if (*(DWORD*)(plyrAddr + 0x2C008))
+		{
+			size = vec2(
+				*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4),
+				*(float*)(*(DWORD*)(plyrAddr + 0x2C008) + 4));
+		}
 
-	//	entity e = {
-	//		vec2(
-	//			*(float*)(plyrAddr + 0x618) + th_param.GAME_WIDTH / 2,
-	//			*(float*)(plyrAddr + 0x61C)),
-	//		vec2(),
-	//		size * 2,
-	//		0
-	//	};
-	//	return e;
-	//}
-	//return {};
-	// TODO
+		circle e{
+			vec2(
+				*(float*)(plyrAddr + 0x618) + th_param.GAME_WIDTH / 2,
+				*(float*)(plyrAddr + 0x61C)),
+			vec2(),
+			size.x,
+		};
+		return e;
+	}
 	return player{ aabb() };
 }
 

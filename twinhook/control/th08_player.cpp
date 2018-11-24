@@ -72,7 +72,16 @@ void th08_player::onEnableChanged(bool enable)
 
 player th08_player::getPlayerEntity()
 {
-	// TODO
-	return player{ aabb() };
+	PBYTE PlayerPtrAddr = (PBYTE)this->gs_ptr.plyr_pos;
+
+	vec2 sz(5, 5);
+
+	aabb a{
+		vec2(*(float*)PlayerPtrAddr - th_param.GAME_X_OFFSET,
+			 *(float*)(PlayerPtrAddr + 4) - th_param.GAME_Y_OFFSET) - sz / 2,
+		vec2(),
+		sz, // hard-coded player size
+	};
+	return player{ a };
 }
 

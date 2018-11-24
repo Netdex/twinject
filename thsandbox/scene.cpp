@@ -12,13 +12,52 @@ scene::~scene()
 
 }
 
+// https://stackoverflow.com/questions/38334081/howto-draw-circles-arcs-and-vector-graphics-in-sdl
+static void draw_circle(SDL_Renderer *renderer, int _x, int _y, int radius)
+{
+	int x = radius - 1;
+	int y = 0;
+	int tx = 1;
+	int ty = 1;
+	int err = tx - (radius << 1); // shifting bits left by 1 effectively
+								  // doubles the value. == tx - diameter
+	while (x >= y)
+	{
+		//  Each of the following renders an octant of the circle
+		SDL_RenderDrawPoint(renderer, _x + x, _y - y);
+		SDL_RenderDrawPoint(renderer, _x + x, _y + y);
+		SDL_RenderDrawPoint(renderer, _x - x, _y - y);
+		SDL_RenderDrawPoint(renderer, _x - x, _y + y);
+		SDL_RenderDrawPoint(renderer, _x + y, _y - x);
+		SDL_RenderDrawPoint(renderer, _x + y, _y + x);
+		SDL_RenderDrawPoint(renderer, _x - y, _y - x);
+		SDL_RenderDrawPoint(renderer, _x - y, _y + x);
+
+		if (err <= 0)
+		{
+			y++;
+			err += ty;
+			ty += 2;
+		}
+		if (err > 0)
+		{
+			x--;
+			tx += 2;
+			err += tx - (radius << 1);
+		}
+	}
+}
+
 static void draw_entity(SDL_Renderer *renderer,
 	const std::shared_ptr<entity> &e)
 {
 	switch (e->type)
 	{
-	case entity::Circle:
+	case entity::Circle: {
+		auto a = std::dynamic_pointer_cast<circle>(e);
+		draw_circle(renderer, a->center.x, a->center.y, a->radius);
 		break;
+	}
 	case entity::AABB: {
 		auto a = std::dynamic_pointer_cast<aabb>(e);
 		SDL_Rect outlineRect = { (int)a->position.x, (int)a->position.y,
