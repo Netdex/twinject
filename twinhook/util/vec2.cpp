@@ -256,20 +256,13 @@ bool vec2::isContainAABB(const vec2& p1, const vec2& p2, const vec2& s1, const v
 float vec2::willCollideAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2,
 	const vec2& v1, const vec2& v2)
 {
-	// BUG this implementation is way too inefficient
+	// TODO this implementation is way too inefficient
 
 	// check if they're already colliding
 	if (isCollideAABB(p1, p2, s1, s2))
 		return 0;
 
-	// check if they're moving away from each other
-	// actually, this code doesn't work
-	/*if (p1.x < p2.x && v2.x > v1.x || p1.x > p2.x && v2.x < v1.x)
-		return -1;
-	if (p1.y < p2.y && v2.y > v1.y || p1.y > p2.y && v2.y < v1.y)
-		return -1;*/
-
-		// check time required until collision for each side
+	// check time required until collision for each side
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
 	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
@@ -297,7 +290,6 @@ float vec2::willExitAABB(const vec2& p1, const vec2& p2, const vec2& s1, const v
 		return 0;
 
 	// check time required for each side to exit
-
 	float minE = FLT_MAX;
 	float t = (p1.x + s1.x - p2.x - s2.x) / (v2.x - v1.x);
 	if (t >= 0)
@@ -418,8 +410,8 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2 &va,
 	const std::vector<vec2>& b, const vec2 &vb)
 {
 	std::set<vec2> normals;
-	int sizeA = a.size();
-	int sizeB = b.size();
+	const int sizeA = a.size();
+	const int sizeB = b.size();
 
 	// calculate normals
 	for (int i = 0; i < sizeA; ++i)
@@ -435,9 +427,6 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2 &va,
 		float minProjA = FLT_MAX, maxProjA = -FLT_MAX;
 		float minProjB = FLT_MAX, maxProjB = -FLT_MAX;
 
-		float vAxisA = dot(va, n);
-		float vAxisB = dot(vb, n);
-
 		// determine extents of projections onto axis
 		for (const vec2& pa : a)
 		{
@@ -452,7 +441,8 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2 &va,
 			maxProjB = std::max(maxProjB, pj);
 		}
 
-		auto interval = willOverlapInterval(minProjA, maxProjA, vAxisA, minProjB, maxProjB, vAxisB);
+		auto interval = willOverlapInterval(minProjA, maxProjA, dot(va, n),
+			minProjB, maxProjB, dot(vb, n));
 		currentInterval = intersectInterval(interval, currentInterval);
 
 		// i.e. there exists an axis that is always separating
@@ -471,7 +461,7 @@ bool vec2::isOverlapInterval(float minA, float maxA, float minB, float maxB)
 	return !(minB < minA && maxB < minA || minB > maxA && maxB > maxA);
 }
 
-std::pair<float, float> vec2::willOverlapInterval(float minA, float maxA, float va, 
+std::pair<float, float> vec2::willOverlapInterval(float minA, float maxA, float va,
 	float minB, float maxB, float vb)
 {
 	// check if intervals are not moving relative to each other
