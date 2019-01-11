@@ -8,7 +8,7 @@ void logm(const char* file, const char* func, int line, const char* fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 	vsprintf_s(szUserFmt, 256, fmt, args);
-	sprintf_s(szDebugMsg, 256, "%s:%d@%s(): %s", file, line, func, szUserFmt);
+	sprintf_s(szDebugMsg, 256, "%20s:%03d @%30s(): %s", file, line, func, szUserFmt);
 	OutputDebugStringA(szDebugMsg);
 	va_end(args);
 }
