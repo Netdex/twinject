@@ -119,7 +119,7 @@ void th_vo_algo::onTick()
 	for (const auto& powerup : player->powerups)
 	{
 		// Filter out unwanted powerups
-		if (powerup.meta == 0 /*&& powerup.obj->p.y > 200*/) {
+		if (powerup.meta == 0 && powerup.obj->com().y > 200) {
 			for (int dir = 0; dir < NUM_DIRS; ++dir)
 			{
 				const auto pseudoPlayer = pseudoPlayers[dir];
@@ -147,7 +147,7 @@ void th_vo_algo::onTick()
 		const vec2 enemyCom = enemy.obj->com();
 		const vec2 playerCom = plyr.obj->com();
 		if (enemyCom.y < playerCom.y) {
-			for (int dir = 0; dir <= NUM_DIRS; ++dir)
+			for (int dir = Direction::Left; dir <= Direction::Right; ++dir)
 			{
 				const vec2 pvel = this->getPlayerMovement(dir);
 
