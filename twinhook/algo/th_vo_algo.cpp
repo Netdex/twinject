@@ -12,6 +12,8 @@
 #include "gfx/imgui_mixins.h"
 #include "control/th11_player.h"
 #include <numeric>
+#include "control/wfth/wfth15_player.h"
+#include "control/wfth/wfth11_player.h"
 
 void th_vo_algo::onBegin()
 {
@@ -411,6 +413,11 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 bool th_vo_algo::calibTick()
 {
 	auto plyr = player->getPlayerEntity();
+	auto exception = dynamic_cast<th15_player*>(player)
+		|| dynamic_cast<th10_player*>(player)
+		|| dynamic_cast<th11_player*>(player)
+		|| dynamic_cast<wfth11_player*>(player)
+		|| dynamic_cast<wfth15_player*>(player);
 
 	switch (calibFrames)
 	{
@@ -435,9 +442,7 @@ bool th_vo_algo::calibTick()
 		th_di8_hook::inst()->resetVkState(DIK_DOWN);
 
 		// BUG why does LoLK do this differently
-		if (dynamic_cast<th15_player*>(player)
-			|| dynamic_cast<th10_player*>(player)
-			|| dynamic_cast<th11_player*>(player))
+		if (exception)
 			playerVel = plyr.obj->com().x - calibStartX;
 		else
 			playerVel = calibStartX - plyr.obj->com().x;
@@ -466,9 +471,7 @@ bool th_vo_algo::calibTick()
 		th_di8_hook::inst()->resetVkState(DIK_LSHIFT);
 
 		// BUG why do MoF and LoLK do this differently
-		if (dynamic_cast<th15_player*>(player)
-			|| dynamic_cast<th10_player*>(player)
-			|| dynamic_cast<th11_player*>(player))
+		if (exception)
 			playerFocVel = plyr.obj->com().x - calibStartX;
 		else
 			playerFocVel = calibStartX - plyr.obj->com().x;

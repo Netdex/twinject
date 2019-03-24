@@ -9,11 +9,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject", "twinject\twinje
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinhook", "twinhook\twinhook.vcxproj", "{A47B2FB1-6209-46DC-AA46-17F03164F7D8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE} = {33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thsandbox", "thsandbox\thsandbox.vcxproj", "{E094CBD3-C3F1-4B39-95C6-71117A768F8A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8} = {A47B2FB1-6209-46DC-AA46-17F03164F7D8}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WireframeTouhou", "dependencies\WireframeTouhou\WireframeTouhou\WireframeTouhou.vcxproj", "{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +48,12 @@ Global
 		{E094CBD3-C3F1-4B39-95C6-71117A768F8A}.Release|x64.Build.0 = Release|x64
 		{E094CBD3-C3F1-4B39-95C6-71117A768F8A}.Release|x86.ActiveCfg = Release|Win32
 		{E094CBD3-C3F1-4B39-95C6-71117A768F8A}.Release|x86.Build.0 = Release|Win32
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}.Debug|x64.ActiveCfg = Debug|Win32
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}.Debug|x86.ActiveCfg = Debug|Win32
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}.Debug|x86.Build.0 = Debug|Win32
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}.Release|x64.ActiveCfg = Release|Win32
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}.Release|x86.ActiveCfg = Release|Win32
+		{33A8F9E9-FA69-4A07-A8B3-833BB583ACAE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,7 +18,7 @@ PROCESS_INFORMATION pi;
 const char *ininame = "twinject.ini";
 
 #define DEBUGGER				// If you use an external debugger, this line must be commented out. Debugging messages will not be received.
-//#define TH10_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
+#define TH10_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
 
 int main(const int argc, const char *argv[])
 {
@@ -62,6 +62,14 @@ int main(const int argc, const char *argv[])
 	char *currentdir = "D:\\Programming\\Multi\\th11";
 #elif defined(TH15_LOADER)
 	_putenv("th=th15");
+	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";
+	char *currentdir = "D:\\Programming\\Multi\\th15";
+#elif defined(WFTH11_LOADER)
+	_putenv("th=wfth11");
+	char *exepath = "D:\\Programming\\Multi\\th11\\th11.exe";
+	char *currentdir = "D:\\Programming\\Multi\\th11";
+#elif defined(WFTH15_LOADER)
+	_putenv("th=wfth15");
 	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";
 	char *currentdir = "D:\\Programming\\Multi\\th15";
 #elif defined(USER_LOADER)

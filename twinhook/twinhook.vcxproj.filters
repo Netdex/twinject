@@ -150,6 +150,12 @@
     <ClCompile Include="model\game_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="control\wfth\wfth15_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control\wfth\wfth11_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -288,6 +294,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="model\game_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\wfth\wfth15_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control\wfth\wfth11_player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

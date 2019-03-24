@@ -14,6 +14,9 @@
 #include "control/th11_player.h"
 #include "control/th15_player.h"
 
+#include "control/wfth/wfth11_player.h"
+#include "control/wfth/wfth15_player.h"
+
 #include "algo/th_vo_algo.h"
 
 #include "patch/th_patch_registry.h"
@@ -80,6 +83,25 @@ void th15_init()
 	th15_bullet_proc_hook::bind(player);
 }
 
+void wfth11_init()
+{
+	wfth11_player *player = new wfth11_player();
+	th_vo_algo *algo = new th_vo_algo(player);
+	player->bindAlgorithm(algo);
+	th_d3d9_hook::bind(player, false);
+	th_di8_hook::bind(player);
+	th_registry::patch("th11_dinput_fix");
+}
+
+void wfth15_init()
+{
+	wfth15_player *player = new wfth15_player();
+	th_vo_algo *algo = new th_vo_algo(player, true);
+	player->bindAlgorithm(algo);
+	th_d3d9_hook::bind(player, false);
+	th_di8_hook::bind(player);
+}
+
 typedef void(*th_loader_t)();
 
 static std::unordered_map<std::string, th_loader_t> th_init{
@@ -88,7 +110,9 @@ static std::unordered_map<std::string, th_loader_t> th_init{
 	{"th08", th08_init},
 	{"th10", th10_init},
 	{"th11", th11_init},
-	{"th15", th15_init}
+	{"th15", th15_init},
+	{"wfth11", wfth11_init},
+	{"wfth15", wfth15_init}
 };
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
