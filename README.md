@@ -2,13 +2,10 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/wy06i4vscngsel5n?svg=true)](https://ci.appveyor.com/project/Netdex/twinject) 
 ### [Click here to visit Wiki (documentation)](https://github.com/Netdex/twinject/wiki)
 ```
-This project is a work-in-progress, new features are being added every week. 
-At the moment all of my resources are focused on development, and very few are 
-allocated to documentation. As a result, some of the documentation here might be 
-out-of-date or just plain wrong.
+This project is a work-in-progress.
 ```
 ```
-If you have any questions, inquiries, want to help, or are just having trouble getting 
+If you have any questions, want to help, or are just having trouble getting 
 something working, feel free to open a ticket or email me (my email address is on my GitHub profile). 
 It's much easier to answer emails when they come rather than keep the documentation here up-to-date 
 all the time.
