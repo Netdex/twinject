@@ -3,7 +3,7 @@
 #include <vector>
 #include <iosfwd>
 
-class __declspec(dllexport) vec2 {
+class vec2 {
 public:
 	union
 	{
@@ -201,10 +201,10 @@ public:
 	static bool isIntervalEmpty(const std::pair<float, float> &a);
 };
 
-vec2 __declspec(dllexport) operator+(const vec2& a, const vec2& b);
-vec2 __declspec(dllexport) operator-(const vec2& a, const vec2& b);
-vec2 __declspec(dllexport) operator*(const vec2& a, float o);
-vec2 __declspec(dllexport) operator/(const vec2& a, float o);
-vec2 __declspec(dllexport) operator*(float o, const vec2& a);
-vec2 __declspec(dllexport) operator/(float o, const vec2& a);
-__declspec(dllexport)  std::ostream& operator<< (std::ostream& stream, const vec2& a);
+vec2 operator+(const vec2& a, const vec2& b);
+vec2 operator-(const vec2& a, const vec2& b);
+vec2 operator*(const vec2& a, float o);
+vec2 operator/(const vec2& a, float o);
+vec2 operator*(float o, const vec2& a);
+vec2 operator/(float o, const vec2& a);
+std::ostream& operator<< (std::ostream& stream, const vec2& a);

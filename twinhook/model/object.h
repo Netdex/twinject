@@ -1,14 +1,15 @@
 #pragma once
 
-#include "util/vec2.h"
 #include <memory>
 #include <string>
+
+#include "util/vec2.h"
+
 
 class polygon;
 class aabb;
 
-
-class __declspec(dllexport) entity
+class entity
 {
 public:
 	enum entity_type
@@ -67,7 +68,7 @@ public:
 };
 
 
-class __declspec(dllexport) aabb : public entity
+class aabb : public entity
 {
 public:
 	vec2 position;
@@ -90,7 +91,7 @@ public:
 };
 
 
-class __declspec(dllexport) circle : public entity
+class circle : public entity
 {
 public:
 	vec2 center;
@@ -112,7 +113,7 @@ public:
 };
 
 
-class __declspec(dllexport) polygon : public entity
+class polygon : public entity
 {
 public:
 	std::vector<vec2> points;
@@ -133,7 +134,7 @@ public:
 
 };
 
-class __declspec(dllexport) obb : public polygon
+class obb : public polygon
 {
 	static std::vector<vec2> toVertices(vec2 position,
 		float length, float radius, float angle);
