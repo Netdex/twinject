@@ -104,7 +104,7 @@ static const BYTE CONTROL_KEYS[] = { DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT, DIK_
  * 
  * This algorithm implements near perfect deathbombing by detecting if it will collide 
  * with an obstacle very soon, and has no recourse for avoidance. However, this is 
- * dependant on the linear approximation and the accuracy of the collision predictors. 
+ * dependent on the linear approximation and the accuracy of the collision predictors. 
  *
  * High-Level Function:
  * First we must calibrate the algorithm by determining the player velocity, by

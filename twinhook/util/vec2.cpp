@@ -88,11 +88,6 @@ vec2 operator*(float o, const vec2& a)
 	return operator*(a, o);
 }
 
-vec2 operator/(float o, const vec2& a)
-{
-	return operator/(a, o);
-}
-
 std::ostream& operator<<(std::ostream& stream, const vec2& a)
 {
 	return stream << "<" << a.x << "," << a.y << ">";

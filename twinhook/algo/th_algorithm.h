@@ -3,8 +3,8 @@
 class th_player;
 
 /**
- * \brief An algorithm that uses game information to control the player 
- * (i.e. the bot's brain)
+ * \brief A player control algorithm, which determines an action to perform based on 
+ * current game state.
  */
 class th_algorithm
 {
@@ -19,7 +19,6 @@ public:
 	 * \param player Pointer to player controller
 	 */
 	th_algorithm(th_player *player) : player(player) {}
-	virtual ~th_algorithm() {}
 	
 	/**
 	 * \brief Called when the algorithm is initialized by the player controller
@@ -34,6 +33,7 @@ public:
 	 * \param d3dDev Pointer to game's Direct3DDevice
 	 */
 	virtual void visualize(IDirect3DDevice9* d3dDev){}
+
 	/**
 	 * \brief Handle input received from player for algorithm control
 	 * \param diKeys Key hold state
