@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iosfwd>
 
 class __declspec(dllexport) vec2 {
 public:

@@ -2,6 +2,7 @@
 
 #include "util/vec2.h"
 #include <memory>
+#include <string>
 
 class polygon;
 class aabb;
