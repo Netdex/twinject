@@ -463,7 +463,7 @@ std::pair<float, float> vec2::willOverlapInterval(float minA, float maxA, float 
 	if (va == vb) {
 		if (isOverlapInterval(minA, maxA, minB, maxB))
 			return std::make_pair(-FLT_MAX, FLT_MAX);
-		return std::make_pair(0, 0);
+		return std::make_pair(0.f, 0.f);
 	}
 
 	/*
@@ -514,7 +514,7 @@ std::pair<float, float> vec2::intersectInterval(const std::pair<float, float>& a
 	const std::pair<float, float>& b)
 {
 	if (b.first > a.second || a.first > b.second)
-		return std::make_pair(0, 0);
+		return std::make_pair(0.f, 0.f);
 	return std::make_pair(std::max(a.first, b.first), std::min(a.second, b.second));
 }
 
