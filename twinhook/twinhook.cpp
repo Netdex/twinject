@@ -91,7 +91,7 @@ static std::unordered_map<std::string, th_loader_t> th_init{
 	{"th15", th15_init}
 };
 
-BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
+__declspec(dllexport) BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, LPVOID lpReserved)
 {
 	switch (reasonForCall)
 	{

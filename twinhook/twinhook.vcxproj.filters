@@ -291,9 +291,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="twinhook.def">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>

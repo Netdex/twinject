@@ -234,9 +234,6 @@
     <ClInclude Include="algo\th_vo_algo.h" />
     <ClInclude Include="util\vec2.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="twinhook.def" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
