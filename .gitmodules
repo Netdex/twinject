@@ -1,0 +1,6 @@
+[submodule "dependencies/cpptoml"]
+	path = dependencies/cpptoml
+	url = https://github.com/skystrife/cpptoml.git
+[submodule "dependencies/imgui/imgui"]
+	path = dependencies/imgui/imgui
+	url = https://github.com/ocornut/imgui.git
