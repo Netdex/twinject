@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "imgui_mixins.h"
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 using namespace ImGui;
 

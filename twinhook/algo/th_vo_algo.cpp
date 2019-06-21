@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 #include "th_vo_algo.h"
 #include "control/th_player.h"
@@ -24,7 +24,7 @@ void th_vo_algo::onTick()
 	using namespace ImGui;
 	Begin("th_vo_algo");
 	Text("Constrained Velocity Obstacle Algorithm");
-	if (CollapsingHeader("Info", "info", true, true))
+	if (CollapsingHeader("Info", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		Text("calib: %s", isCalibrated ? "true" : "false");
 		SameLine(); ShowHelpMarker("Algorithm player speed calibration");

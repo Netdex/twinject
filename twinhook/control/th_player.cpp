@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 #include "th_player.h"
 #include "config/th_config.h"

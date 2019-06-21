@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "imgui_controller.h"
-#include <imgui/imgui.h>
-#include <imgui/examples/imgui_impl_dx9.h>
-#include <imgui/examples/imgui_impl_win32.h>
+#include <imgui.h>
+#include <examples/imgui_impl_dx9.h>
+#include <examples/imgui_impl_win32.h>
 #include "hook/th_wndproc_imgui_hook.h"
 #include <winuser.h>
 

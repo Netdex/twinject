@@ -4,9 +4,9 @@
  */
 #include "imgui_window.h"
 
-#include <imgui/imgui.h>
-#include <imgui/examples/imgui_impl_dx9.h>
-#include <imgui/examples/imgui_impl_win32.h>
+#include <imgui.h>
+#include <examples/imgui_impl_dx9.h>
+#include <examples/imgui_impl_win32.h>
 
 #include <d3d9.h>
 #define DIRECTINPUT_VERSION 0x0800

@@ -138,11 +138,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\imgui\imgui\examples\imgui_impl_dx9.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui\examples\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui\imgui.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\dependencies\imgui\examples\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\dependencies\imgui\examples\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="..\dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="config\th_command_proc.cpp" />
     <ClCompile Include="config\th_registry.cpp" />
     <ClCompile Include="control\th06_player.cpp" />
