@@ -44,11 +44,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\dependencies\detours\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\dependencies\cpptoml\include;$(SolutionDir)\dependencies\detours\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\dependencies\detours\lib.X86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\dependencies\detours\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\dependencies\cpptoml\include;$(SolutionDir)\dependencies\detours\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\dependencies\detours\lib.X86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,16 +90,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="debugger.cpp" />
-    <ClCompile Include="ini.cpp" />
-    <ClCompile Include="config.cpp" />
     <ClCompile Include="twinject.cpp" />
     <ClCompile Include="winmanip.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config.h" />
     <ClInclude Include="debugger.h" />
-    <ClInclude Include="ini.h" />
     <ClInclude Include="winmanip.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="twinject.toml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

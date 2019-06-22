@@ -1,116 +1,96 @@
-
-#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <filesystem>
 
 #include <windows.h>
 #include <detours.h>
-#include <tchar.h>
-#include <psapi.h>
-#include <strsafe.h>
-#include <atlstr.h>
+
+#include <cpptoml.h>
 
 #include "debugger.h"
-#include "config.h"
-#include "ini.h"
 
 STARTUPINFOA si;
 PROCESS_INFORMATION pi;
 
-const char *ininame = "twinject.ini";
+// If you use an external debugger, this line must be commented out. 
+// Debugging messages will not be received.
+#define DEBUGGER				
 
-#define DEBUGGER				// If you use an external debugger, this line must be commented out. Debugging messages will not be received.
-//#define TH10_LOADER				// Since I have not implemented the universal loader, you must define the game to load here.
-
-int main(const int argc, const char *argv[])
+int main(const int argc, const char* argv[])
 {
-	printf("TWINJECT - Touhou Windows Injector (netdex)\n\
-===========================================\n\n");
+	std::cout << "TWINJECT - Touhou Windows Injector (netdex)\n\
+===========================================" << std::endl;
 
-	// The following block of code defines debugging paths to the games I have in my debug environment.
-	// Undefine the loader define to read the configuration file.
-
-	const char *DBG_DLL_PATH = "D:\\Programming\\Multi\\twinject\\Debug\\twinhook.dll";
-	const char *RLS_DLL_PATH = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll";
-
-	char dllpath[MAX_PATH] = { 0 };
-
-#ifdef DEBUG
-	printf("WARNING: Injector was compiled in debug mode!\n");
-	strcpy(dllpath, DBG_DLL_PATH);
-#else
-	strcpy(dllpath, RLS_DLL_PATH);
-#endif
-
-#if defined (TH06_LOADER)
-	_putenv("th=th06");
-	char *exepath = "D:\\Programming\\Multi\\th06\\th06e.exe";
-	char *currentdir = "D:\\Programming\\Multi\\th06";
-#elif defined(TH07_LOADER)
-	_putenv("th=th07");
-	char *exepath = "D:\\Programming\\Multi\\th07\\th07.exe";
-	char *currentdir = "D:\\Programming\\Multi\\th07";
-#elif defined(TH08_LOADER)
-	_putenv("th=th08");
-	char *exepath = "D:\\Programming\\Multi\\th08\\th08.exe";
-	char *currentdir = "D:\\Programming\\Multi\\th08";
-#elif defined(TH10_LOADER)
-	_putenv("th=th10");
-	char *exepath = "D:\\Programming\\Multi\\th10\\th10.exe";
-	char *currentdir = "D:\\Programming\\Multi\\th10";
-#elif defined(TH11_LOADER)
-	_putenv("th=th11");
-	char *exepath = "D:\\Programming\\Multi\\th11\\th11.exe";
-	char *currentdir = "D:\\Programming\\Multi\\th11";
-#elif defined(TH15_LOADER)
-	_putenv("th=th15");
-	char *exepath = "D:\\Programming\\Multi\\th15\\th15.exe";
-	char *currentdir = "D:\\Programming\\Multi\\th15";
-#elif defined(USER_LOADER)
-	_putenv("th=th08");
-	char *exepath = "D:\\Games\\Touhou Project\\08.0 ~ Imperishable Night\\th08.exe";
-	char *currentdir = "D:\\Games\\Touhou Project\\08.0 ~ Imperishable Night";
-#else
-	// The following code loads configuration data from an external file
-	configuration config;
-
-	if (ini_parse(ininame, handler, &config) < 0) {
-		printf("failed to load configuration %s\n", ininame);
+	std::shared_ptr<cpptoml::table> config;
+	try {
+		config = cpptoml::parse_file("twinject.toml");
+	}
+	catch (cpptoml::parse_exception& e)
+	{
+		std::cerr << "twinject.toml contains a syntax error:" << std::endl;
+		std::cerr << e.what() << std::endl;
 		return 1;
 	}
 
-	char exepath[MAX_PATH];
-	char currentdir[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, currentdir);
-	PathCombine(exepath, currentdir, config.exename);
-	PathCombine(dllpath, currentdir, config.dllname);
-	_putenv(config.env);
+	bool debug_mode = *config->get_as<bool>("debug");
+	std::string env = *config->get_as<std::string>("env");
+	std::string dll = *config->get_as<std::string>("dll");
+
+	std::filesystem::path twinhook_dll_path;
+	std::filesystem::path bin_path;
+	std::filesystem::path cur_path;
+
+	if (debug_mode)
+	{
+		std::cout << "WARNING: debug=true, so injector will use hardcoded paths!" << std::endl;
+		auto env_table = config->get_table(env);
+
+		cur_path = *env_table->get_as<std::string>("path");
+		std::string bin = *env_table->get_as<std::string>("bin");
+		bin_path = cur_path / bin;
+#ifdef DEBUG
+		twinhook_dll_path = *config->get_as<std::string>("twinhook_path_dbg");
+#else
+		twinhook_dll_path = *config->get_as<std::string>("twinhook_path_rls");
 #endif
+	}
+	else
+	{
+		std::string bin = *config->get_as<std::string>("bin");
+		cur_path = std::filesystem::current_path();
+		bin_path = cur_path / bin;
+		twinhook_dll_path = cur_path / dll;
+	}
+
+#ifdef DEBUG
+	std::cout << "WARNING: Injector was compiled in debug mode!" << std::endl;
+#endif
+
+	SetEnvironmentVariable("th", env.c_str());
 
 #ifndef DEBUGGER
-	printf("WARNING: Debugger disabled upon compile-time! No debug messages will appear!\n");
+	std::cout << "WARNING: Debugger disabled upon compile-time! No debug messages will appear!" << std::endl;
 #endif
-
-	char twinjectDir[MAX_PATH];
-	GetModuleFileName(NULL, twinjectDir, MAX_PATH);
-	SetDllDirectory(twinjectDir);
-	printf("Setting DLL directory path to: %s\n", twinjectDir);
-	printf("Injecting DLL from path: %s\n", dllpath);
+	std::cout << "twinject: Adding path to DLL search path: " << twinhook_dll_path << std::endl;
+	SetDllDirectory(twinhook_dll_path.string().c_str());
 
 	memset(&si, 0, sizeof(si));
 	memset(&pi, 0, sizeof(pi));
 	si.cb = sizeof(si);
-	if (DetourCreateProcessWithDll(exepath, NULL, NULL, NULL, TRUE,
+	if (DetourCreateProcessWithDll(bin_path.string().c_str(),
+		NULL, NULL, NULL, TRUE,
 		CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE
 #ifdef DEBUGGER
 		| DEBUG_PROCESS
 #endif
 		, NULL,
-		currentdir, &si, &pi, dllpath, NULL))
+		cur_path.string().c_str(),
+		&si, &pi, twinhook_dll_path.string().c_str(), NULL))
 	{
-		printf("twinject: Injection OK\n");
+		std::cout << "twinject: Injection OK" << std::endl;
 	}
 	else
 	{
-		printf("twinject: Injection Fail\n");
+		std::cout << "twinject: Injection FAIL" << std::endl;
 		return 1;
 	}
 
