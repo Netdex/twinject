@@ -12,14 +12,14 @@ extern PROCESS_INFORMATION pi;
 
 DWORD OnLoadDllDebugEvent(const LPDEBUG_EVENT DebugEv)
 {
-	if (DebugEv->u.LoadDll.lpImageName)
-	{
-		LPTSTR path = GetFilePathFromHandle(DebugEv->u.LoadDll.hFile);
-		LPTSTR name = GetFileName(path);
-		// printf("DLL Load: %s\n", name);
-		delete[] path;
-		delete[] name;
-	}
+	//if (DebugEv->u.LoadDll.lpImageName)
+	//{
+	//	LPTSTR path = GetFilePathFromHandle(DebugEv->u.LoadDll.hFile);
+	//	LPTSTR name = GetFileName(path);
+	//	// printf("DLL Load: %s\n", name);
+	//	delete[] path;
+	//	delete[] name;
+	//}
 
 	return DBG_CONTINUE;
 }
