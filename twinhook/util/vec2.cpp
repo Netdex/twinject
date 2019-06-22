@@ -22,12 +22,6 @@ vec2::vec2(const vec2& other)
 {
 }
 
-vec2::vec2(vec2&& other) noexcept
-	: x(other.x),
-	y(other.y)
-{
-}
-
 vec2& vec2::operator=(const vec2& other)
 {
 	if (this == &other)

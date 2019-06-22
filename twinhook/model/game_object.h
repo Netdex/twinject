@@ -1,8 +1,8 @@
 #pragma once
 
+#include <utility>
+
 #include "model/object.h"
-
-
 
 class game_object
 {
@@ -16,10 +16,7 @@ protected:
 		Enemy
 	};
 
-	game_object(game_object_type type, std::shared_ptr<entity> obj) : type(type)
-	{
-		this->obj = obj;
-	}
+	game_object(game_object_type type, std::shared_ptr<entity> obj) : type(type), obj(std::move(obj)) {}
 public:
 	game_object_type type;
 	std::shared_ptr<entity> obj;

@@ -19,7 +19,6 @@ public:
 	vec2(float x, float y);
 
 	vec2(const vec2& other);
-	vec2(vec2&& other) noexcept;
 	vec2& operator=(const vec2& other);
 	vec2& operator=(vec2&& other) noexcept;
 
@@ -206,5 +205,4 @@ vec2 operator-(const vec2& a, const vec2& b);
 vec2 operator*(const vec2& a, float o);
 vec2 operator/(const vec2& a, float o);
 vec2 operator*(float o, const vec2& a);
-vec2 operator/(float o, const vec2& a);
 std::ostream& operator<< (std::ostream& stream, const vec2& a);
