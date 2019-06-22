@@ -8,7 +8,7 @@
 
 class obb : public polygon
 {
-	static std::vector<vec2> toVertices(vec2 position,
+	static std::vector<vec2> toVertices(const vec2& position,
 		float length, float radius, float angle);
 public:
 	obb(const vec2& position, float length, float radius, float angle, const vec2& velocity = vec2())

@@ -3,7 +3,6 @@
 #include "util/vec2.h"
 #include "algo/th_algorithm.h"
 #include "info/keypress_detect.h"
-#include "config/th_command_proc.h"
 #include "gfx/imgui_controller.h"
 
 #include "model/game_object.h"
@@ -38,7 +37,6 @@ class th_player
 protected:
 	th_algorithm *algorithm = nullptr;
 	keypress_detect kpd;
-	th_command_proc cmdp;
 	imgui_controller *imguictl = nullptr;
 
 	// game specific pointers
@@ -52,7 +50,7 @@ public:
 	bool enabled = false;
 	bool render = false;
 
-	th_player(gs_addr gsa) : gs_ptr(gsa), cmdp(this) {}
+	th_player(gs_addr gsa) : gs_ptr(gsa) {}
 	virtual ~th_player()
 	{
 		if (imguictl)	delete imguictl;

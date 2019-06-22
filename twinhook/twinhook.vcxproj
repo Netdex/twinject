@@ -144,7 +144,6 @@
     <ClCompile Include="..\dependencies\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\dependencies\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\dependencies\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="config\th_command_proc.cpp" />
     <ClCompile Include="config\th_registry.cpp" />
     <ClCompile Include="control\th06_player.cpp" />
     <ClCompile Include="control\th11_player.cpp" />
@@ -162,7 +161,6 @@
     <ClCompile Include="model\polygon.cpp" />
     <ClCompile Include="patch\th_patch.cpp" />
     <ClCompile Include="patch\th_patch_registry.cpp" />
-    <ClCompile Include="strategy\th_laser_expander.cpp" />
     <ClCompile Include="util\cdraw.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -189,10 +187,8 @@
     <ClCompile Include="algo\th_vo_algo.cpp" />
     <ClCompile Include="twinhook.cpp" />
     <ClCompile Include="util\vec2.cpp" />
-    <ClCompile Include="test\vec2_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config\th_command_proc.h" />
     <ClInclude Include="config\th_registry.h" />
     <ClInclude Include="control\th06_player.h" />
     <ClInclude Include="control\th11_player.h" />
@@ -211,8 +207,6 @@
     <ClInclude Include="patch\th10_patch_autobomb.h" />
     <ClInclude Include="patch\th11_patch_dinput_fix.h" />
     <ClInclude Include="patch\th_patch_registry.h" />
-    <ClInclude Include="pattern\nocopy.h" />
-    <ClInclude Include="strategy\th_laser_expander.h" />
     <ClInclude Include="util\cdraw.h" />
     <ClInclude Include="util\color.h" />
     <ClInclude Include="util\detour.h" />

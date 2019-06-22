@@ -2,9 +2,7 @@
 
 #include <d3d9.h>
 
-#include "pattern/nocopy.h"
-
-class imgui_controller : nocopy
+class imgui_controller
 {
 	HWND hWnd = NULL;
 	IDirect3DDevice9 *pD3DDev = NULL;

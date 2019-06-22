@@ -54,7 +54,6 @@ void th_player::draw(IDirect3DDevice9* d3dDev)
 {
 	if (algorithm)
 		algorithm->visualize(d3dDev);
-	cmdp.render(d3dDev);
 	DI8_Overlay_RenderInput(d3dDev, this->getKeyboardState());
 
 	/* IMGUI Integration*/
