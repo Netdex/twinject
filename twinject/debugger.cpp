@@ -36,15 +36,16 @@ DWORD OnOutputDebugStringEvent(const LPDEBUG_EVENT debug_event)
 		strEventMessage = msg;
 	else
 		strEventMessage = (char*)msg;
-	_tprintf("%ws\n", (LPCWSTR)strEventMessage);
+	_tprintf("%ws", (LPCWSTR)strEventMessage);
 	delete[]msg;
 	return DBG_CONTINUE;
 }
 
 void EnterDebugLoop(const LPDEBUG_EVENT DebugEv)
 {
+	bool continue_dbg = true;
 	DWORD dwContinueStatus = DBG_CONTINUE;
-	for (;;)
+	while(continue_dbg)
 	{
 		WaitForDebugEvent(DebugEv, INFINITE);
 		switch (DebugEv->dwDebugEventCode)
@@ -102,6 +103,9 @@ void EnterDebugLoop(const LPDEBUG_EVENT DebugEv)
 			// Display the output debugging string. 
 			dwContinueStatus = OnOutputDebugStringEvent(DebugEv);
 			break;
+		case EXIT_PROCESS_DEBUG_EVENT:
+			continue_dbg = false;
+
 		}
 		ContinueDebugEvent(DebugEv->dwProcessId,
 			DebugEv->dwThreadId,

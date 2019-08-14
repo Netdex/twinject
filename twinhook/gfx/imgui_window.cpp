@@ -12,7 +12,8 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <tchar.h>
-#include "util/logfs.h"
+
+#include <spdlog/spdlog.h>
 
 static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
 static D3DPRESENT_PARAMETERS    g_d3dpp;
@@ -60,7 +61,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 bool imgui_window_init()
 {
-	LOG("Initializing IMGUI external window and renderer");
+	SPDLOG_INFO("Initializing IMGUI external window and renderer");
 	// Create application window
 	wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("Twinject Debugger"), NULL };
 	RegisterClassEx(&wc);
@@ -165,7 +166,7 @@ bool imgui_window_cleanup()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	if (g_pd3dDevice) g_pd3dDevice->Release();
+	//if (g_pd3dDevice) g_pd3dDevice->Release();
 	if (pD3D) pD3D->Release();
 	DestroyWindow(hwnd);
 	UnregisterClass(_T("Twinject Debugger"), wc.hInstance);

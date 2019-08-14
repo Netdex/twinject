@@ -77,7 +77,7 @@ static DirectInput8Hook di8_hook;
 
 static HRESULT __stdcall DirectInput8Create_Hook(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter)
 {
-	LOG("DI8Create: Feeding fake DirectInput");
+	SPDLOG_INFO("DI8Create: Feeding fake DirectInput");
 	LPDIRECTINPUT8A legit;
 	HRESULT result = DirectInput8Create_Original(hinst, dwVersion, riidltf, (LPVOID*)&legit, punkOuter);
 	th_di8_hook::inst()->DirectInput8 = new DirectInput8Wrapper(legit, di8_hook);
@@ -89,7 +89,7 @@ static  void Hook_DInput8_DirectInput8Create(DirectInput8Hook hook)
 {
 	di8_hook = hook;
 	if (DetourFunction(&(PVOID&)DirectInput8Create_Original, DirectInput8Create_Hook))
-		LOG("Detours: Hooked second stage DirectInput8Create");
+		SPDLOG_INFO("Detours: Hooked second stage DirectInput8Create");
 	else
-		LOG("Detours: Failed to hook DirectInput8Create");
+		SPDLOG_INFO("Detours: Failed to hook DirectInput8Create");
 }

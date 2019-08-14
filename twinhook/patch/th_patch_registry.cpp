@@ -27,7 +27,7 @@ th_patch::result th_registry::patch(const std::string& patchName)
 		code = th_patch::PATCH_INVALID;
 	else
 		code = p->patch();
-	LOG("apply patch %s: result code %x", patchName.c_str(), code);
+	SPDLOG_INFO("apply patch {}: result code {}", patchName, code);
 	return code;
 }
 
@@ -40,6 +40,6 @@ th_patch::result th_registry::unpatch(const std::string& patchName)
 		code = th_patch::PATCH_INVALID;
 	else
 		code = p->unpatch();
-	LOG("remove patch %s: result code %x", patchName.c_str(), code);
+	SPDLOG_INFO("remove patch {}: result code {}", patchName, code);
 	return code;
 }

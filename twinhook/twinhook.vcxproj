@@ -46,12 +46,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(SolutionDir)dependencies\imgui</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(SolutionDir)dependencies\imgui;$(SolutionDir)dependencies\spdlog\include</IncludePath>
     <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(SolutionDir)dependencies\imgui</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(SolutionDir)dependencies\imgui;$(SolutionDir)dependencies\spdlog\include</IncludePath>
     <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -174,7 +174,6 @@
     <ClCompile Include="hook\th07_bullet_proc_hook.cpp" />
     <ClCompile Include="control\th07_player.cpp" />
     <ClCompile Include="gfx\di8_input_overlay.cpp" />
-    <ClCompile Include="util\logfs.cpp" />
     <ClCompile Include="hook\th08_bullet_proc_hook.cpp" />
     <ClCompile Include="control\th08_player.cpp" />
     <ClCompile Include="control\th10_player.cpp" />
@@ -218,7 +217,6 @@
     <ClInclude Include="hook\th07_bullet_proc_hook.h" />
     <ClInclude Include="control\th07_player.h" />
     <ClInclude Include="gfx\di8_input_overlay.h" />
-    <ClInclude Include="util\logfs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="hook\th08_bullet_proc_hook.h" />
     <ClInclude Include="control\th10_player.h" />
@@ -236,6 +234,8 @@
     <ClInclude Include="control\th_player.h" />
     <ClInclude Include="algo\th_vector_algo.h" />
     <ClInclude Include="algo\th_vo_algo.h" />
+    <ClInclude Include="util\assert.h" />
+    <ClInclude Include="util\spdlog_msvc.h" />
     <ClInclude Include="util\vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

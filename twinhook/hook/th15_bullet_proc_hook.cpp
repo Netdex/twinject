@@ -69,9 +69,9 @@ int __declspec(naked) __stdcall sub_455D00_hook(int pPos, int a3)
 void hook_th15_sub_455D00()
 {
 	if (DetourFunction(&(PVOID&)sub_455D00_Original, sub_455D00_hook))
-		LOG("Detours: Hooked sub_455D00");
+		SPDLOG_INFO("Detours: Hooked sub_455D00");
 	else
-		LOG("Detours: Failed to hook sub_455D00");
+		SPDLOG_ERROR("Detours: Failed to hook sub_455D00");
 }
 
 static sub_455E10_t sub_455E10_Original = (sub_455E10_t)0x00455E10;
@@ -137,7 +137,7 @@ int __declspec(naked) __stdcall sub_455E10_hook(float* a3, float a4, int a5)
 void hook_th15_sub_455E10()
 {
 	if (DetourFunction(&(PVOID&)sub_455E10_Original, sub_455E10_hook))
-		LOG("Detours: Hooked sub_455E10");
+		SPDLOG_INFO("Detours: Hooked sub_455E10");
 	else
-		LOG("Detours: Failed to hook sub_455E10");
+		SPDLOG_ERROR("Detours: Failed to hook sub_455E10");
 }

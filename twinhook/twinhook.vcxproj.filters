@@ -93,9 +93,6 @@
     <ClCompile Include="util\detour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util\logfs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="util\vec2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -254,9 +251,6 @@
     <ClInclude Include="util\detour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util\logfs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util\vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -300,6 +294,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="model\entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\spdlog_msvc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

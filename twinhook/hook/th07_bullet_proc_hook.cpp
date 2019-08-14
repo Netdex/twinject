@@ -14,9 +14,9 @@ int __fastcall sub_424290_Hook(void *ecx)
 void Hook_TH07_sub_424290()
 {
 	if (DetourFunction(&(PVOID&)sub_424290_Original, sub_424290_Hook))
-		LOG("Detours: Hooked sub_424290");
+		SPDLOG_INFO("Detours: Hooked sub_424290");
 	else
-		LOG("Detours: Failed to hook sub_424290");
+		SPDLOG_ERROR("Detours: Failed to hook sub_424290");
 }
 
 void th07_bullet_proc_hook::bind(th07_player* player)

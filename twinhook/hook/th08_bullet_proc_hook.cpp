@@ -55,9 +55,9 @@ __declspec(naked) int __fastcall sub_410A70_Hook(int a1, int a2, int a3)
 static void Hook_TH08_sub_410A70()
 {
 	if (DetourFunction(&(PVOID&)sub_410A70_Original, sub_410A70_Hook))
-		LOG("Detours: Hooked sub_410A70");
+		SPDLOG_INFO("Detours: Hooked sub_410A70");
 	else
-		LOG("Detours: Failed to hook sub_410A70");
+		SPDLOG_ERROR("Detours: Failed to hook sub_410A70");
 }
 
 void th08_bullet_proc_hook::vectorUpdateHook(int retaddr, int a1, int a2, int a3)

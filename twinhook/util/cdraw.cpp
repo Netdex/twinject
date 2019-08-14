@@ -34,7 +34,7 @@ namespace cdraw
 		CDrawScaleX = destRect.right / th_param.EXPECTED_WINDOW_WIDTH;
 		CDrawScaleY = destRect.bottom / th_param.EXPECTED_WINDOW_HEIGHT;
 
-		LOG("CDraw: initialized graphics primitives");
+		SPDLOG_INFO("CDraw: initialized graphics primitives");
 	}
 
 	void begin()

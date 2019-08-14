@@ -43,7 +43,7 @@ void th_d3d9_hook::d3d9InitHook(IDirect3DDevice9 *d3dDev)
 	GetClientRect(cparams.hFocusWindow, &rect);
 	th_param.WINDOW_WIDTH = static_cast<float>(rect.right);
 	th_param.WINDOW_HEIGHT = static_cast<float>(rect.bottom);
-	LOG("Detected window dimensions %ld %ld", rect.right, rect.bottom);
+	SPDLOG_INFO("Detected window dimensions {}x{}", rect.right, rect.bottom);
 	cdraw::init(d3dDev, rect);
 	inst()->player->onInit();
 }
@@ -69,7 +69,7 @@ static IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 {
 	IDirect3D9 *legit = Direct3DCreate9_Original(sdkVers);
 	if (!d3d9_created) {
-		LOG("D3D9: Feeding fake IDirect3D9");
+		SPDLOG_INFO("D3D9: Feeding fake IDirect3D9");
 		Direct3D9Wrapper *Direct3D9 = new Direct3D9Wrapper(legit, d3d9_hook);
 		d3d9_created = true;
 		return Direct3D9;
@@ -82,9 +82,9 @@ static void Hook_D3D9_Direct3DCreate9()
 	ASSERT(("d3d9 already created", !d3d9_created));
 
 	if (DetourFunction(&(PVOID&)Direct3DCreate9_Original, Direct3DCreate9_Hook))
-		LOG("Detours: Hooked Direct3DCreate9");
+		SPDLOG_INFO("Detours: Hooked Direct3DCreate9");
 	else
-		LOG("Detours: Failed to hook Direct3DCreate9");
+		SPDLOG_ERROR("Detours: Failed to hook Direct3DCreate9");
 }
 
 static bool HookedD3D = false;
@@ -98,7 +98,7 @@ static HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
 	{
 		HookedD3D = true;
 		PBYTE pDirect3DCreate9 = (PBYTE)GetProcAddress(hM, "Direct3DCreate9");
-		LOG("D3D9: Found Direct3DCreate9 at addr %d", (int)pDirect3DCreate9);
+		SPDLOG_INFO("D3D9: Found Direct3DCreate9 at addr {}", (int)pDirect3DCreate9);
 		Direct3DCreate9_Original = (Direct3DCreate9_t)pDirect3DCreate9;
 		Hook_D3D9_Direct3DCreate9();
 	}
@@ -112,7 +112,7 @@ static void Hook_Kernel32_LoadLibraryA()
 	LoadLibraryA_Original = LoadLibraryA;
 
 	if (DetourFunction(&(PVOID&)LoadLibraryA_Original, LoadLibraryA_Hook))
-		LOG("Detours: Hooked LoadLibraryA");
+		SPDLOG_INFO("Detours: Hooked LoadLibraryA");
 	else
-		LOG("Detours: Failed to hook LoadLibraryA");
+		SPDLOG_INFO("Detours: Failed to hook LoadLibraryA");
 }

@@ -54,7 +54,7 @@ void th_vo_algo::onTick()
 	{
 		isCalibrated = calibTick();
 		if (isCalibrated) {
-			LOG("calibrated plyr vel: %f %f", playerVel, playerFocVel);
+			SPDLOG_INFO("calibrated plyr vel: {} {}", playerVel, playerFocVel);
 		}
 		End();
 		return;
