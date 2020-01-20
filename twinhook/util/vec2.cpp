@@ -255,16 +255,16 @@ float vec2::willCollideAABB(const vec2& p1, const vec2& p2, const vec2& s1, cons
 	float t = (p1.x - p2.x - s2.x) / (v2.x - v1.x);
 	float minE = FLT_MAX;
 	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = std::min(minE, t);
+		minE = t;
 	t = (p1.x - p2.x + s1.x) / (v2.x - v1.x);
-	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = std::min(minE, t);
+	if (t >= 0 && t < minE && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = t;
 	t = (p1.y - p2.y - s2.y) / (v2.y - v1.y);
-	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = std::min(minE, t);
+	if (t >= 0 && t < minE && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = t;
 	t = (p1.y - p2.y + s1.y) / (v2.y - v1.y);
-	if (t >= 0 && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
-		minE = std::min(minE, t);
+	if (t >= 0 && t < minE && isCollideAABB(p1 + t * v1, p2 + t * v2, s1, s2))
+		minE = t;
 
 	// check if finite collision time exists
 	if (minE != FLT_MAX && minE < 6000 /* imposed limit of 100 seconds */)
