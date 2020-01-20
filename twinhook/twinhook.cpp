@@ -123,7 +123,7 @@ __declspec(dllexport) BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, 
 
 		spdlog_msvc *logger = new spdlog_msvc{};
 		spdlog::set_default_logger(logger->get_logger());
-		spdlog::set_pattern("[%L] %20s:%4#@%20! - %v");
+		spdlog::set_pattern("[%L:%!@%s:L%#] %v");
 		SPDLOG_INFO("spdlog_msvc initialized");
 
 		// get game name from environment variable passed from twinject
