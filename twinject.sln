@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject", "twinject\twinje
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinhook", "twinhook\twinhook.vcxproj", "{A47B2FB1-6209-46DC-AA46-17F03164F7D8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ImGui\ImGui.vcxproj", "{DF399789-7F8C-404A-BEFF-B93671197597}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -24,6 +26,10 @@ Global
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8}.Debug|x86.Build.0 = Debug|Win32
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8}.Release|x86.ActiveCfg = Release|Win32
 		{A47B2FB1-6209-46DC-AA46-17F03164F7D8}.Release|x86.Build.0 = Release|Win32
+		{DF399789-7F8C-404A-BEFF-B93671197597}.Debug|x86.ActiveCfg = Debug|Win32
+		{DF399789-7F8C-404A-BEFF-B93671197597}.Debug|x86.Build.0 = Debug|Win32
+		{DF399789-7F8C-404A-BEFF-B93671197597}.Release|x86.ActiveCfg = Release|Win32
+		{DF399789-7F8C-404A-BEFF-B93671197597}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
