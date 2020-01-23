@@ -39,20 +39,24 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ImGui\imgui.props" />
+    <Import Project="..\Detours\Detours.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ImGui\imgui.props" />
+    <Import Project="..\Detours\Detours.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(SolutionDir)dependencies\imgui;$(SolutionDir)dependencies\spdlog\include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
+    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\spdlog\include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\detours\include;$(SolutionDir)dependencies\imgui;$(SolutionDir)dependencies\spdlog\include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86;$(SolutionDir)dependencies\detours\lib.X86</LibraryPath>
+    <IncludePath>$(ProjectDir);$(IncludePath);$(SolutionDir)dependencies\directx_2010\Include;$(SolutionDir)dependencies\spdlog\include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)dependencies\directx_2010\Lib\x86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -78,12 +82,13 @@
       <OmitFramePointers>true</OmitFramePointers>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
@@ -124,7 +129,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
-      <AdditionalDependencies>detours.lib;d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
@@ -138,12 +143,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\imgui\examples\imgui_impl_dx9.cpp" />
-    <ClCompile Include="..\dependencies\imgui\examples\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="algo\q_state_optimizer_algorithm.cpp" />
     <ClCompile Include="config\th_registry.cpp" />
     <ClCompile Include="control\th06_player.cpp" />
     <ClCompile Include="control\th11_player.cpp" />
@@ -188,6 +188,8 @@
     <ClCompile Include="util\vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="control\movement.h" />
+    <ClInclude Include="algo\q_state_optimizer_algorithm.h" />
     <ClInclude Include="config\th_registry.h" />
     <ClInclude Include="control\th06_player.h" />
     <ClInclude Include="control\th11_player.h" />
@@ -237,6 +239,14 @@
     <ClInclude Include="util\assert.h" />
     <ClInclude Include="util\spdlog_msvc.h" />
     <ClInclude Include="util\vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Detours\Detours.vcxproj">
+      <Project>{66ec5a9d-6965-4557-87c8-821a089bb8c8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+      <Project>{df399789-7f8c-404a-beff-b93671197597}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
