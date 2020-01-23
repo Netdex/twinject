@@ -7,3 +7,6 @@
 [submodule "dependencies/spdlog"]
 	path = dependencies/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "dependencies/Detours"]
+	path = dependencies/Detours
+	url = https://github.com/microsoft/Detours.git

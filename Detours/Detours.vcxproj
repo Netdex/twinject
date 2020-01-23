@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{66EC5A9D-6965-4557-87C8-821A089BB8C8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Detours.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Detours.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeBuildCommandLine>cd /D $(SolutionDir)dependencies/Detours
+nmake</NMakeBuildCommandLine>
+    <NMakeOutput>$(SolutionDir)dependencies/Detours/lib.X86/detours.lib</NMakeOutput>
+    <NMakeCleanCommandLine>cd /D $(SolutionDir)dependencies/Detours
+nmake clean</NMakeCleanCommandLine>
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeBuildCommandLine>cd /D $(SolutionDir)dependencies/Detours
+nmake</NMakeBuildCommandLine>
+    <NMakeOutput>$(SolutionDir)dependencies/Detours/lib.X86/detours.lib</NMakeOutput>
+    <NMakeCleanCommandLine>cd /D $(SolutionDir)dependencies/Detours
+nmake clean</NMakeCleanCommandLine>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\dependencies\Detours\src\creatwth.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\detours.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\disasm.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\disolarm.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\disolarm64.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\disolia64.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\disolx64.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\disolx86.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\image.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\modules.cpp" />
+    <ClCompile Include="..\dependencies\Detours\src\uimports.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\dependencies\Detours\src\detours.h" />
+    <ClInclude Include="..\dependencies\Detours\src\detver.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
