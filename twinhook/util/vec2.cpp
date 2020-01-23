@@ -3,43 +3,6 @@
 
 #include <set>
 
-vec2::vec2() : x(0), y(0)
-{
-}
-
-vec2::vec2(float t) : x(t), y(t)
-{
-}
-
-vec2::vec2(float x, float y) : x(x), y(y)
-{
-}
-
-
-vec2::vec2(const vec2& other)
-	: x(other.x),
-	y(other.y)
-{
-}
-
-vec2& vec2::operator=(const vec2& other)
-{
-	if (this == &other)
-		return *this;
-	x = other.x;
-	y = other.y;
-	return *this;
-}
-
-vec2& vec2::operator=(vec2&& other) noexcept
-{
-	if (this == &other)
-		return *this;
-	x = other.x;
-	y = other.y;
-	return *this;
-}
-
 bool vec2::operator==(const vec2& o) const
 {
 	return x == o.x && y == o.y;
@@ -395,18 +358,18 @@ bool vec2::isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b)
 	return true;
 }
 
-float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2 &va,
-	const std::vector<vec2>& b, const vec2 &vb)
+float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2& va,
+	const std::vector<vec2>& b, const vec2& vb)
 {
-	std::set<vec2> normals;
 	const int sizeA = a.size();
 	const int sizeB = b.size();
+	std::vector<vec2> normals(sizeA + sizeB);
 
 	// calculate normals
 	for (int i = 0; i < sizeA; ++i)
-		normals.insert((a[(i + sizeA + 1) % sizeA] - a[i]).normal().unit());
+		normals.push_back((a[(i + sizeA + 1) % sizeA] - a[i]).normal().unit());
 	for (int i = 0; i < sizeB; ++i)
-		normals.insert((b[(i + sizeB + 1) % sizeB] - b[i]).normal().unit());
+		normals.push_back((b[(i + sizeB + 1) % sizeB] - b[i]).normal().unit());
 
 	std::pair<float, float> currentInterval(-FLT_MAX, FLT_MAX);
 
@@ -432,7 +395,7 @@ float vec2::willCollideSAT(const std::vector<vec2>& a, const vec2 &va,
 
 		auto interval = willOverlapInterval(minProjA, maxProjA, dot(va, n),
 			minProjB, maxProjB, dot(vb, n));
-		currentInterval = intersectInterval(interval, currentInterval);
+		intersectInterval(currentInterval, interval);
 
 		// i.e. there exists an axis that is always separating
 		if (isIntervalEmpty(currentInterval))
@@ -504,12 +467,18 @@ std::pair<float, float> vec2::willOverlapInterval(float minA, float maxA, float 
 
 }
 
-std::pair<float, float> vec2::intersectInterval(const std::pair<float, float>& a,
+std::pair<float, float>& vec2::intersectInterval(std::pair<float, float>& a,
 	const std::pair<float, float>& b)
 {
 	if (b.first > a.second || a.first > b.second)
-		return std::make_pair(0.f, 0.f);
-	return std::make_pair(std::max(a.first, b.first), std::min(a.second, b.second));
+	{
+		a.first = 0;
+		a.second = 0;
+		return a;
+	}
+	a.first = std::max(a.first, b.first);
+	a.second = std::min(a.second, b.second);
+	return a;
 }
 
 bool vec2::isIntervalEmpty(const std::pair<float, float>& a)

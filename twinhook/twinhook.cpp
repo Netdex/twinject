@@ -25,6 +25,7 @@
 #include "gfx/imgui_window.h"
 #include "util/spdlog_msvc.h"
 
+// Stores global context initialized on DLL load, to be freed on DLL unload.
 struct twinhook_ctx
 {
 	std::shared_ptr<th_player> th_player;
@@ -116,13 +117,13 @@ __declspec(dllexport) BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, 
 	case DLL_PROCESS_ATTACH:
 	{
 		// disable COM warnings
-		CoInitialize(nullptr);
+		ASSERT(SUCCEEDED(CoInitialize(nullptr)));
 		DisableThreadLibraryCalls(hModule);
 
 		context = new twinhook_ctx;
 
-		spdlog_msvc *logger = new spdlog_msvc{};
-		spdlog::set_default_logger(logger->get_logger());
+		context->logger = std::make_shared<spdlog_msvc>();
+		spdlog::set_default_logger(context->logger->get_logger());
 		spdlog::set_pattern("[%L:%!@%s:L%#] %v");
 		SPDLOG_INFO("spdlog_msvc initialized");
 
@@ -155,6 +156,8 @@ __declspec(dllexport) BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, 
 		SPDLOG_INFO("Detaching from process");
 		imgui_window_cleanup();
 		delete context;
+		break;
+	default:
 		break;
 	}
 

@@ -7,20 +7,16 @@ class vec2 {
 public:
 	union
 	{
-		float x, w;
+		float x, w{};
 	};
 	union
 	{
-		float y, h;
+		float y, h{};
 	};
 
-	vec2();
-	vec2(float t);
-	vec2(float x, float y);
-
-	vec2(const vec2& other);
-	vec2& operator=(const vec2& other);
-	vec2& operator=(vec2&& other) noexcept;
+	constexpr vec2() : x(0), y(0) {}
+	explicit constexpr vec2(float t) : x(t), y(t) {}
+	constexpr vec2(float x, float y) : x(x), y(y) {}
 
 	bool operator==(const vec2& o) const;
 	bool operator!=(const vec2& o) const;
@@ -42,11 +38,11 @@ public:
 	vec2 rotate(float rad) const;
 	vec2 transform(float(*t)(float)) const;
 
-	static float dot(const vec2 &a, const vec2 &b);
-	static vec2 proj(const vec2 &a, const vec2 &b);
-	static vec2 perp(const vec2 &a, const vec2 &b);
+	static float dot(const vec2& a, const vec2& b);
+	static vec2 proj(const vec2& a, const vec2& b);
+	static vec2 perp(const vec2& a, const vec2& b);
 
-	static std::vector<vec2> aabbVert(const vec2 &p, const vec2 &s);
+	static std::vector<vec2> aabbVert(const vec2& p, const vec2& s);
 
 	/**
 	 * \brief Determine the minimum component-wise vector
@@ -54,8 +50,8 @@ public:
 	 * \param b Second vector
 	 * \return The minimum component-wise vector
 	 */
-	static vec2 minv(const vec2 &a, const vec2 &b);
-	static vec2 minv(const std::vector<vec2> &vs);
+	static vec2 minv(const vec2& a, const vec2& b);
+	static vec2 minv(const std::vector<vec2>& vs);
 
 	/**
 	* \brief Determine the maximum component-wise vector
@@ -63,8 +59,8 @@ public:
 	* \param b Second vector
 	* \return the minimum component-wise vector
 	*/
-	static vec2 maxv(const vec2 &a, const vec2 &b);
-	static vec2 maxv(const std::vector<vec2> &vs);
+	static vec2 maxv(const vec2& a, const vec2& b);
+	static vec2 maxv(const std::vector<vec2>& vs);
 
 	/**
 	 * \brief Determine if p is inside an AABB defined by a and b
@@ -73,7 +69,7 @@ public:
 	 * \param b Arbitrary corner of AABB
 	 * \return Whether p is inside an AABB defined by a and b
 	 */
-	static bool inAABB(const vec2 &p, const vec2 &a, const vec2 &b);
+	static bool inAABB(const vec2& p, const vec2& a, const vec2& b);
 
 	/*
 	 *  TODO move all the code after this point out of vec2, because it doesn't really have
@@ -88,7 +84,7 @@ public:
 	  * \param s2 Size (x=width, y=height) of AABB 2
 	  * \return Whether AABB 1 is colliding with AABB 2
 	  */
-	static bool isCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2);
+	static bool isCollideAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2);
 
 	/**
 	 * \brief Determine if AABB 2 is fully contained in AABB 1
@@ -98,7 +94,7 @@ public:
 	 * \param s2 Size (x=width, y=height) of AABB 2
 	 * \return Whether AABB 2 is fully contained in AABB 1
 	 */
-	static bool isContainAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2);
+	static bool isContainAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2);
 
 	/**
 	 * \brief Determine if AABB 1 will collide with AABB 2 in the future
@@ -110,8 +106,8 @@ public:
 	 * \param v2 Velocity of AABB 2 (pixels/frame)
 	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision..
 	 */
-	static float willCollideAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
-		const vec2 &v1, const vec2 &v2);
+	static float willCollideAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2,
+		const vec2& v1, const vec2& v2);
 
 
 	/**
@@ -125,8 +121,8 @@ public:
 	 * \param v2 Velocity of AABB 2 (pixels/frame)
 	 * \return 0 if already exited, -1 if no exit, otherwise number of frames until exit
 	 */
-	static float willExitAABB(const vec2 &p1, const vec2 &p2, const vec2 &s1, const vec2 &s2,
-		const vec2 &v1, const vec2 &v2);
+	static float willExitAABB(const vec2& p1, const vec2& p2, const vec2& s1, const vec2& s2,
+		const vec2& v1, const vec2& v2);
 
 	/**
 	 * \brief Determine if two circles are collided
@@ -136,7 +132,7 @@ public:
 	 * \param r2 Radius of circle 2
 	 * \return Whether the circles are collided
 	 */
-	static bool isCollideCircle(const vec2 &p1, const vec2 &p2, float r1, float r2);
+	static bool isCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2);
 
 	/**
 	 * \brief Determine if circle 1 will collide with circle 2 in the future
@@ -146,8 +142,8 @@ public:
 	 * \param r2 Radius of circle 2
 	 * \return 0 if already collided, -1 if no collision, otherwise number of frames until collision
 	 */
-	static float willCollideCircle(const vec2 &p1, const vec2 &p2, float r1, float r2,
-		const vec2 &v1, const vec2 &v2);
+	static float willCollideCircle(const vec2& p1, const vec2& p2, float r1, float r2,
+		const vec2& v1, const vec2& v2);
 
 	/**
 	 * \brief Find the point on a circle that is the closest to some point
@@ -156,7 +152,7 @@ public:
 	 * \param o A point outside or inside the circle
 	 * \return The point on the circle that is the closest to point o
 	 */
-	static vec2 closestPointOnCircle(const vec2 &ct, float r, const vec2 &o);
+	static vec2 closestPointOnCircle(const vec2& ct, float r, const vec2& o);
 	/**
 	 * \brief Solve the specified quadratic equation of the form
 	 * ax^2 + bx + c
@@ -167,7 +163,7 @@ public:
 	 * \param x2 Second root
 	 * \return Number of solutions (0, 1, 2)
 	 */
-	static int quadraticSolve(float a, float b, float c, float &x1, float &x2);
+	static int quadraticSolve(float a, float b, float c, float& x1, float& x2);
 
 	/**
 	 * \brief Check if the convex polygons defined by two point clouds collide via SAT.
@@ -176,7 +172,7 @@ public:
 	 * \param b Point cloud of convex polygon B
 	 * \return Whether convex polygons A and B collide
 	 */
-	static bool isCollideSAT(const std::vector<vec2> &a, const std::vector<vec2> &b);
+	static bool isCollideSAT(const std::vector<vec2>& a, const std::vector<vec2>& b);
 
 	/**
 	 * \brief Check if the convex polygons defined by two point clouds will collide via
@@ -188,16 +184,16 @@ public:
 	 * \return 0 if already collided, <0 if will never collide, otherwise the number
 	 * of frames until collision.
 	 */
-	static float willCollideSAT(const std::vector<vec2> &a, const vec2 &va,
-		const std::vector<vec2> &b, const vec2 &vb);
+	static float willCollideSAT(const std::vector<vec2>& a, const vec2& va,
+		const std::vector<vec2>& b, const vec2& vb);
 
 	static bool isOverlapInterval(float minA, float maxA, float minB, float maxB);
 
 	static std::pair<float, float> willOverlapInterval(
 		float minA, float maxA, float va, float minB, float maxB, float vb);
-	static std::pair<float, float> intersectInterval(
-		const std::pair<float, float> & a, const std::pair<float, float> & b);
-	static bool isIntervalEmpty(const std::pair<float, float> &a);
+	static std::pair<float, float>& intersectInterval(
+		std::pair<float, float>& a, const std::pair<float, float>& b);
+	static bool isIntervalEmpty(const std::pair<float, float>& a);
 };
 
 vec2 operator+(const vec2& a, const vec2& b);

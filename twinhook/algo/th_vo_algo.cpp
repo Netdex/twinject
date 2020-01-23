@@ -1,17 +1,19 @@
-#include "stdafx.h"
+#include "algo/th_vo_algo.h"
+
+#include <numeric>
+
 #include <imgui.h>
 
-#include "th_vo_algo.h"
-#include "control/th_player.h"
-#include "hook/th_di8_hook.h"
 #include "config/th_config.h"
-#include "util/cdraw.h"
-#include "util/color.h"
+#include "control/movement.h"
+#include "control/th_player.h"
+#include "control/th11_player.h"
 #include "control/th15_player.h"
 #include "control/th10_player.h"
 #include "gfx/imgui_mixins.h"
-#include "control/th11_player.h"
-#include <numeric>
+#include "hook/th_di8_hook.h"
+#include "util/cdraw.h"
+#include "util/color.h"
 
 void th_vo_algo::onBegin()
 {
@@ -66,13 +68,13 @@ void th_vo_algo::onTick()
 	 * Ticks until collision whilst moving in this direction
 	 * Uses same direction numbering schema
 	 */
-	float collisionTicks[NUM_DIRS];
-	std::fill_n(collisionTicks, NUM_DIRS, FLT_MAX);
+	float collisionTicks[control::Movement::MaxValue];
+	std::fill_n(collisionTicks, control::Movement::MaxValue, FLT_MAX);
 
 	bool bounded = true;
 
-	std::shared_ptr<entity> pseudoPlayers[NUM_DIRS];
-	for(int dir = 0; dir < NUM_DIRS; ++dir)
+	std::shared_ptr<entity> pseudoPlayers[control::Movement::MaxValue];
+	for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
 	{
 		vec2 pvel = this->getPlayerMovement(dir);
 		pseudoPlayers[dir] = plyr.obj->withVelocity(pvel);
@@ -81,7 +83,21 @@ void th_vo_algo::onTick()
 	// Bullet collision frame calculations
 	for (auto b = player->bullets.begin(); b != player->bullets.end(); ++b)
 	{
-		for (int dir = 0; dir < NUM_DIRS; ++dir)
+		for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
+		{
+			const auto pseudoPlayer = pseudoPlayers[dir];
+			float colTick = pseudoPlayer->willCollideWith(*b->obj);
+
+			if (colTick >= 0) {
+				collisionTicks[dir] = std::min(colTick, collisionTicks[dir]);
+				bounded = false;
+			}
+		}
+	}
+
+	for (auto b = player->enemies.begin(); b != player->enemies.end(); ++b)
+	{
+		for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
 		{
 			const auto pseudoPlayer = pseudoPlayers[dir];
 			float colTick = pseudoPlayer->willCollideWith(*b->obj);
@@ -95,7 +111,7 @@ void th_vo_algo::onTick()
 
 	for (laser l : player->lasers)
 	{
-		for (int dir = 0; dir < NUM_DIRS; ++dir)
+		for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
 		{
 			const auto pseudoPlayer = pseudoPlayers[dir];
 			float colTick = pseudoPlayer->willCollideWith(*l.obj);
@@ -113,14 +129,14 @@ void th_vo_algo::onTick()
 	 */
 
 	 // Ticks until collision with target whilst moving in this direction
-	float targetTicks[NUM_DIRS];
-	std::fill_n(targetTicks, NUM_DIRS, FLT_MAX);
+	float targetTicks[control::Movement::MaxValue];
+	std::fill_n(targetTicks, control::Movement::MaxValue, FLT_MAX);
 
 	for (const auto& powerup : player->powerups)
 	{
 		// Filter out unwanted powerups
 		if (powerup.meta == 0 && powerup.obj->com().y > 200) {
-			for (int dir = 0; dir < NUM_DIRS; ++dir)
+			for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
 			{
 				const auto pseudoPlayer = pseudoPlayers[dir];
 
@@ -147,7 +163,7 @@ void th_vo_algo::onTick()
 		const vec2 enemyCom = enemy.obj->com();
 		const vec2 playerCom = plyr.obj->com();
 		if (enemyCom.y < playerCom.y) {
-			for (int dir = Direction::Left; dir <= Direction::Right; ++dir)
+			for (int dir : {control::Movement::Left, control::Movement::Right})
 			{
 				const vec2 pvel = this->getPlayerMovement(dir);
 
@@ -165,7 +181,7 @@ void th_vo_algo::onTick()
 
 	aabb gameBounds{ vec2(), vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT) };
 	// Wall collision frame calculations
-	for (int dir = 1; dir < NUM_DIRS; ++dir)
+	for (int dir = 1; dir < control::Movement::MaxValue; ++dir)
 	{
 		const auto pseudoPlayer = pseudoPlayers[dir];
 
@@ -181,9 +197,11 @@ void th_vo_algo::onTick()
 	}
 	// Look for best viable target, aka targeting will not result in collision
 	int tarIdx = -1;
-	if (*std::min_element(collisionTicks, collisionTicks + NUM_DIRS) > MIN_SAFETY_TICK)
+	float min_collision_tick = *std::min_element(collisionTicks + control::Movement::Up, collisionTicks + control::Movement::MaxValue);
+	float max_collision_tick = *std::max_element(collisionTicks, collisionTicks + control::Movement::MaxValue);
+	if (min_collision_tick > 1.f && max_collision_tick > 100.f)
 	{
-		for (int dir = 0; dir < NUM_DIRS; ++dir)
+		for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
 		{
 			if (targetTicks[dir] < collisionTicks[dir]
 				&& (tarIdx == -1 || targetTicks[dir] < targetTicks[tarIdx]))
@@ -217,7 +235,7 @@ void th_vo_algo::onTick()
 			maxIdx = 0;
 		}
 
-		for (int dir = 1; dir < NUM_DIRS; ++dir)
+		for (int dir = 1; dir < control::Movement::MaxValue; ++dir)
 		{
 			if (collisionTicks[dir] != FLT_MAX &&
 				collisionTicks[dir] > collisionTicks[maxIdx])
@@ -230,7 +248,7 @@ void th_vo_algo::onTick()
 
 	/* IMGUI Integration */
 	int minTimeIdx = 0;
-	for (int dir = 1; dir < NUM_DIRS; ++dir)
+	for (int dir = 1; dir < control::Movement::MaxValue; ++dir)
 	{
 		if (collisionTicks[dir] < collisionTicks[minTimeIdx])
 			minTimeIdx = dir;
@@ -254,17 +272,18 @@ void th_vo_algo::onTick()
 	di8->setVkState(DIK_LCONTROL, DIK_KEY_DOWN);	// skip dialogue continuously
 
 	// release all control keys
-	for (int i = 0; i < sizeof CONTROL_KEYS / sizeof BYTE; ++i)
-		di8->resetVkState(CONTROL_KEYS[i]);
+	for (int x : control::kControlKeys)
+		di8->resetVkState(x);
 
 	// press required keys for moving in desired direction
-	for (int i = 0; i < 3; ++i)
-		if (DIR_KEYS[tarIdx][i])
-			di8->setVkState(DIR_KEYS[tarIdx][i], DIK_KEY_DOWN);
+	for (int i = 0; i < 3; ++i) {
+		if (control::kMovementToInput[tarIdx][i])
+			di8->setVkState(control::kMovementToInput[tarIdx][i], DIK_KEY_DOWN);
+	}
 
 	// deathbomb if the bot is going to die in the next frame
 	// this is very dependent on the collision predictor being very accurate
-	if (!powerupTarget && collisionTicks[tarIdx] < 0.5f)
+	if (collisionTicks[tarIdx] < 0.5f)
 	{
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
 	}
@@ -285,13 +304,13 @@ void th_vo_algo::calibInit()
 
 vec2 th_vo_algo::getPlayerMovement(int dir)
 {
-	return DIRECTION_VEL[dir] * (FOCUSED_DIR[dir] ? playerFocVel : playerVel);
+	return control::kMovementVelocity[dir] * (control::kMovementFocused[dir] ? playerFocVel : playerVel);
 }
 
 float th_vo_algo::minStaticCollideTick(
-	const std::vector<const game_object*> &bullets,
-	const aabb &area,
-	std::vector<const game_object*> &collided) const
+	const std::vector<const game_object*>& bullets,
+	const aabb& area,
+	std::vector<const game_object*>& collided) const
 {
 	float minTick = FLT_MAX;
 	for (const game_object* bullet : bullets)
@@ -309,8 +328,8 @@ float th_vo_algo::minStaticCollideTick(
 };
 
 void th_vo_algo::vizPotentialQuadtree(
-	const std::vector<const game_object*> &bullets,
-	const aabb &area,
+	const std::vector<const game_object*>& bullets,
+	const aabb& area,
 	float minRes) const
 {
 	/*cdraw::rect(
@@ -372,11 +391,11 @@ void th_vo_algo::vizPotentialQuadtree(
 std::vector<const game_object*> th_vo_algo::constructDangerObjectUnion()
 {
 	std::vector<const game_object*> objs;
-	for (const laser &l : player->lasers)
+	for (const laser& l : player->lasers)
 		objs.push_back(&l);
-	for (const bullet &b : player->bullets)
+	for (const bullet& b : player->bullets)
 		objs.push_back(&b);
-	for (const enemy &e : player->enemies)
+	for (const enemy& e : player->enemies)
 		objs.push_back(&e);
 	return objs;
 }
@@ -395,16 +414,16 @@ void th_vo_algo::visualize(IDirect3DDevice9* d3dDev)
 				aabb{ vec2(), vec2(), vec2(th_param.GAME_WIDTH, th_param.GAME_HEIGHT) },
 				VEC_FIELD_MIN_RESOLUTION);
 		}
-		for (const laser &l : player->lasers)
+		for (const laser& l : player->lasers)
 			l.render();
-		for (const bullet &b : player->bullets)
+		for (const bullet& b : player->bullets)
 			b.render();
-		for (const enemy &e : player->enemies)
+		for (const enemy& e : player->enemies)
 			e.render();
-		for (const powerup &p : player->powerups)
+		for (const powerup& p : player->powerups)
 			p.render();
 		plyr.render();
-		
+
 	}
 }
 
