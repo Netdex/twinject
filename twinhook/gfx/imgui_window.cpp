@@ -9,6 +9,7 @@
 #include <examples/imgui_impl_win32.h>
 
 #include <d3d9.h>
+#undef DIRECTINPUT_VERSION 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <tchar.h>
