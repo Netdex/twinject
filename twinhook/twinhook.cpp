@@ -44,9 +44,11 @@ void th06_init()
 	th_d3d9_hook::bind(context->th_player.get(), true);
 	th_di8_hook::bind(context->th_player.get());
 }
+
 void th07_init()
 {
-	context->th_player = std::make_shared<th07_player>();
+	auto player = std::make_shared<th07_player>();
+	context->th_player = player;
 	context->th_algo = std::make_shared<th_vo_algo>(context->th_player.get());
 	context->th_player->bindAlgorithm(context->th_algo.get());
 
@@ -90,18 +92,17 @@ void th11_init()
 
 void th15_init()
 {
-	context->th_player = std::make_shared<th15_player>();
+	auto player = std::make_shared<th15_player>();
+	context->th_player = player;
 	context->th_algo = std::make_shared<th_vo_algo>(context->th_player.get());
 	context->th_player->bindAlgorithm(context->th_algo.get());
 
 	th_d3d9_hook::bind(context->th_player.get(), false);
 	th_di8_hook::bind(context->th_player.get());
-	th15_bullet_proc_hook::bind(std::dynamic_pointer_cast<th15_player>(context->th_player).get());
+	th15_bullet_proc_hook::bind(player.get());
 }
 
-typedef void(*th_loader_t)();
-
-static std::unordered_map<std::string, th_loader_t> th_init{
+static std::unordered_map<std::string, void(*)()> th_init{
 	{"th06", th06_init},
 	{"th07", th07_init},
 	{"th08", th08_init},
@@ -125,7 +126,6 @@ __declspec(dllexport) BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, 
 		context->logger = std::make_shared<spdlog_msvc>();
 		spdlog::set_default_logger(context->logger->get_logger());
 		spdlog::set_pattern("[%L:%!@%s:L%#] %v");
-		SPDLOG_INFO("spdlog_msvc initialized");
 
 		// get game name from environment variable passed from twinject
 		// we should probably use IPC instead of envvars, but it works so hey
