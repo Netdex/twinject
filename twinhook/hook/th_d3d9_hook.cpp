@@ -10,7 +10,7 @@ static Direct3D9Hook d3d9_hook;
 
 void th_d3d9_hook::bind(th_player* player, bool twoStage)
 {
-	ASSERT(("cannot multi-bind", !instance));
+	CHECK(!instance);
 	instance = new th_d3d9_hook(player);
 
 	Direct3D9Hook hook;
@@ -30,13 +30,13 @@ void th_d3d9_hook::bind(th_player* player, bool twoStage)
 
 th_d3d9_hook* th_d3d9_hook::inst()
 {
-	ASSERT(("cannot obtain unbounded instance", instance));
+	CHECK(instance);
 	return instance;
 }
 
-void th_d3d9_hook::d3d9InitHook(IDirect3DDevice9 *d3dDev)
+void th_d3d9_hook::d3d9InitHook(IDirect3DDevice9* d3dDev)
 {
-	ASSERT(("d3ddev9_wrapper inaccessible", th_d3d9_hook::inst()->d3ddev9_wrapper));
+	CHECK(th_d3d9_hook::inst()->d3ddev9_wrapper);
 	D3DDEVICE_CREATION_PARAMETERS cparams;
 	RECT rect;
 	inst()->d3ddev9_wrapper->GetCreationParameters(&cparams);
@@ -48,12 +48,12 @@ void th_d3d9_hook::d3d9InitHook(IDirect3DDevice9 *d3dDev)
 	inst()->player->onInit();
 }
 
-void th_d3d9_hook::d3d9BeginHook(IDirect3DDevice9 *d3dDev)
+void th_d3d9_hook::d3d9BeginHook(IDirect3DDevice9* d3dDev)
 {
 	inst()->player->onBeginTick();
 }
 
-void th_d3d9_hook::d3d9EndHook(IDirect3DDevice9 *d3dDev)
+void th_d3d9_hook::d3d9EndHook(IDirect3DDevice9* d3dDev)
 {
 	inst()->player->onTick();
 	cdraw::begin();
@@ -67,10 +67,10 @@ static bool d3d9_created = false;
 
 static IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 {
-	IDirect3D9 *legit = Direct3DCreate9_Original(sdkVers);
+	IDirect3D9* legit = Direct3DCreate9_Original(sdkVers);
 	if (!d3d9_created) {
 		SPDLOG_INFO("D3D9: Feeding fake IDirect3D9");
-		Direct3D9Wrapper *Direct3D9 = new Direct3D9Wrapper(legit, d3d9_hook);
+		Direct3D9Wrapper* Direct3D9 = new Direct3D9Wrapper(legit, d3d9_hook);
 		d3d9_created = true;
 		return Direct3D9;
 	}
@@ -79,7 +79,7 @@ static IDirect3D9* WINAPI Direct3DCreate9_Hook(UINT sdkVers)
 
 static void Hook_D3D9_Direct3DCreate9()
 {
-	ASSERT(("d3d9 already created", !d3d9_created));
+	CHECK(!d3d9_created);
 
 	if (DetourFunction(&(PVOID&)Direct3DCreate9_Original, Direct3DCreate9_Hook))
 		SPDLOG_INFO("Detours: Hooked Direct3DCreate9");
@@ -107,7 +107,7 @@ static HMODULE WINAPI LoadLibraryA_Hook(LPCSTR lpFileName)
 
 static void Hook_Kernel32_LoadLibraryA()
 {
-	ASSERT(("d3d9 already loaded", !HookedD3D));
+	CHECK(("d3d9 already loaded", !HookedD3D));
 
 	LoadLibraryA_Original = LoadLibraryA;
 

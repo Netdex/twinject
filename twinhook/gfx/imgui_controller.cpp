@@ -10,7 +10,7 @@ using namespace ImGui;
 
 void imgui_controller::init()
 {
-	ASSERT(pD3DDev->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) >= 0);
+	CHECK(pD3DDev->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) >= 0);
 
 	th_wndproc_imgui_hook::bind(hWnd);
 
@@ -36,7 +36,7 @@ void imgui_controller::render()
 	Render();
 
 	// We must apply state of working case, then return state back to normal
-	ASSERT(pD3DDev->CreateStateBlock(D3DSBT_ALL, &d3d9_sb_preserve) >= 0);
+	CHECK(pD3DDev->CreateStateBlock(D3DSBT_ALL, &d3d9_sb_preserve) >= 0);
 	d3d9_state_block->Apply();
 	ImGui_ImplDX9_RenderDrawData(GetDrawData());
 	d3d9_sb_preserve->Apply();

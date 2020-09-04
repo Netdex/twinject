@@ -8,7 +8,7 @@ th15_bullet_proc_hook* th15_bullet_proc_hook::instance = nullptr;
 
 void th15_bullet_proc_hook::bind(th15_player* player)
 {
-	ASSERT(("cannot multi-bind", !instance));
+	CHECK(!instance);
 	instance = new th15_bullet_proc_hook(player);
 	hook_th15_sub_455D00();
 	hook_th15_sub_455E10();
@@ -16,7 +16,7 @@ void th15_bullet_proc_hook::bind(th15_player* player)
 
 th15_bullet_proc_hook* th15_bullet_proc_hook::inst()
 {
-	ASSERT(("cannot obtain unbounded instance", instance));
+	CHECK(instance);
 	return instance;
 }
 

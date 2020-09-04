@@ -118,7 +118,7 @@ __declspec(dllexport) BOOL WINAPI DllMain(HMODULE hModule, DWORD reasonForCall, 
 	case DLL_PROCESS_ATTACH:
 	{
 		// disable COM warnings
-		ASSERT(SUCCEEDED(CoInitialize(nullptr)));
+		CHECK(SUCCEEDED(CoInitialize(nullptr)));
 		DisableThreadLibraryCalls(hModule);
 
 		context = new twinhook_ctx;

@@ -21,7 +21,7 @@ void Hook_TH07_sub_424290()
 
 void th07_bullet_proc_hook::bind(th07_player* player)
 {
-	ASSERT(("cannot multi-bind", !instance));
+	CHECK(!instance);
 	instance = new th07_bullet_proc_hook(player);
 
 	Hook_TH07_sub_424290();
@@ -29,14 +29,14 @@ void th07_bullet_proc_hook::bind(th07_player* player)
 
 th07_bullet_proc_hook* th07_bullet_proc_hook::inst()
 {
-	ASSERT(("cannot obtain unbounded instance", instance));
+	CHECK(instance);
 	return instance;
 }
 
 void th07_bullet_proc_hook::vectorUpdateHook(void *ecx)
 {
 	th07_player *player = dynamic_cast<th07_player*>(inst()->player);
-	ASSERT(("wrong player type bound to hook", player));
+	CHECK(player);
 
 	std::vector<bullet> &bullets = player->bullets;
 	std::vector<powerup> &powerups = player->powerups;

@@ -37,10 +37,7 @@ std::shared_ptr<aabb> polygon::boundingBox() const
 
 float polygon::willExit(const entity& o) const
 {
-	switch (o.type)
-	{
-	default: return -1.f;
-	}
+	return -1.f;
 }
 
 float polygon::willCollideWith(const entity& o) const

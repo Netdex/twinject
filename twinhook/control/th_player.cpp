@@ -14,7 +14,7 @@
 
 void th_player::onInit()
 {
-	ASSERT(("Could not initialize IMGUI window", imgui_window_init()));
+	CHECK(imgui_window_init());
 }
 
 void th_player::onBeginTick()
