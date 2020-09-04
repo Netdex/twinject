@@ -41,7 +41,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeBuildCommandLine>cd /D $(SolutionDir)dependencies/Detours
+    <NMakeBuildCommandLine>cd /D $(SolutionDir)dependencies/Detours/src
 nmake</NMakeBuildCommandLine>
     <NMakeOutput>$(SolutionDir)dependencies/Detours/lib.X86/detours.lib</NMakeOutput>
     <NMakeCleanCommandLine>cd /D $(SolutionDir)dependencies/Detours
@@ -49,7 +49,7 @@ nmake clean</NMakeCleanCommandLine>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>cd /D $(SolutionDir)dependencies/Detours
+    <NMakeBuildCommandLine>cd /D $(SolutionDir)dependencies/Detours/src
 nmake</NMakeBuildCommandLine>
     <NMakeOutput>$(SolutionDir)dependencies/Detours/lib.X86/detours.lib</NMakeOutput>
     <NMakeCleanCommandLine>cd /D $(SolutionDir)dependencies/Detours
@@ -74,6 +74,9 @@ nmake clean</NMakeCleanCommandLine>
   <ItemGroup>
     <ClInclude Include="..\dependencies\Detours\src\detours.h" />
     <ClInclude Include="..\dependencies\Detours\src\detver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Detours.props" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
