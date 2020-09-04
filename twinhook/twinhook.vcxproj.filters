@@ -135,9 +135,6 @@
     <ClCompile Include="model\obb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="algo\q_state_optimizer_algorithm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -285,9 +282,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\assert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="algo\q_state_optimizer_algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="control\movement.h">
