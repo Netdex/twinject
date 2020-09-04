@@ -7,8 +7,6 @@ This project is a work-in-progress.
 ```
 If you have any questions, want to help, or are just having trouble getting 
 something working, feel free to open a ticket or email me (my email address is on my GitHub profile). 
-It's much easier to answer emails when they come rather than keep the documentation here up-to-date 
-all the time.
 ```
 ## [Demonstration Video](https://youtu.be/-3xhwImamQw)
 [![alt text?](https://i.imgur.com/eAjWOSt.png)](https://youtu.be/-3xhwImamQw)
@@ -18,11 +16,9 @@ _twinject_ (**t**ouhou **w**indows **inject**or) is an automated player for the 
 
 For the unaware, bullet hells are a category of *Shoot 'em Up* video games where the player controls a ship, which must dodge large numbers of obstacles and destroy large numbers of enemies. In the demonstration videos, the fast moving projectiles are the obstacles which must be dodged - if the player hits any of these projectiles they die immediately. The player itself also fires projectiles, which damage enemies. Props to ZUN for making games that people still play 20 years later.
 
-Why did I do this? I thought it would be a neat challenge to apply my knowledge of reverse engineering, and low-level development. This project's focus is not data extraction, but rather developing an effective dodging algorithm when all information is available. The dodging algorithm uses a mix of linear algebra and numerical optimization to quickly approximate good movements for the bot to make. This is explained in detail in the Technical Descriptions linked below.
-
 Documentation is currently incomplete/outdated, and is currently on my list of things to do. At the moment, I am prioritizing features and demonstrations.
 
-So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for games listed in the table below. Some binding implementations or reverse engineering knowledge have been borrowed from other sources and are cited at the bottom. Thank you! Since all the necessary abstractions already exist, I also plan to utilize machine learning strategies as a possible solution.
+So far, I plan to implement bindings for this bot for every mainline game. As of now, I have completed basic bindings for games listed in the table below. Some binding implementations or reverse engineering knowledge have been borrowed from other sources and are cited at the bottom. Thank you! 
 
 ## Demonstrations
 As of now, I have implemented two player algorithms with varying degrees of success.
@@ -63,7 +59,7 @@ The dependencies are included in the repository, and are referenced by relative 
 
 ### Build Instructions
 ```
-1. Clone repository to disk
+1. git clone --recurse-submodules https://github.com/netdex/twinject.git
 2. Build in Visual Studio 2017 with Release (x86) target.
 The following components are required:
 - VC++ 2017 version 15.8 v14.5 latest v141 tools (other verisons should be okay, you will need to retarget)
@@ -73,38 +69,16 @@ The following components are required:
 Place the following files into the game directory:
 twinject.exe
 twinhook.dll
-twinject.ini (you may need to create this yourself, specified below)
+twinject.toml (there is a sample included under twinhook/)
 
 Obtain dx8->dx9 converter patch (included in releases in this repo as dxd8.dll and enbconvertor.ini),
 and place into game directory if the game requires it.
 ```
 If you don't want to build it, there are stable Releases in this repository. The tagged commits represent stable points, since sometimes I break the build and it doesn't work. If you want to test the latest features (since the Releases take effort to create, so I don't do them often), you can download the build artifacts from [Appveyor](https://ci.appveyor.com/project/netdex/twinject/build/artifacts). If you are having trouble getting it to build, feel free to open a ticket or contact me.
 
-### Configuration
-twinject.ini must be in the same folder as twinject.exe, and contains configuration options. Here's the default configuration:
-```
-[twinject]
-; Filename of game executable
-exename=th08.exe
-; Filename of twinhook dll
-dllname=twinhook.dll
-; Name of game loader (e.g. th=th08)
-env=th=th08
-```
-
 ## Usage
 ```
--- INSTALLATION (from release) --
-Extract all files to your game directory.
-
--- RUNNING --
-Run twinject.exe, which will chainload the game executable.
-Make sure your game executable and the one defined in twinject.ini match.
-
--- CONTROLS --
-G - Enable/disable bot
-H - Show/hide debug graphics
-/ - Input debug command
+Refer to deploy/INSTRUCTIONS.TXT
 
 You can click the IMGUI windows to control twinject as well.  
 (note: key controls have been temporarily replaced with IMGUI while I sort stuff out.)

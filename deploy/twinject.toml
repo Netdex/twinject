@@ -1,0 +1,42 @@
+###################################
+# TWINJECT INJECTOR CONFIGURATION #
+###################################
+
+debug = false			# if debug = true, use debug paths instead of searching current directory
+
+### AUTOMATIC INJECTOR CONFIGURATION 
+bin = "th10.exe"		# name of th binary in current directory
+env = "th10"			# name of internal environment/th_player type
+dll = "twinhook.dll"		# name of twinhook DLL (should always be "twinhook.dll")
+
+### HARDCODED DEBUG PATHS ###
+# if debug = true, the following hardcoded paths are used for env = loader.env
+
+twinhook_path_dbg = "D:\\Programming\\Multi\\twinject\\Debug\\twinhook.dll"
+twinhook_path_rls = "D:\\Programming\\Multi\\twinject\\Release\\twinhook.dll"
+
+[th06]
+bin = "th06e.exe"
+path = "D:\\Programming\\Multi\\th06"
+
+[th07]
+bin = "th07.exe"
+path = "D:\\Programming\\Multi\\th07"
+
+[th08]
+bin = "th08.exe"
+path = "D:\\Programming\\Multi\\th08"
+
+[th10]
+bin = "th10.exe"
+path = "D:\\Programming\\Multi\\th10"
+
+[th11]
+bin = "th11.exe"
+path = "D:\\Programming\\Multi\\th11"
+
+[th15]
+bin = "th15.exe"
+path = "D:\\Programming\\Multi\\th15"
+
+

@@ -2,21 +2,17 @@ twinject (netdex)
 =========
 https://github.com/netdex/twinject
 
-A bot for Touhou games that reads data directly from memory and uses this information in an attempt to bot the game. 
 Please read all documentation in the repository.
 
 -- INSTALLATION --
 Extract all files to your Touhou game directory.
 
 -- RUNNING --
-Make sure your game executable and the one defined in twinject.ini match.
-Make sure the game loader is defined correctly (env=th\=thXX)
+Configure twinject.toml according to the game.
 Run twinject.exe, which will chainload the game.
 
-
 -- CONTROLS --
-G - Enable bot
-B - Disable bot
+You can use the ImGui window to control twinject, or the following keyboard shortcuts: 
+
+G - Toggle bot
 H - Display debug graphics
-N - Hide debug graphics 
-/ - Open debug console
