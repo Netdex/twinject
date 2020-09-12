@@ -15,49 +15,55 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\Detours\src\disolia64.cpp">
+    <ClInclude Include="..\..\dependencies\Detours\src\detver.h">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\disolx64.cpp">
+    </ClInclude>
+    <ClInclude Include="..\..\dependencies\Detours\src\detours.h">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\disolx86.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\modules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\uimports.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\creatwth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\detours.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\disasm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\disolarm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\Detours\src\disolarm64.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\dependencies\Detours\src\detours.h">
+    </ClInclude>
+    <ClInclude Include="..\..\dependencies\Detours\include\detver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\Detours\src\detver.h">
+    <ClInclude Include="..\..\dependencies\Detours\include\detours.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Detours.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\dependencies\Detours\src\disasm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\disolarm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\disolarm64.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\disolia64.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\disolx64.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\disolx86.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\modules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\uimports.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\creatwth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\Detours\src\detours.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

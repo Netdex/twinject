@@ -39,13 +39,13 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\ImGui\imgui.props" />
-    <Import Project="..\Detours\Detours.props" />
+    <Import Project="..\vcxproj\ImGui\imgui.props" />
+    <Import Project="..\vcxproj\Detours\Detours.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\ImGui\imgui.props" />
-    <Import Project="..\Detours\Detours.props" />
+    <Import Project="..\vcxproj\ImGui\imgui.props" />
+    <Import Project="..\vcxproj\Detours\Detours.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -149,6 +149,7 @@
     <ClCompile Include="control\th06_player.cpp" />
     <ClCompile Include="control\th11_player.cpp" />
     <ClCompile Include="control\th_player.cpp" />
+    <ClCompile Include="gfx\imgui_impl_win32.cpp" />
     <ClCompile Include="model\aabb.cpp" />
     <ClCompile Include="model\circle.cpp" />
     <ClCompile Include="model\entity.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="config\th_registry.h" />
     <ClInclude Include="control\th06_player.h" />
     <ClInclude Include="control\th11_player.h" />
+    <ClInclude Include="gfx\imgui_impl_win32.h" />
     <ClInclude Include="model\aabb.h" />
     <ClInclude Include="model\circle.h" />
     <ClInclude Include="model\entity.h" />
@@ -241,10 +243,10 @@
     <ClInclude Include="util\vec2.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Detours\Detours.vcxproj">
+    <ProjectReference Include="..\vcxproj\Detours\Detours.vcxproj">
       <Project>{66ec5a9d-6965-4557-87c8-821a089bb8c8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+    <ProjectReference Include="..\vcxproj\ImGui\ImGui.vcxproj">
       <Project>{df399789-7f8c-404a-beff-b93671197597}</Project>
     </ProjectReference>
   </ItemGroup>

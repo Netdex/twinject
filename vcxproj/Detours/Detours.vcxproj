@@ -59,24 +59,26 @@ nmake clean</NMakeCleanCommandLine>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\Detours\src\creatwth.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\detours.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\disasm.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\disolarm.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\disolarm64.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\disolia64.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\disolx64.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\disolx86.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\image.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\modules.cpp" />
-    <ClCompile Include="..\dependencies\Detours\src\uimports.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\dependencies\Detours\src\detours.h" />
-    <ClInclude Include="..\dependencies\Detours\src\detver.h" />
+    <ClInclude Include="..\..\dependencies\Detours\include\detours.h" />
+    <ClInclude Include="..\..\dependencies\Detours\include\detver.h" />
+    <ClInclude Include="..\..\dependencies\Detours\src\detours.h" />
+    <ClInclude Include="..\..\dependencies\Detours\src\detver.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Detours.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\dependencies\Detours\src\creatwth.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\detours.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\disasm.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\disolarm.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\disolarm64.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\disolia64.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\disolx64.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\disolx86.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\image.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\modules.cpp" />
+    <ClCompile Include="..\..\dependencies\Detours\src\uimports.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -72,15 +72,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\imgui\examples\imgui_impl_dx9.cpp" />
-    <ClCompile Include="..\dependencies\imgui\examples\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\dependencies\imgui\imgui_widgets.cpp" />
+    <None Include="ImGui.props" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ImGui.props" />
+    <ClInclude Include="..\..\dependencies\imgui\examples\imgui_impl_dx9.h" />
+    <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
+    <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\dependencies\imgui\examples\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\..\dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

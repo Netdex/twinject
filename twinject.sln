@@ -10,9 +10,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinject", "twinject\twinje
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twinhook", "twinhook\twinhook.vcxproj", "{A47B2FB1-6209-46DC-AA46-17F03164F7D8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ImGui\ImGui.vcxproj", "{DF399789-7F8C-404A-BEFF-B93671197597}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "vcxproj\ImGui\ImGui.vcxproj", "{DF399789-7F8C-404A-BEFF-B93671197597}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Detours", "Detours\Detours.vcxproj", "{66EC5A9D-6965-4557-87C8-821A089BB8C8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Detours", "vcxproj\Detours\Detours.vcxproj", "{66EC5A9D-6965-4557-87C8-821A089BB8C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
