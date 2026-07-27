@@ -28,10 +28,10 @@ static const float ENEMY_TARGET_ALIGNMENT_TOLERANCE = 6.0f;
  * or bullet patterns that require memorization to pass. This algorithm usually bombs 
  * through these parts.
  * 
- * Note that targeting is also difficult, since there is no simple way to weight 
- * targets and obstacles in a reasonable way. Currently the algorithm only targets 
- * powerups will be no obstacles blocking the way which should work in theory, 
- * but causes the bot to collide with obstacles more often.
+ * Note that targeting is also difficult, since there is no simple way to weight
+ * targets and obstacles in a reasonable way. Currently the algorithm targets
+ * powerups and horizontally aligns with enemies only when the selected movement
+ * stays clear of obstacles.
  * 
  * This algorithm implements near perfect deathbombing by detecting if it will collide 
  * with an obstacle very soon, and has no recourse for avoidance. However, this is 
@@ -49,6 +49,9 @@ class th_vo_algo : public th_algorithm
 	/* Adaptibility Parameters */
 	// Should we use hitcircles instead of hitboxes
 	bool hitCircle = false;
+	// Target only when the corresponding game binding exposes these objects.
+	bool collectPowerups = true;
+	bool targetEnemies = true;
 
 	/* Calibration Parameters */
 	bool isCalibrated = false;

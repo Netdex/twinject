@@ -70,8 +70,16 @@ int main(const int argc, const char* argv[])
 #ifndef DEBUGGER
 	std::cout << "WARNING: Debugger disabled upon compile-time! No debug messages will appear!" << std::endl;
 #endif
-	std::cout << "twinject: Adding path to DLL search path: " << twinhook_dll_path << std::endl;
-	SetDllDirectory(twinhook_dll_path.string().c_str());
+	const std::filesystem::path dll_search_path =
+		twinhook_dll_path.parent_path();
+	std::cout << "twinject: Adding path to DLL search path: "
+		<< dll_search_path << std::endl;
+	if (!SetDllDirectoryA(dll_search_path.string().c_str()))
+	{
+		std::cerr << "twinject: Failed to configure DLL search path (error "
+			<< GetLastError() << ")" << std::endl;
+		return 1;
+	}
 
 	memset(&si, 0, sizeof(si));
 	memset(&pi, 0, sizeof(pi));

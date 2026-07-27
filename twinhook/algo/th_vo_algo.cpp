@@ -124,50 +124,63 @@ void th_vo_algo::onTick()
 	}
 
 	/*
-	 * Powerup collision frame calculations
+	 * Target calculations
 	 * Note: Powerups do not move linearly so using a linear model might be poor.
 	 */
+	enum class target_kind
+	{
+		none,
+		powerup,
+		enemy,
+	};
 
-	 // Ticks until collision with target whilst moving in this direction
+	// Ticks until reaching/alignment with a target whilst moving in this direction.
 	float targetTicks[control::Movement::MaxValue];
 	std::fill_n(targetTicks, control::Movement::MaxValue, FLT_MAX);
+	target_kind targetKinds[control::Movement::MaxValue];
+	std::fill_n(targetKinds, control::Movement::MaxValue, target_kind::none);
 
-	for (const auto& powerup : player->powerups)
+	if (collectPowerups)
 	{
-		// Filter out unwanted powerups
-		if (powerup.meta == 0 && powerup.obj->com().y > 200) {
-			for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
-			{
-				const auto pseudoPlayer = pseudoPlayers[dir];
+		for (const auto& powerup : player->powerups)
+		{
+			// Filter out unwanted powerups.
+			if (powerup.meta == 0 && powerup.obj->com().y > 200) {
+				for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
+				{
+					const auto pseudoPlayer = pseudoPlayers[dir];
 
-				/*
-				 * Powerups tend to be attracted towards the player, so we can be
-				 * very lax with the collision predictor and use the AABB model
-				 * all the time
-				 */
-				 /*float colTick = vec2::willCollideAABB(
-						 plyr.position - plyr.size / 2, powerup.position - powerup.size / 2, plyr.size, powerup.size, pvel, powerup.velocity);
-				 */
-				float colTick = pseudoPlayer->willCollideWith(*powerup.obj);
-				if (colTick >= 0) {
-					targetTicks[dir] = std::min(colTick, targetTicks[dir]);
+					/*
+					 * Powerups tend to be attracted towards the player, so we can be
+					 * very lax with the collision predictor and use the AABB model
+					 * all the time.
+					 */
+					float colTick = pseudoPlayer->willCollideWith(*powerup.obj);
+					if (colTick >= 0 && colTick < targetTicks[dir]) {
+						targetTicks[dir] = colTick;
+						targetKinds[dir] = target_kind::powerup;
+					}
 				}
 			}
 		}
 	}
 
 	// Target enemies by horizontally lining up the player shot with targets above.
-	for (const auto& enemy : player->enemies)
+	if (targetEnemies)
 	{
-		const vec2 enemyCom = enemy.obj->com();
-		const vec2 playerCom = plyr.obj->com();
-		if (enemyCom.y < playerCom.y) {
-			for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
-			{
-				float alignTick = ticksUntilEnemyAlignment(plyr, enemy, dir);
-				if (alignTick >= 0)
+		for (const auto& enemy : player->enemies)
+		{
+			const vec2 enemyCom = enemy.obj->com();
+			const vec2 playerCom = plyr.obj->com();
+			if (enemyCom.y < playerCom.y) {
+				for (int dir = 0; dir < control::Movement::MaxValue; ++dir)
 				{
-					targetTicks[dir] = std::min(alignTick, targetTicks[dir]);
+					float alignTick = ticksUntilEnemyAlignment(plyr, enemy, dir);
+					if (alignTick >= 0 && alignTick < targetTicks[dir])
+					{
+						targetTicks[dir] = alignTick;
+						targetKinds[dir] = target_kind::enemy;
+					}
 				}
 			}
 		}
@@ -203,12 +216,16 @@ void th_vo_algo::onTick()
 		}
 	}
 
-	Text("target found: %s", (tarIdx == -1) ? "false" : "true");
+	const target_kind selectedTarget = tarIdx == -1
+		? target_kind::none
+		: targetKinds[tarIdx];
+	const char* selectedTargetName = selectedTarget == target_kind::powerup
+		? "powerup"
+		: selectedTarget == target_kind::enemy ? "enemy" : "none";
+	Text("target: %s", selectedTargetName);
 
-	bool powerupTarget = true;
-	// check if we could find a targetable powerup
+	// Fall back to the safest direction when no viable target was found.
 	if (tarIdx == -1) {
-		powerupTarget = false;
 		// find direction with maximum frames until collision
 
 		/* TODO changed from 0 to 1 to disable hold position
@@ -282,6 +299,8 @@ void th_vo_algo::onTick()
 		di8->setVkState(DIK_X, DIK_KEY_DOWN);
 	}
 
+	Checkbox("Collect powerups", &this->collectPowerups);
+	Checkbox("Target enemies", &this->targetEnemies);
 	Checkbox("Show Vector Field", &this->renderVectorField);
 
 	End();

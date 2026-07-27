@@ -17,6 +17,9 @@ public:
 	void onEnableChanged(bool enable) override;
 
 private:
+	void doEnemyPoll();
+	void doPowerupPoll();
+
 	/**
 	 * Note: the size for players in th15 is radius, not diameter.
 	 */
