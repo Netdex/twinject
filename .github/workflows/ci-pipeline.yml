@@ -1,0 +1,41 @@
+﻿# twinject CI Build Pipeline
+# Builds Release x86 (Win32) for all four projects
+
+trigger:
+  - main
+  - master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: 'twinject.sln'
+  buildPlatform: 'Win32'
+  buildConfiguration: 'Release'
+
+steps:
+  # 1. Restore git submodules
+  - task: PowerShell@2
+    displayName: 'Restore submodules'
+    inputs:
+      targetType: inline
+      script: |
+        git submodule update --init --recursive
+
+  # 2. Build the solution with MSBuild
+  - task: VSBuild@1
+    displayName: 'Build solution'
+    inputs:
+      solution: $(solution)
+      vsVersion: '16.0' # VS2019
+      platform: $(buildPlatform)
+      configuration: $(buildConfiguration)
+      msbuildArgs: '/p:WindowsTargetPlatformVersion=10.0'
+
+  # 3. Publish artifacts (twinject.exe + twinhook.dll)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifacts'
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\Release'
+      ArtifactName: 'twinject-release'
+    condition: succeededOrFailed()

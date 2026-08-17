@@ -1,18 +1,29 @@
-twinject (netdex)
-=========
-https://github.com/netdex/twinject
+THAutomation
+============
 
-Please read all documentation in the repository.
+QUICK START
+-----------
+1. Extract the complete release package.
+2. Run THAutomation.exe.
+3. Select a supported Touhou game and browse to its EXE.
+4. Click the large "Inject and launch" button.
 
--- INSTALLATION --
-Extract all files to your Touhou game directory.
+The launcher remembers each game path, so later launches take one click.
+You can also drag a game EXE onto the launcher window.
 
--- RUNNING --
-Configure twinject.toml according to the game.
-Run twinject.exe, which will chainload the game.
+TH06, TH07, and TH08 use a DirectX 8 compatibility layer. Keep the legacy
+folder beside THAutomation.exe; the launcher installs it into the selected
+game directory when needed without overwriting an existing d3d8.dll.
 
--- CONTROLS --
-You can use the ImGui window to control twinject, or the following keyboard shortcuts: 
+REQUIREMENTS
+------------
+- 32-bit supported Touhou executable
+- Microsoft DirectX End-User Runtimes (June 2010)
+- THAutomation.exe and twinhook.dll from the same build
 
-G - Toggle bot
-H - Display debug graphics
+CONTROLS
+--------
+G - Enable or disable automation
+H - Toggle debug graphics
+
+The in-game debug window exposes the remaining controls.

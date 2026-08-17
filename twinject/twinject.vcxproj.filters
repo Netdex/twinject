@@ -24,18 +24,18 @@
     <ClCompile Include="twinject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="winmanip.cpp">
-      <Filter>Source Files\util</Filter>
+    <ClCompile Include="injector.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="debugger.cpp">
+    <ClCompile Include="launcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="winmanip.h">
-      <Filter>Header Files\util</Filter>
+    <ClInclude Include="injector.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="debugger.h">
+    <ClInclude Include="launcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

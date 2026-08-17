@@ -66,16 +66,37 @@ Write-Host "Building $sln (Release|x86)..." -ForegroundColor Cyan
 & $msbuildExe $msbuildArgs
 if ($LASTEXITCODE -ne 0) { throw "MSBuild failed (exit code $LASTEXITCODE)" }
 
-# Gather artifacts
+# Assemble a user-facing portable package. No TOML editing is required: the
+# launcher remembers game paths and configures the injected environment.
 $outDir = Join-Path $repoRoot "Release"
 $dist = Join-Path $repoRoot "dist"
 if (-not (Test-Path $dist)) { New-Item -ItemType Directory -Path $dist | Out-Null }
-foreach ($f in @("twinject.exe", "twinhook.dll")) {
-    $artifact = Join-Path $outDir $f
-    if (-not (Test-Path $artifact)) { throw "Build artifact not found: $artifact" }
-    Copy-Item -Path $artifact -Destination $dist -Force
+
+$launcher = Join-Path $outDir "twinject.exe"
+$hook = Join-Path $outDir "twinhook.dll"
+if (-not (Test-Path $launcher)) { throw "Build artifact not found: $launcher" }
+if (-not (Test-Path $hook)) { throw "Build artifact not found: $hook" }
+
+Copy-Item -Path $launcher -Destination (Join-Path $dist "THAutomation.exe") -Force
+Copy-Item -Path $hook -Destination (Join-Path $dist "twinhook.dll") -Force
+
+$legacy = Join-Path $dist "legacy"
+if (-not (Test-Path $legacy)) { New-Item -ItemType Directory -Path $legacy | Out-Null }
+foreach ($file in @("d3d8.dll", "enbconvertor.ini")) {
+    $source = Join-Path (Join-Path $repoRoot "deploy") $file
+    if (-not (Test-Path $source)) { throw "Legacy renderer file not found: $source" }
+    Copy-Item -Path $source -Destination $legacy -Force
 }
-$config = Join-Path $repoRoot "deploy\twinject.toml"
-if (-not (Test-Path $config)) { throw "Injector config not found: $config" }
-Copy-Item -Path $config -Destination $dist -Force
-Write-Host "Artifacts copied to $dist" -ForegroundColor Green
+
+# Remove obsolete files from older packages so users do not accidentally open
+# the old console injector.
+foreach ($obsolete in @("twinject.exe", "twinject.toml")) {
+    $path = Join-Path $dist $obsolete
+    if (Test-Path $path) { Remove-Item -LiteralPath $path -Force }
+}
+
+$archive = Join-Path $repoRoot "THAutomation-release.zip"
+Compress-Archive -Path (Join-Path $dist "*") -DestinationPath $archive -Force
+
+Write-Host "Portable launcher package created at $dist" -ForegroundColor Green
+Write-Host "Release archive created at $archive" -ForegroundColor Green
